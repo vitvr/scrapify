@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "322336638669",
+    "project_id": "scrapify-9bcaa",
+    "storage_bucket": "scrapify-9bcaa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322336638669:android:15ccdc4df6d12ab50a0b84",
+        "android_client_info": {
+          "package_name": "com.example.scrapify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322336638669-1t06k9qm6hv7qv1lnvkgj109eqbqsi8v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-q-_hlA_oJoR7l0V6hutMH3v2Tvp7gp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322336638669-1t06k9qm6hv7qv1lnvkgj109eqbqsi8v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
