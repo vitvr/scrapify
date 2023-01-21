@@ -58,7 +58,7 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
                 SizedBox(height: 10),
                 TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(191, 255, 99, 61),
+                    backgroundColor: Color.fromARGB(64, 255, 99, 61),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
