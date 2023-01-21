@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:scrapify/onboading2.dart';
+import 'package:scrapify/onboarding2.dart';
 import 'package:scrapify/onboarding.dart';
 import 'firebase_options.dart';
 
