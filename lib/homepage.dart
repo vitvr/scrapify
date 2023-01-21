@@ -22,10 +22,10 @@ class _HomePageState extends State<HomePage> {
         ),
         appBar: AppBar(
           // elevation: 0.0,
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.white,
-            // systemNavigationBarDividerColor: Colors.white,
-          ),
+          // systemOverlayStyle: SystemUiOverlayStyle(
+          //   statusBarColor: Colors.white,
+          //   // systemNavigationBarDividerColor: Colors.white,
+          // ),
           title: const Text(
             'SCRAPIFY',
             style: TextStyle(fontSize: 35),
@@ -68,12 +68,49 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         // backgroundColor: Colors.white,
-        body: const SafeArea(
+        body: SafeArea(
           child: Center(
-            child: Text(
-              'HOME PAGE TODO!',
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ListView.separated(
+                // scrollDirection: Axis.horizontal,
+                itemCount: 20,
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 10);
+                },
+                itemBuilder: (context, index) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      createBox(index),
+                      createBox(index + 1), // this wont work on actual post
+                    ],
+                  );
+                },
+              ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Padding createBox(int index) {
+    Color c = Colors.black;
+    if (index % 3 == 0) {
+      c = Colors.red;
+    } else if (index % 3 == 1) {
+      c = Colors.green;
+    } else if (index % 3 == 2) {
+      c = Colors.blue;
+    }
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        color: c,
+        child: const SizedBox(
+          height: 150,
+          width: 150,
         ),
       ),
     );
