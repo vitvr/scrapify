@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:scrapify/homepage.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatelessWidget {
+  LoginPage({super.key});
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
-class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +28,14 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color.fromARGB(64, 255, 99, 61),
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '\t\t\t\t\tUsername',
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: TextField(
+                      controller: emailController, //oh no wrong controller
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Username',
+                      ),
                     ),
                   ),
                 ),
@@ -43,10 +45,14 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color.fromARGB(64, 255, 99, 61),
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '\t\t\t\t\tPassword',
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: TextField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Password',
+                      ),
                     ),
                   ),
                 ),

@@ -4,11 +4,12 @@ import 'package:scrapify/onboarding2.dart';
 import 'package:scrapify/onboarding.dart';
 import 'firebase_options.dart';
 
-void main() async {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

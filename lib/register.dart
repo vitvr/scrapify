@@ -30,10 +30,13 @@ class RegisterPageState extends State<RegisterPage> {
                     color: Color.fromARGB(64, 255, 99, 61),
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '\t\t\t\t\tUsername',
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Username',
+                      ),
                     ),
                   ),
                 ),
@@ -43,10 +46,13 @@ class RegisterPageState extends State<RegisterPage> {
                     color: Color.fromARGB(64, 255, 99, 61),
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '\t\t\t\t\tEmail Address',
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Email Address',
+                      ),
                     ),
                   ),
                 ),
@@ -56,10 +62,14 @@ class RegisterPageState extends State<RegisterPage> {
                     color: Color.fromARGB(64, 255, 99, 61),
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '\t\t\t\t\tPassword',
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: TextField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Password',
+                      ),
                     ),
                   ),
                 ),
@@ -69,10 +79,13 @@ class RegisterPageState extends State<RegisterPage> {
                     color: Color.fromARGB(64, 255, 99, 61),
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '\t\t\t\t\tConfirm Password',
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Confirm Password',
+                      ),
                     ),
                   ),
                 ),
