@@ -8,15 +8,18 @@ class InitialAuth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth.instance.signOut(); // I sign out on each app restart...
+    // for testing purposes, remove this line when the app is done so the...
+    // user stays logged in even after closing the app
     return Scaffold(
       backgroundColor: Colors.white,
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return HomePage();
+            return const HomePage();
           } else {
-            return OnBoardingPage2();
+            return const OnBoardingPage2();
           }
         },
       ),

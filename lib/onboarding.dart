@@ -34,7 +34,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RegisterPage()));
+                          builder: (context) => const RegisterPage()));
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,
@@ -45,7 +45,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RegisterPage()));
+                          builder: (context) => const RegisterPage()));
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange,

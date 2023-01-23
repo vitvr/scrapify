@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,10 +13,10 @@ class _HomePageState extends State<HomePage> {
     return Container(
       color: Colors.white,
       child: Scaffold(
-        backgroundColor: Color.fromARGB(14, 255, 99, 61),
+        backgroundColor: const Color.fromARGB(14, 255, 99, 61),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromARGB(191, 255, 99, 61),
-          child: Icon(Icons.create),
+          backgroundColor: const Color.fromARGB(191, 255, 99, 61),
+          child: const Icon(Icons.create),
           onPressed: () {},
         ),
         appBar: AppBar(
@@ -36,14 +35,14 @@ class _HomePageState extends State<HomePage> {
           actions: [
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.notification_add_outlined),
+              icon: const Icon(Icons.notification_add_outlined),
             ),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
           selectedItemColor: Colors.black,
-          unselectedItemColor: Color.fromARGB(191, 255, 99, 61),
+          unselectedItemColor: const Color.fromARGB(191, 255, 99, 61),
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
