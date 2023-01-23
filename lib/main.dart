@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:scrapify/onboarding2.dart';
-import 'package:scrapify/onboarding.dart';
+import 'package:scrapify/intial_auth.dart';
 import 'firebase_options.dart';
+// import 'package:scrapify/onboarding2.dart';
 
-void main() async {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -19,9 +20,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'scrapify',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.pink,
       ),
-      home: OnBoardingPage2(),
+      home: const InitialAuth(),
     );
   }
 }

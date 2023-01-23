@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrapify/homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -9,6 +10,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+
+  final passwordController = TextEditingController();
+
+  void signIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+    } on FirebaseAuthException {
+      // Should avoid empty try blocks like this
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +46,14 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color.fromARGB(64, 255, 99, 61),
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '\t\t\t\t\tUsername',
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: TextField(
+                      controller: emailController,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Email Address',
+                      ),
                     ),
                   ),
                 ),
@@ -43,10 +63,15 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color.fromARGB(64, 255, 99, 61),
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '\t\t\t\t\tPassword',
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Password',
+                      ),
                     ),
                   ),
                 ),
@@ -60,19 +85,30 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 20),
                 TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(191, 255, 99, 61),
+                    backgroundColor: const Color.fromARGB(191, 255, 99, 61),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
-                    minimumSize: Size(1000000, 50),
+                    minimumSize: const Size(1000000, 50),
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
+                    signIn();
+                    FirebaseAuth.instance
+                        .authStateChanges()
+                        .listen((User? user) {
+                      if (user == null) {
+                        // print('NO SUCH USER');
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
+                        );
+                      }
+                    });
                   },
                   child: const Text(
-                    'Login',
+                    'Log in',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,

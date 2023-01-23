@@ -36,15 +36,17 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
                 const SizedBox(height: 50),
                 TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(191, 255, 99, 61),
+                    backgroundColor: const Color.fromARGB(191, 255, 99, 61),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
-                    minimumSize: Size(1000000, 50),
+                    minimumSize: const Size(1000000, 50),
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => RegisterPage()),
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterPage(),
+                      ),
                     );
                   },
                   child: const Text(
@@ -55,26 +57,65 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(64, 255, 99, 61),
+                    backgroundColor: const Color.fromARGB(64, 255, 99, 61),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
-                    minimumSize: Size(1000000, 50),
+                    minimumSize: const Size(1000000, 50),
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
                     );
                   },
                   child: const Text(
-                    'Login',
+                    'Log in',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                     ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'or',
+                ),
+                const SizedBox(height: 10),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      side: BorderSide(
+                        color: Colors.black,
+                        width: 1.5,
+                      ),
+                    ),
+                    minimumSize: const Size(1000000, 50),
+                  ),
+                  onPressed: () {}, // idk
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Image(
+                        image: AssetImage('assets/google_logo.png'),
+                        width: 30.0,
+                        height: 30.0,
+                      ),
+                      SizedBox(width: 20),
+                      Text(
+                        'Continue with Google',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
