@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: const Color.fromARGB(14, 255, 99, 61),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(191, 255, 99, 61),
+          backgroundColor: const Color.fromARGB(255, 255, 99, 61),
           child: const Icon(Icons.create),
           onPressed: () {},
         ),
