@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scrapify/register.dart';
 import 'package:scrapify/login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scrapify/homepage.dart';
 
 class OnBoardingPage2 extends StatefulWidget {
   const OnBoardingPage2({super.key});
@@ -10,6 +13,23 @@ class OnBoardingPage2 extends StatefulWidget {
 }
 
 class _OnBoardingPage2State extends State<OnBoardingPage2> {
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? user = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await user?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +118,22 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
                     ),
                     minimumSize: const Size(1000000, 50),
                   ),
-                  onPressed: () {}, // idk
+                  onPressed: () async {
+                    await signInWithGoogle();
+                    await FirebaseAuth.instance
+                        .authStateChanges()
+                        .listen((User? user) {
+                      if (user == null) {
+                        print('NO SUCH USER');
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
+                        );
+                      }
+                    });
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
