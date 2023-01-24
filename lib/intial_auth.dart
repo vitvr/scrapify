@@ -1,3 +1,6 @@
+// This page is for the app to check if the user is already logged in when the
+// app is opened. So the user doesnt have to log in every time they open it.
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/homepage.dart';
