@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:scrapify/onboarding2.dart';
+
+import 'login.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +21,14 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: const Color.fromARGB(255, 255, 99, 61),
           child: const Icon(Icons.create),
-          onPressed: () {},
+          onPressed: () {
+            FirebaseAuth.instance.signOut();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const OnBoardingPage2(),
+              ),
+            );
+          },
         ),
         appBar: AppBar(
           // elevation: 0.0,
