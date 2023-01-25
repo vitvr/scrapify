@@ -13,12 +13,12 @@ class OnBoardingPage2 extends StatefulWidget {
 }
 
 class _OnBoardingPage2State extends State<OnBoardingPage2> {
-  Future<UserCredential> signInWithGoogle() async {
+  signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? user = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await user?.authentication;
+    final GoogleSignInAuthentication? googleAuth = await user!.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
