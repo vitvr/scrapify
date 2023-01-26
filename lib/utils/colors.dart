@@ -1,3 +1,4 @@
+// Use this for setting UI colors
 import "package:flutter/material.dart";
 
 const dark = Color.fromRGBO(255, 99, 61, 1.0);
