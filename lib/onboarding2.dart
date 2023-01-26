@@ -4,11 +4,20 @@ import 'package:scrapify/login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scrapify/homepage.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 // Packages for carousel
 import 'package:scrapify/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+// WARNING
+// Keep this false unless debugging.
+//
+// Usage:
+// For applying colors on different containers
+// for measurement accuracy
+bool debuggingOn = false;
 
 class OnBoardingPage2 extends StatefulWidget {
   const OnBoardingPage2({super.key});
@@ -41,8 +50,8 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(18.0),
+          child: Container(
+            color: debuggingOn ? Colors.blueAccent : null,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -50,7 +59,7 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CarouselSlider(
-                      items: carouselCards.map((card) {
+                      items: cards.map((card) {
                         return Builder(builder: (BuildContext context) {
                           return SizedBox(
                               width: MediaQuery.of(context).size.width * 0.80,
@@ -71,19 +80,19 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
                               setState(() => activeIndex = index)),
                       carouselController: _controller,
                     ),
-                    const SizedBox(height: 15),
                     buildIndicator()
                   ],
                 ),
                 LayoutBuilder(builder: (context, constraints) {
                   return Container(
+                    color: debuggingOn ? Colors.amber : null,
+                    height: MediaQuery.of(context).size.height * 0.34,
                     width: constraints.maxWidth * 0.8,
                     child: Column(children: [
                       const SizedBox(height: 20),
                       TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(191, 255, 99, 61),
+                          backgroundColor: const CustomColors().dark,
                           shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(16.0)),
@@ -108,8 +117,7 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
                       const SizedBox(height: 0),
                       TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(64, 255, 99, 61),
+                          backgroundColor: const CustomColors().lighter,
                           shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(16.0)),
@@ -196,13 +204,6 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
   }
 
   int activeIndex = 0;
-  final carouselCards = [
-    const Card1(),
-    const Card2(),
-    const Card3(),
-    const Card4(),
-    const Card5(),
-  ];
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -215,7 +216,7 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
   final CarouselController _controller = CarouselController();
   Widget buildIndicator() => AnimatedSmoothIndicator(
         activeIndex: activeIndex,
-        count: carouselCards.length,
+        count: cards.length,
         effect: const ExpandingDotsEffect(
             activeDotColor: Colors.black,
             dotHeight: 8,
@@ -226,167 +227,85 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
 
 // Below are the generated carousel cards for onboarding
 
-class Card1 extends StatelessWidget {
-  const Card1({super.key});
+class CarouselCard extends StatelessWidget {
+  late AssetImage img;
+  late String heading;
+  late String caption;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
-      children: const <Widget>[
-        Image(image: AssetImage('assets/onboarding1.png')),
-        Align(
-            heightFactor: 1.4,
-            alignment: Alignment.centerLeft,
-            child: Text("Welcome to Scrapify",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontFamily: 'Inter',
-                    height: 1.2,
-                    color: Colors.black,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w800))),
+      children: <Widget>[
+        ConstrainedBox(
+            constraints: BoxConstraints(
+                minHeight: 50,
+                minWidth: 300,
+                maxHeight: MediaQuery.of(context).size.height * 0.3,
+                maxWidth: MediaQuery.of(context).size.width),
+            child: Image(image: img)),
         Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-                "Where your memories are preserved, arranged, and presented in the form of AR scrapbooks.",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w500))),
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                child: AutoSizeText(
+                  heading,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                      fontFamily: 'Inter',
+                      height: 1.1,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w800),
+                  presetFontSizes: const [32],
+                  maxLines: 2,
+                ))),
+        Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 20),
+                child: AutoSizeText(
+                  caption,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w400),
+                  presetFontSizes: const [19, 17, 14],
+                  maxLines: 2,
+                ))),
       ],
     );
   }
+
+  CarouselCard(
+      {super.key,
+      required this.img,
+      required this.heading,
+      required this.caption});
 }
 
-class Card2 extends StatelessWidget {
-  const Card2({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: const <Widget>[
-        Image(image: AssetImage('assets/onboarding2.png')),
-        Align(
-            heightFactor: 1.4,
-            alignment: Alignment.centerLeft,
-            child: Text("Express yourself freely",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontFamily: 'Inter',
-                    height: 1.2,
-                    color: Colors.black,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w800))),
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-                "Share your perspectives of the world with your family, friends, and people around the world.",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w500))),
-      ],
-    );
-  }
-}
-
-class Card3 extends StatelessWidget {
-  const Card3({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: const <Widget>[
-        Image(image: AssetImage('assets/onboarding3.png')),
-        Align(
-            heightFactor: 1.4,
-            alignment: Alignment.centerLeft,
-            child: Text("Showcase your collections",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontFamily: 'Inter',
-                    height: 1.2,
-                    color: Colors.black,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w800))),
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-                "Whether you’re a hobbyist or an institution, there’s an opportunity to show your content to the world.",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w500))),
-      ],
-    );
-  }
-}
-
-class Card4 extends StatelessWidget {
-  const Card4({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: const <Widget>[
-        Image(image: AssetImage('assets/onboarding4.png')),
-        Align(
-            heightFactor: 1.4,
-            alignment: Alignment.centerLeft,
-            child: Text("Interact with your communities",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontFamily: 'Inter',
-                    height: 1.2,
-                    color: Colors.black,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w800))),
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-                "Found an interesting scrapbook? Let the creators know you like and support their content.",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w500))),
-      ],
-    );
-  }
-}
-
-class Card5 extends StatelessWidget {
-  const Card5({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: const <Widget>[
-        Image(image: AssetImage('assets/onboarding5.png')),
-        Align(
-            heightFactor: 1.4,
-            alignment: Alignment.centerLeft,
-            child: Text("Travel the world without traveling",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontFamily: 'Inter',
-                    height: 1.2,
-                    color: Colors.black,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w800))),
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-                "Discover and experience different scrapbooks created by people around the world",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w500))),
-      ],
-    );
-  }
-}
+List<CarouselCard> cards = [
+  CarouselCard(
+      img: const AssetImage('assets/onboarding1.png'),
+      heading: "Welcome to Scrapify",
+      caption:
+          "Where your memories are curated and presented in the form of AR scrapbooks."),
+  CarouselCard(
+      img: const AssetImage('assets/onboarding2.png'),
+      heading: "Express your thoughts freely",
+      caption:
+          "Share your perspectives of the world with people around the world."),
+  CarouselCard(
+      img: const AssetImage('assets/onboarding3.png'),
+      heading: "Showcase your collections",
+      caption:
+          "Whether you’re a hobbyist or an institution, there’s an opportunity to share."),
+  CarouselCard(
+      img: const AssetImage('assets/onboarding4.png'),
+      heading: "Interact with your communities",
+      caption:
+          "Found an interesting scrapbook? Let the world know you support their content."),
+  CarouselCard(
+      img: const AssetImage('assets/onboarding5.png'),
+      heading: "Travel the world without traveling",
+      caption:
+          "Discover and experience scrapbooks created by people around the world.")
+];
