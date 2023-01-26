@@ -4,7 +4,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/homepage.dart';
-import 'package:scrapify/onboarding2.dart';
+import 'package:scrapify/onboarding.dart';
 
 class InitialAuth extends StatelessWidget {
   const InitialAuth({super.key});
@@ -22,7 +22,7 @@ class InitialAuth extends StatelessWidget {
           if (snapshot.hasData) {
             return const HomePage();
           } else {
-            return const OnBoardingPage2();
+            return const OnboardingPage();
           }
         },
       ),
