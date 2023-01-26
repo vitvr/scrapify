@@ -5,6 +5,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scrapify/homepage.dart';
 
+// Packages for carousel
+import 'package:scrapify/utils/colors.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 class OnBoardingPage2 extends StatefulWidget {
   const OnBoardingPage2({super.key});
 
@@ -41,18 +46,44 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Image(image: AssetImage('assets/parrot.png')),
-                const SizedBox(height: 20),
-                const Text(
-                  'Welcome to Scrapify',
-                  style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CarouselSlider.builder(
+                        itemCount: carouselImages.length,
+                        options: CarouselOptions(
+                            height: 350,
+                            viewportFraction: 1,
+                            enableInfiniteScroll: false,
+                            onPageChanged: (index, reason) =>
+                                setState(() => activeIndex = index)),
+                        itemBuilder: ((context, index, realIndex) {
+                          final carouselImage = carouselImages[index];
+                          return buildImage(carouselImage, index);
+                        }),
+                        carouselController: _controller),
+                    ElevatedButton(
+                        onPressed: () => _controller.nextPage(),
+                        child: Text("→"),
+                        style: size),
+                    const SizedBox(height: 20),
+                    buildIndicator()
+                  ],
                 ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Where your memories are preserved, arranged, and presented'
-                  'in the form of scrapbooks.',
-                  style: TextStyle(fontSize: 16),
-                ),
+
+                // const Image(image: AssetImage('assets/parrot.png')),
+                // const SizedBox(height: 20),
+                // const Text(
+                //   'Welcome to Scrapify',
+                //   style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                // ),
+                // const SizedBox(height: 10),
+                // const Text(
+                //   'Where your memories are preserved, arranged, and presented'
+                //   ' in the form of scrapbooks.',
+                //   style: TextStyle(fontSize: 16),
+                // ),
+
                 const SizedBox(height: 50),
                 TextButton(
                   style: TextButton.styleFrom(
@@ -160,4 +191,29 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
       ),
     );
   }
+
+  int activeIndex = 0;
+  final CarouselController _controller = CarouselController();
+
+  final carouselImages = [
+    const AssetImage('assets/onboarding1.png'),
+    const AssetImage('assets/onboarding2.png'),
+    const AssetImage('assets/onboarding3.png'),
+    const AssetImage('assets/onboarding4.png')
+  ];
+
+  Widget buildImage(AssetImage imagePath, int index) => Container(
+        margin: const EdgeInsets.symmetric(horizontal: 5),
+        child: Image(image: carouselImages[index]),
+      );
+
+  Widget buildIndicator() => AnimatedSmoothIndicator(
+        activeIndex: activeIndex,
+        count: carouselImages.length,
+        effect: const ExpandingDotsEffect(
+            activeDotColor: Colors.black,
+            dotHeight: 10,
+            dotWidth: 10,
+            expansionFactor: 3),
+      );
 }
