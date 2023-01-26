@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:scrapify/intial_auth.dart';
-import 'package:scrapify/profile.dart';
 import 'package:scrapify/utils/template.dart';
 import 'firebase_options.dart';
 // import 'package:scrapify/onboarding2.dart';
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Inter',
         primarySwatch: Colors.pink,
       ),
-      home: const ProfileScreen(),
+      home: const InitialAuth(),
     );
   }
 }

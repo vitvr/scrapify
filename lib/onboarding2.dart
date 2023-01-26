@@ -53,7 +53,7 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
                       items: carouselCards.map((card) {
                         return Builder(builder: (BuildContext context) {
                           return SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.75,
+                              width: MediaQuery.of(context).size.width * 0.80,
                               child: Card(
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
@@ -71,110 +71,122 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
                               setState(() => activeIndex = index)),
                       carouselController: _controller,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     buildIndicator()
                   ],
                 ),
-                const SizedBox(height: 50),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(191, 255, 99, 61),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    ),
-                    minimumSize: const Size(1000000, 50),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const RegisterPage(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Register',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(64, 255, 99, 61),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    ),
-                    minimumSize: const Size(1000000, 50),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Log in',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'or',
-                ),
-                const SizedBox(height: 10),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                      side: BorderSide(
-                        color: Colors.black,
-                        width: 1.5,
-                      ),
-                    ),
-                    minimumSize: const Size(1000000, 50),
-                  ),
-                  onPressed: () async {
-                    await signInWithGoogle();
-                    await FirebaseAuth.instance
-                        .authStateChanges()
-                        .listen((User? user) {
-                      if (user == null) {
-                        print('NO SUCH USER');
-                      } else {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
+                LayoutBuilder(builder: (context, constraints) {
+                  return Container(
+                    width: constraints.maxWidth * 0.8,
+                    child: Column(children: [
+                      const SizedBox(height: 20),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(191, 255, 99, 61),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(16.0)),
                           ),
-                        );
-                      }
-                    });
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Image(
-                        image: AssetImage('assets/google_logo.png'),
-                        width: 30.0,
-                        height: 30.0,
-                      ),
-                      SizedBox(width: 20),
-                      Text(
-                        'Continue with Google',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
+                          minimumSize: const Size(1000000, 40),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const RegisterPage(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Register',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                      const SizedBox(height: 0),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(64, 255, 99, 61),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(16.0)),
+                          ),
+                          minimumSize: const Size(1000000, 40),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Log in',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      const Text(
+                        'or',
+                      ),
+                      const SizedBox(height: 10),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(16.0)),
+                            side: BorderSide(
+                              color: Colors.black,
+                              width: 1.5,
+                            ),
+                          ),
+                          minimumSize: const Size(1000000, 40),
+                        ),
+                        onPressed: () async {
+                          await signInWithGoogle();
+                          await FirebaseAuth.instance
+                              .authStateChanges()
+                              .listen((User? user) {
+                            if (user == null) {
+                              print('NO SUCH USER');
+                            } else {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const HomePage(),
+                                ),
+                              );
+                            }
+                          });
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Image(
+                              image: AssetImage('assets/google_logo.png'),
+                              width: 22.0,
+                              height: 22.0,
+                            ),
+                            SizedBox(width: 20),
+                            Text(
+                              'Continue with Google',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]),
+                  );
+                }),
               ],
             ),
           ),
@@ -206,8 +218,8 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
         count: carouselCards.length,
         effect: const ExpandingDotsEffect(
             activeDotColor: Colors.black,
-            dotHeight: 10,
-            dotWidth: 10,
+            dotHeight: 8,
+            dotWidth: 8,
             expansionFactor: 3),
       );
 }
@@ -219,7 +231,7 @@ class Card1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: const <Widget>[
         Image(image: AssetImage('assets/onboarding1.png')),
         Align(
@@ -252,7 +264,7 @@ class Card2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: const <Widget>[
         Image(image: AssetImage('assets/onboarding2.png')),
         Align(
@@ -285,7 +297,7 @@ class Card3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: const <Widget>[
         Image(image: AssetImage('assets/onboarding3.png')),
         Align(
@@ -318,7 +330,7 @@ class Card4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: const <Widget>[
         Image(image: AssetImage('assets/onboarding4.png')),
         Align(
@@ -351,7 +363,7 @@ class Card5 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: const <Widget>[
         Image(image: AssetImage('assets/onboarding5.png')),
         Align(
