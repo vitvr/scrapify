@@ -203,7 +203,7 @@ class _OnBoardingPage2State extends State<OnBoardingPage2> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Image(
-                        image: AssetImage('assets/facebook_logo.png'),
+                        image: AssetImage('assets/facebook_logo_2.png'),
                         width: 40.0,
                         height: 40.0,
                       ),
