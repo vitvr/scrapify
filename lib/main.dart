@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'scrapify',
       theme: ThemeData(
+        fontFamily: 'Inter',
         primarySwatch: Colors.pink,
       ),
       home: const InitialAuth(),
