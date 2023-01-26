@@ -19,14 +19,14 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 // for measurement accuracy
 bool debuggingOn = false;
 
-class OnBoardingPage2 extends StatefulWidget {
-  const OnBoardingPage2({super.key});
+class OnboardingPage extends StatefulWidget {
+  const OnboardingPage({super.key});
 
   @override
-  State<OnBoardingPage2> createState() => _OnBoardingPage2State();
+  State<OnboardingPage> createState() => _OnboardingPageState();
 }
 
-class _OnBoardingPage2State extends State<OnBoardingPage2> {
+class _OnboardingPageState extends State<OnboardingPage> {
   signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? user = await GoogleSignIn().signIn();

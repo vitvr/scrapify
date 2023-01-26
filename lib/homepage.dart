@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:scrapify/onboarding2.dart';
+import 'package:scrapify/onboarding.dart';
 
 import 'login.dart';
 
@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
             FirebaseAuth.instance.signOut();
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const OnBoardingPage2(),
+                builder: (context) => const OnboardingPage(),
               ),
             );
           },
