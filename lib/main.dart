@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:scrapify/intial_auth.dart';
 import 'package:scrapify/mainpage.dart';
 import 'package:scrapify/menuscreen.dart';
-import 'package:scrapify/profile.dart';
 import 'package:scrapify/utils/template.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
