@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:scrapify/homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:scrapify/mainpage.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -11,20 +12,34 @@ class RegisterPage extends StatefulWidget {
 
 class RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
-
   final passwordController2 = TextEditingController();
+
+  final usernameController = TextEditingController();
+
+  final ref = FirebaseDatabase.instance.ref('users');
+
+  String? uid = '';
 
   void register() async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
+      uid = credential.user?.uid;
     } on FirebaseAuthException {
       // Should avoid empty try blocks like this
     }
+    await ref.set({
+      uid: {
+        "username": usernameController.text,
+        "email": emailController.text,
+        "followers": 0,
+        "following": 0
+      }
+    });
   }
 
   void signIn() async {
@@ -59,10 +74,11 @@ class RegisterPageState extends State<RegisterPage> {
                     color: Color.fromARGB(64, 255, 99, 61),
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.only(left: 16.0),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
                     child: TextField(
-                      decoration: InputDecoration(
+                      controller: usernameController,
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Username',
                       ),
@@ -151,7 +167,7 @@ class RegisterPageState extends State<RegisterPage> {
                         } else {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => const HomePage(),
+                              builder: (context) => const MainPage(),
                             ),
                           );
                         }

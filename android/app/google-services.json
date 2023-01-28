@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "322336638669",
+    "firebase_url": "https://scrapify-9bcaa-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "scrapify-9bcaa",
     "storage_bucket": "scrapify-9bcaa.appspot.com"
   },
@@ -14,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "322336638669-1t06k9qm6hv7qv1lnvkgj109eqbqsi8v.apps.googleusercontent.com",
+          "client_id": "322336638669-1ra6bhf98bp8ka2baknsij1umr812oll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scrapify",
+            "certificate_hash": "c17ecbcd5d5a1154eb01adf6f5ab2d4e2f9d9d17"
+          }
+        },
+        {
+          "client_id": "322336638669-267kprmpdktn0e2mqr3k3vsskg3q1n3q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

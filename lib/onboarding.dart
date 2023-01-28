@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scrapify/mainpage.dart';
 import 'package:scrapify/register.dart';
 import 'package:scrapify/login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -167,7 +168,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             } else {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const HomePage(),
+                                  builder: (context) => const MainPage(),
                                 ),
                               );
                             }

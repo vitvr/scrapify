@@ -4,6 +4,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/homepage.dart';
+import 'package:scrapify/mainpage.dart';
 import 'package:scrapify/onboarding.dart';
 
 class InitialAuth extends StatelessWidget {
@@ -20,7 +21,7 @@ class InitialAuth extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const HomePage();
+            return const MainPage();
           } else {
             return const OnboardingPage();
           }
