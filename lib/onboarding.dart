@@ -76,7 +76,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       }).toList(),
                       options: CarouselOptions(
                           initialPage: 0,
-                          height: MediaQuery.of(context).size.height * 0.60,
+                          height: MediaQuery.of(context).size.height * 0.55,
                           viewportFraction: 1,
                           enableInfiniteScroll: false,
                           onPageChanged: (index, reason) =>
@@ -89,7 +89,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 LayoutBuilder(builder: (context, constraints) {
                   return Container(
                     color: debuggingOn ? Colors.amber : null,
-                    height: MediaQuery.of(context).size.height * 0.34,
+                    height: MediaQuery.of(context).size.height * 0.3,
                     width: constraints.maxWidth * 0.8,
                     child: Column(children: [
                       const SizedBox(height: 20),
@@ -98,9 +98,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           backgroundColor: const CustomColors().dark,
                           shape: const RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(16.0)),
+                                BorderRadius.all(Radius.circular(25.0)),
                           ),
-                          minimumSize: const Size(1000000, 40),
+                          minimumSize: const Size(1000000, 45),
                         ),
                         onPressed: () {
                           Navigator.of(context).push(
@@ -117,15 +117,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 0),
+                      const SizedBox(height: 5),
                       TextButton(
                         style: TextButton.styleFrom(
                           backgroundColor: const CustomColors().lighter,
                           shape: const RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(16.0)),
+                                BorderRadius.all(Radius.circular(25.0)),
                           ),
-                          minimumSize: const Size(1000000, 40),
+                          minimumSize: const Size(1000000, 45),
                         ),
                         onPressed: () {
                           Navigator.of(context).push(
@@ -146,19 +146,19 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       const Text(
                         'or',
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 6.5),
                       TextButton(
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.white,
                           shape: const RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(16.0)),
+                                BorderRadius.all(Radius.circular(25.0)),
                             side: BorderSide(
                               color: Colors.black,
                               width: 1.5,
                             ),
                           ),
-                          minimumSize: const Size(1000000, 40),
+                          minimumSize: const Size(1000000, 45),
                         ),
                         onPressed: () async {
                           await signInWithGoogle();
