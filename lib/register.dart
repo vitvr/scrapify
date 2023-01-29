@@ -183,14 +183,27 @@ class RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40),
-                  child: Text(
-                    'By registering, you agree to Scrapify\'s Terms and '
-                    'Conditions and Privacy Policy.',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 35),
+                    child: RichText(
+                      text: TextSpan(
+                          text: 'By registering, you agree to Scrapify\'s ',
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.black),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Terms and Conditions',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: const CustomColors().dark)),
+                            const TextSpan(text: ' and '),
+                            TextSpan(
+                                text: 'Privacy Policy.',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: const CustomColors().dark)),
+                          ]),
+                    )),
                 const SizedBox(height: 20),
                 TextButton(
                   style: TextButton.styleFrom(
