@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:scrapify/login.dart';
 import 'package:scrapify/mainpage.dart';
 import 'package:scrapify/utils/colors.dart';
 
@@ -70,179 +71,227 @@ class RegisterPageState extends State<RegisterPage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 75),
-                  child: Image(image: AssetImage('assets/mainLogoNoBG.png')),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(64, 255, 100, 61),
-                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: TextField(
-                      controller: usernameController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Username',
+          child: Column(children: [
+            Expanded(
+              flex: 9,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.05,
+                    MediaQuery.of(context).size.width * 0.125,
+                    MediaQuery.of(context).size.width * 0.05,
+                    0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 75),
+                      child:
+                          Image(image: AssetImage('assets/mainLogoNoBG.png')),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(64, 255, 100, 61),
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
                       ),
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(64, 255, 99, 61),
-                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: TextField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Email Address',
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: TextField(
+                          controller: usernameController,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Username',
+                          ),
+                          style: const TextStyle(fontSize: 14),
+                        ),
                       ),
-                      style: const TextStyle(fontSize: 14),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(64, 255, 99, 61),
-                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-                    child: TextField(
-                      controller: passwordController,
-                      obscureText: !passwordVisible,
-                      decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          border: InputBorder.none,
-                          hintText: 'Password',
-                          suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  passwordVisible = !passwordVisible;
-                                });
-                              },
-                              icon: Icon(
-                                passwordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Colors.black,
-                              ))),
-                      style: const TextStyle(fontSize: 14),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(64, 255, 99, 61),
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: TextField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Email Address',
+                          ),
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(64, 255, 99, 61),
-                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: TextField(
-                      controller: passwordController2,
-                      obscureText: !confirmPasswordVisible,
-                      decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          border: InputBorder.none,
-                          hintText: 'Confirm Password',
-                          suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  confirmPasswordVisible =
-                                      !confirmPasswordVisible;
-                                });
-                              },
-                              icon: Icon(
-                                confirmPasswordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Colors.black,
-                              ))),
-                      style: const TextStyle(fontSize: 14),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(64, 255, 99, 61),
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                        child: TextField(
+                          controller: passwordController,
+                          obscureText: !passwordVisible,
+                          decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                              border: InputBorder.none,
+                              hintText: 'Password',
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      passwordVisible = !passwordVisible;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    passwordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Colors.black,
+                                  ))),
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 35),
-                    child: RichText(
-                      text: TextSpan(
-                          text: 'By registering, you agree to Scrapify\'s ',
-                          style: const TextStyle(
-                              fontSize: 12, color: Colors.black),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: 'Terms and Conditions',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: const CustomColors().dark)),
-                            const TextSpan(text: ' and '),
-                            TextSpan(
-                                text: 'Privacy Policy.',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: const CustomColors().dark)),
-                          ]),
-                    )),
-                const SizedBox(height: 20),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 255, 99, 61),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                    const SizedBox(height: 10),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(64, 255, 99, 61),
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: TextField(
+                          controller: passwordController2,
+                          obscureText: !confirmPasswordVisible,
+                          decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                              border: InputBorder.none,
+                              hintText: 'Confirm Password',
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      confirmPasswordVisible =
+                                          !confirmPasswordVisible;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    confirmPasswordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Colors.black,
+                                  ))),
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ),
                     ),
-                    minimumSize: const Size(1000000, 50),
-                  ),
-                  onPressed: () {
-                    if (passwordController.text == passwordController2.text) {
-                      register();
-                      signIn();
-                      FirebaseAuth.instance
-                          .authStateChanges()
-                          .listen((User? user) {
-                        if (user == null) {
-                          // print('NO SUCH USER');
-                        } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const MainPage(),
-                            ),
-                          );
+                    const SizedBox(height: 20),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                        child: RichText(
+                          text: TextSpan(
+                              text: 'By registering, you agree to Scrapify\'s ',
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.black),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: 'Terms and Conditions',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: const CustomColors().dark)),
+                                const TextSpan(text: ' and '),
+                                TextSpan(
+                                    text: 'Privacy Policy.',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: const CustomColors().dark)),
+                              ]),
+                        )),
+                    const SizedBox(height: 20),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 255, 99, 61),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                        ),
+                        minimumSize: const Size(1000000, 50),
+                      ),
+                      onPressed: () {
+                        if (passwordController.text ==
+                            passwordController2.text) {
+                          register();
+                          signIn();
+                          FirebaseAuth.instance
+                              .authStateChanges()
+                              .listen((User? user) {
+                            if (user == null) {
+                              // print('NO SUCH USER');
+                            } else {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const MainPage(),
+                                ),
+                              );
+                            }
+                          });
                         }
-                      });
-                    }
-                  },
-                  child: const Text(
-                    'Register',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
+                      },
+                      child: const Text(
+                        'Register',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+            Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    Expanded(flex: 3, child: Container()),
+                    Expanded(
+                        flex: 7,
+                        child: SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginPage(),
+                                    ),
+                                  );
+                                },
+                                style: ButtonStyle(
+                                    overlayColor: MaterialStateProperty.all(
+                                        const CustomColors().extremelyLight)),
+                                child: RichText(
+                                  text: TextSpan(
+                                      text: 'Already have an account? ',
+                                      style: const TextStyle(
+                                          fontSize: 12, color: Colors.black),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Log in here',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color:
+                                                    const CustomColors().dark)),
+                                        const TextSpan(text: '.')
+                                      ]),
+                                ))))
+                  ],
+                ))
+          ]),
         ),
       ),
     );
