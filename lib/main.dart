@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:scrapify/intial_auth.dart';
 import 'firebase_options.dart';
+import 'package:material_color_generator/material_color_generator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Scrapify',
       theme: ThemeData(
         fontFamily: 'Inter',
-        primarySwatch: Colors.pink,
+        primarySwatch: generateMaterialColor(color: const Color(0xFFFF633D)),
       ),
       home: const InitialAuth(),
     );

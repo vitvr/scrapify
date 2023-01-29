@@ -135,7 +135,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           );
                         },
                         child: const Text(
-                          'Log in',
+                          'Login',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14,

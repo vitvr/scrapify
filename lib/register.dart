@@ -68,6 +68,7 @@ class RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
@@ -91,7 +92,7 @@ class RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 10),
                     Container(
                       decoration: const BoxDecoration(
-                        color: Color.fromARGB(64, 255, 100, 61),
+                        color: Color.fromARGB(64, 255, 99, 61),
                         borderRadius: BorderRadius.all(Radius.circular(16.0)),
                       ),
                       child: Padding(
@@ -191,7 +192,7 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 35),
                         child: RichText(
@@ -207,13 +208,14 @@ class RegisterPageState extends State<RegisterPage> {
                                         color: const CustomColors().dark)),
                                 const TextSpan(text: ' and '),
                                 TextSpan(
-                                    text: 'Privacy Policy.',
+                                    text: 'Privacy Policy',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: const CustomColors().dark)),
+                                const TextSpan(text: '.')
                               ]),
                         )),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     TextButton(
                       style: TextButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 255, 99, 61),

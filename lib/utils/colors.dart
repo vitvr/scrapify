@@ -7,6 +7,6 @@ class CustomColors {
   final dark = const Color.fromRGBO(255, 99, 61, 1.0);
   final light = const Color.fromRGBO(255, 141, 113, 1.0);
   final lighter = const Color.fromRGBO(255, 188, 171, 1.0);
-  final lightTextInput = const Color.fromARGB(64, 255, 100, 61);
-  final extremelyLight = const Color.fromARGB(20, 255, 100, 61);
+  final lightTextInput = const Color.fromARGB(64, 255, 99, 61);
+  final extremelyLight = const Color.fromARGB(20, 255, 99, 61);
 }
