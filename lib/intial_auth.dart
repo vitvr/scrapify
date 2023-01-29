@@ -3,7 +3,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:scrapify/homepage.dart';
 import 'package:scrapify/mainpage.dart';
 import 'package:scrapify/onboarding.dart';
 

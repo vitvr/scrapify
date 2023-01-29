@@ -1,6 +1,6 @@
+/* page to see current user's profile info */
+
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:scrapify/homepage.dart';
 import 'utils/colors.dart';
 
 class ProfileScreen extends StatelessWidget {

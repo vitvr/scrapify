@@ -1,5 +1,6 @@
+/* page for logging in with email and password */
+
 import 'package:flutter/material.dart';
-import 'package:scrapify/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scrapify/mainpage.dart';
 
@@ -12,7 +13,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
 
   void signIn() async {

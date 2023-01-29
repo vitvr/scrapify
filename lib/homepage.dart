@@ -1,8 +1,9 @@
+/* the homepage of the app, it includes a feed of recommended posts as well as
+the option to create new ones */
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/onboarding.dart';
-
-import 'login.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,6 +19,8 @@ class _HomePageState extends State<HomePage> {
       color: Colors.white,
       child: Scaffold(
         backgroundColor: const Color.fromARGB(14, 255, 99, 61),
+        // currently, the 'create scrapbook' button is being used as a
+        // placeholder sign out button
         floatingActionButton: FloatingActionButton(
           backgroundColor: const Color.fromARGB(255, 255, 99, 61),
           child: const Icon(Icons.create),
@@ -31,11 +34,6 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         appBar: AppBar(
-          // elevation: 0.0,
-          // systemOverlayStyle: SystemUiOverlayStyle(
-          //   statusBarColor: Colors.white,
-          //   // systemNavigationBarDividerColor: Colors.white,
-          // ),
           title: const Text(
             'SCRAPIFY',
             style: TextStyle(fontSize: 35),
@@ -78,6 +76,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // creates boxes of random colors, placeholder for actual posts
   Padding createBox(int index) {
     Color c = Colors.black;
     if (index % 3 == 0) {

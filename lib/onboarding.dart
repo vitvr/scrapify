@@ -1,10 +1,12 @@
+/* welcoming page shown to new users before they log-in to an account, includes
+google authentication */
+
 import 'package:flutter/material.dart';
 import 'package:scrapify/mainpage.dart';
 import 'package:scrapify/register.dart';
 import 'package:scrapify/login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:scrapify/homepage.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 // Packages for carousel
