@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:scrapify/mainpage.dart';
+import 'package:scrapify/utils/colors.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -22,6 +23,8 @@ class RegisterPageState extends State<RegisterPage> {
   final ref = FirebaseDatabase.instance.ref('users');
 
   String? uid = '';
+  late bool passwordVisible;
+  late bool confirmPasswordVisible;
 
   void register() async {
     try {
@@ -56,8 +59,15 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   @override
+  void initState() {
+    passwordVisible = false;
+    confirmPasswordVisible = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
@@ -73,7 +83,7 @@ class RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 10),
                 Container(
                   decoration: const BoxDecoration(
-                    color: Color.fromARGB(64, 255, 99, 61),
+                    color: Color.fromARGB(64, 255, 100, 61),
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
                   child: Padding(
@@ -84,6 +94,7 @@ class RegisterPageState extends State<RegisterPage> {
                         border: InputBorder.none,
                         hintText: 'Username',
                       ),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
                 ),
@@ -101,6 +112,7 @@ class RegisterPageState extends State<RegisterPage> {
                         border: InputBorder.none,
                         hintText: 'Email Address',
                       ),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
                 ),
@@ -111,14 +123,29 @@ class RegisterPageState extends State<RegisterPage> {
                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
+                    padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                     child: TextField(
                       controller: passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Password',
-                      ),
+                      obscureText: !passwordVisible,
+                      decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          border: InputBorder.none,
+                          hintText: 'Password',
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  passwordVisible = !passwordVisible;
+                                });
+                              },
+                              icon: Icon(
+                                passwordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.black,
+                              ))),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
                 ),
@@ -132,26 +159,43 @@ class RegisterPageState extends State<RegisterPage> {
                     padding: const EdgeInsets.only(left: 16.0),
                     child: TextField(
                       controller: passwordController2,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Confirm Password',
-                      ),
+                      obscureText: !confirmPasswordVisible,
+                      decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          border: InputBorder.none,
+                          hintText: 'Confirm Password',
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  confirmPasswordVisible =
+                                      !confirmPasswordVisible;
+                                });
+                              },
+                              icon: Icon(
+                                confirmPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.black,
+                              ))),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 55),
+                  padding: EdgeInsets.symmetric(horizontal: 40),
                   child: Text(
                     'By registering, you agree to Scrapify\'s Terms and '
                     'Conditions and Privacy Policy.',
+                    style: TextStyle(fontSize: 12),
                   ),
                 ),
                 const SizedBox(height: 20),
                 TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(191, 255, 99, 61),
+                    backgroundColor: const Color.fromARGB(255, 255, 99, 61),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
@@ -180,7 +224,7 @@ class RegisterPageState extends State<RegisterPage> {
                     'Register',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 16,
+                      fontSize: 14,
                     ),
                   ),
                 ),
