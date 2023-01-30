@@ -77,9 +77,9 @@ class RegisterPageState extends State<RegisterPage> {
               flex: 9,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
-                    MediaQuery.of(context).size.width * 0.05,
+                    MediaQuery.of(context).size.width * 0.075,
                     MediaQuery.of(context).size.width * 0.125,
-                    MediaQuery.of(context).size.width * 0.05,
+                    MediaQuery.of(context).size.width * 0.075,
                     0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -194,7 +194,9 @@ class RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 15),
                     Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.085),
                         child: RichText(
                           text: TextSpan(
                               text: 'By registering, you agree to Scrapify\'s ',

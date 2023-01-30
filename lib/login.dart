@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scrapify/forgotPass.dart';
 import 'package:scrapify/mainpage.dart';
 import 'package:scrapify/register.dart';
 import 'package:scrapify/utils/colors.dart';
@@ -46,7 +47,11 @@ class _LoginPageState extends State<LoginPage> {
           Expanded(
             flex: 9,
             child: Padding(
-              padding: const EdgeInsets.all(18.0),
+              padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.075,
+                  MediaQuery.of(context).size.width * 0.05,
+                  MediaQuery.of(context).size.width * 0.075,
+                  0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -105,24 +110,36 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
                   Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 35),
-                      child: RichText(
-                        text: TextSpan(
-                            text: 'Forgot your login credentials? ',
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.black),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: 'Click here',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: const CustomColors().dark)),
-                              const TextSpan(text: '.'),
-                            ]),
-                      )),
-                  const SizedBox(height: 15),
+                      padding: EdgeInsets.symmetric(
+                          horizontal:
+                              MediaQuery.of(context).size.width * 0.075),
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgotPasswordPage(),
+                              ),
+                            );
+                          },
+                          style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all(
+                                  const CustomColors().extremelyLight)),
+                          child: RichText(
+                            text: TextSpan(
+                                text: 'Forgot your password? ',
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.black),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'Click here',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: const CustomColors().dark)),
+                                  const TextSpan(text: '.')
+                                ]),
+                          ))),
                   TextButton(
                     style: TextButton.styleFrom(
                       backgroundColor: const CustomColors().dark,
