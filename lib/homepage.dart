@@ -49,26 +49,49 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        // backgroundColor: Colors.white,
         body: SafeArea(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+          // child: GridView.builder(
+          //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //     crossAxisCount: 2,
+          //   ),
+          //   itemBuilder: (context, index) {
+          //     return Padding(
+          //       padding: EdgeInsets.all(2),
+          //       child: PostCard(),
+          //     );
+          //   },
+          // ),
+
+          child: ListView.builder(
+            itemCount: 20,
+            itemBuilder: (context, index) {
+              return Row(
                 children: [
                   PostCard(),
                   PostCard(),
                 ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  PostCard(),
-                  PostCard(),
-                ],
-              ),
-            ],
+              );
+            },
           ),
+
+          // child: Column(
+          //   children: [
+          //     Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         PostCard(),
+          //         PostCard(),
+          //       ],
+          //     ),
+          //     Row(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         PostCard(),
+          //         PostCard(),
+          //       ],
+          //     ),
+          //   ],
+          // ),
         ),
       ),
     );
