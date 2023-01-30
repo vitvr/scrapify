@@ -1,9 +1,8 @@
 /* the homepage of the app, it includes a feed of recommended posts as well as
 the option to create new ones */
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:scrapify/onboarding.dart';
+import 'package:scrapify/new_scrapbook.dart';
 import 'package:scrapify/utils/post.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,10 +25,9 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: const Color.fromARGB(255, 255, 99, 61),
           child: const Icon(Icons.create),
           onPressed: () {
-            FirebaseAuth.instance.signOut();
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const OnboardingPage(),
+                builder: (context) => NewScrapbookPage(),
               ),
             );
           },
