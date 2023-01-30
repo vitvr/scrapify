@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scrapify/login.dart';
 import 'package:scrapify/mainpage.dart';
 import 'package:scrapify/utils/colors.dart';
@@ -22,6 +23,8 @@ class RegisterPageState extends State<RegisterPage> {
   final usernameController = TextEditingController();
 
   final ref = FirebaseDatabase.instance.ref('users');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   String? uid = '';
   late bool passwordVisible;
@@ -29,23 +32,31 @@ class RegisterPageState extends State<RegisterPage> {
 
   void register() async {
     try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential cred = await _auth.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
-      uid = credential.user?.uid;
+
+      //add to firestore database
+      await _firestore.collection('users').doc(cred.user!.uid).set({
+        'username': usernameController.text,
+        'uid': cred.user!.uid,
+        'email': emailController.text,
+        'followers': [],
+        'following': [],
+      });
     } on FirebaseAuthException {
       // Should avoid empty try blocks like this
     }
-    await ref.set({
-      uid: {
-        "username": usernameController.text,
-        "email": emailController.text,
-        "followers": 0,
-        "following": 0
-      }
-    });
+    //realtime database
+    // await ref.set({
+    //   uid: {
+    //     "username": usernameController.text,
+    //     "email": emailController.text,
+    //     "followers": 0,
+    //     "following": 0
+    //   }
+    // });
   }
 
   void signIn() async {
