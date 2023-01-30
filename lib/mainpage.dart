@@ -4,8 +4,10 @@ not have to be rebuilt when moving to another page */
 
 import 'package:flutter/material.dart';
 import 'package:scrapify/homepage.dart';
+import 'package:scrapify/menuscreen.dart';
 import 'package:scrapify/profile.dart';
 import 'package:scrapify/utils/colors.dart';
+import 'package:scrapify/utils/post.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -20,10 +22,10 @@ class _MainPageState extends State<MainPage> {
   // list of pages for the bottom navigation bar
   List<Widget> pages = const [
     HomePage(),
-    HomePage(), // placeholder
+    PostCard(), // placeholder
     HomePage(), // placeholder
     ProfileScreen(),
-    HomePage(), // placeholder
+    Menu(),
   ];
 
   @override

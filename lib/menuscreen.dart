@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scrapify/onboarding.dart';
 
-void main(List<String> args) {
-  runApp(new MaterialApp(
-    home: Menu(),
-  ));
-}
-
 class Menu extends StatefulWidget {
   const Menu({super.key});
   @override
@@ -48,192 +42,174 @@ class _MenuState extends State<Menu> {
             ),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.black,
-          unselectedItemColor: const Color.fromARGB(191, 255, 99, 61),
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: 'Map',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_outlined),
-              label: 'Account',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.menu),
-              label: 'Menu',
-            ),
-          ],
-        ),
         body: Container(
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(15.0),
             child: GridView(
                 children: [
                   Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(64, 255, 99, 61),
-                      ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.person_outline,
-                              size: 40,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              "Followers",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 15),
-                            )
-                          ])),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromARGB(64, 255, 99, 61),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.person_outline,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        // Padding(padding: const EdgeInsets.all(20),),
+                        Text(
+                          "Followers",
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        )
+                      ],
+                    ),
+                  ),
                   Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(64, 255, 99, 61),
-                      ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.person,
-                              size: 40,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              "Following",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 15),
-                            )
-                          ])),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromARGB(64, 255, 99, 61),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.person,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          "Following",
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        )
+                      ],
+                    ),
+                  ),
                   Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(64, 255, 99, 61),
-                      ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.people,
-                              size: 40,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              "Groups",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 15),
-                            )
-                          ])),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromARGB(64, 255, 99, 61),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.people,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          "Groups",
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        )
+                      ],
+                    ),
+                  ),
                   Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(64, 255, 99, 61),
-                      ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.map,
-                              size: 40,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              "Geocatching",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 15),
-                            )
-                          ])),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromARGB(64, 255, 99, 61),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.map,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          "Geocatching",
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        )
+                      ],
+                    ),
+                  ),
                   Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(64, 255, 99, 61),
-                      ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.bookmarks,
-                              size: 40,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              "Bookmarks",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 15),
-                            )
-                          ])),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromARGB(64, 255, 99, 61),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.bookmarks,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          "Bookmarks",
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        )
+                      ],
+                    ),
+                  ),
                   Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(64, 255, 99, 61),
-                      ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.settings,
-                              size: 40,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              "Settings",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 15),
-                            )
-                          ])),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromARGB(64, 255, 99, 61),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.settings,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          "Settings",
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        )
+                      ],
+                    ),
+                  ),
                   Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(64, 255, 99, 61),
-                      ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.help,
-                              size: 40,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              "Help & Support",
-                              textAlign: TextAlign.right,
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 15),
-                            )
-                          ])),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromARGB(64, 255, 99, 61),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.help,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          "Help & Support",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        )
+                      ],
+                    ),
+                  ),
                   Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(64, 255, 99, 61),
-                      ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.document_scanner,
-                              size: 40,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              "Terms & Policies",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 15),
-                            )
-                          ])),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromARGB(64, 255, 99, 61),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.document_scanner,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          "Terms & Policies",
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 220,

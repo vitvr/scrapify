@@ -4,6 +4,7 @@ the option to create new ones */
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/onboarding.dart';
+import 'package:scrapify/utils/post.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -50,26 +51,23 @@ class _HomePageState extends State<HomePage> {
         ),
         // backgroundColor: Colors.white,
         body: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ListView.separated(
-                // scrollDirection: Axis.horizontal,
-                itemCount: 20,
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: 10);
-                },
-                itemBuilder: (context, index) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      createBox(index),
-                      createBox(index + 1), // this wont work on actual post
-                    ],
-                  );
-                },
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  PostCard(),
+                  PostCard(),
+                ],
               ),
-            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  PostCard(),
+                  PostCard(),
+                ],
+              ),
+            ],
           ),
         ),
       ),
