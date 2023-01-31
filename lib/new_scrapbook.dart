@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:scrapify/homepage.dart';
+import 'package:scrapify/utils/choose_image.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/menu_button.dart';
 
@@ -31,14 +34,132 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
 
   String infoTypeValue = 'Opinion';
 
+  // Widget noPhoto = Column(
+  //   children: const [
+  //     Icon(
+  //       Icons.add_circle_outline,
+  //       color: Colors.black,
+  //     ),
+  //     Text(
+  //       'Add cover photo',
+  //       style: TextStyle(
+  //         color: Colors.black,
+  //         fontSize: 14,
+  //       ),
+  //     ),
+  //   ],
+  // );
+
+  // Image image = Image.asset(
+  //   'assets/parrot.png',
+  //   fit: BoxFit.cover,
+  // );
+
+  // Widget showImage = Image.asset(
+  //   'assets/parrot.png',
+  //   fit: BoxFit.cover,
+  // );
+
+  Image image = Image.asset(
+    'assets/parrot.png',
+    fit: BoxFit.cover,
+  );
+
+  Widget showImage = Container();
+
+  // bool hasImage = false;
+  // Widget buttonImage = Column(
+  //   children: const [
+  //     Icon(
+  //       Icons.add_circle_outline,
+  //       color: Colors.black,
+  //     ),
+  //     Text(
+  //       'Add cover photo',
+  //       style: TextStyle(
+  //         color: Colors.black,
+  //         fontSize: 14,
+  //       ),
+  //     ),
+  //   ],
+  // );
+
+  // Color buttonColor = CustomColors().lighter;
+
+  //selecting image for post
+
+  Uint8List? _file;
+
+  _selectImage(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text('Create Post'),
+            children: [
+              //camera option
+              SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Take a Photo'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  Uint8List file = await pickImage(
+                    ImageSource.camera,
+                  );
+                  setState(() {
+                    _file = file;
+                  });
+                },
+              ),
+
+              //gallery option
+              SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Choose From Gallery'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  Uint8List file = await pickImage(
+                    ImageSource.gallery,
+                  );
+                  setState(() {
+                    _file = file;
+                  });
+                },
+              ),
+              //cancel
+              SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text("Cancel"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  bool display = false;
+
   @override
   Widget build(BuildContext context) {
+    // if (hasImage) {
+    //   buttonImage = image;
+    //   buttonColor = Colors.white;
+    // } else {
+    //   buttonImage = noPhoto;
+    //   buttonColor = CustomColors().lighter;
+    // }
+    if (_file == null) {
+      showImage = Container();
+    } else {
+      showImage = Image(
+        image: MemoryImage(_file!),
+      );
+    }
     return Container(
-      color: Colors.white,
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(14, 255, 99, 61),
-        // currently, the 'create scrapbook' button is being used as a
-        // placeholder sign out button
+        backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
           backgroundColor: const Color.fromARGB(255, 255, 99, 61),
           child: const Icon(Icons.arrow_back),
@@ -62,112 +183,123 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
           ],
         ),
         body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(
-              MediaQuery.of(context).size.width.toDouble() * 0.025,
-            ),
-            child: SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(
+                MediaQuery.of(context).size.width.toDouble() * 0.025,
+              ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'I\'LL MAKE THIS PAGE LOOK NICER LATER '
-                    'THIS IS A PLACEHOLDER',
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        backgroundImage: AssetImage('assets/selfie.jpg'),
-                        radius: 40,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Jane Doe',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              DropdownButton(
-                                value: visibilityValue,
-                                icon: Icon(Icons.arrow_downward),
-                                onChanged: (value) {
-                                  setState(() {
-                                    visibilityValue = value.toString();
-                                  });
-                                },
-                                items: visibilityList.map((value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                              DropdownButton(
-                                value: infoTypeValue,
-                                icon: Icon(Icons.arrow_downward),
-                                onChanged: (value) {
-                                  setState(() {
-                                    infoTypeValue = value.toString();
-                                  });
-                                },
-                                items: infoTypeList.map((value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(
-                          MediaQuery.of(context).size.width.toDouble() * 0.02,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.white,
+                          backgroundImage: AssetImage('assets/selfie.jpg'),
+                          radius: 40,
                         ),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: const CustomColors().dark,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(16.0)),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.05,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Jane Doe',
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
                             ),
-                            minimumSize: const Size(50, 50),
+                            Row(
+                              children: [
+                                DropdownButton(
+                                  dropdownColor: CustomColors().light,
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  value: visibilityValue,
+                                  icon: Icon(Icons.arrow_downward),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      visibilityValue = value.toString();
+                                    });
+                                  },
+                                  items: visibilityList.map((value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                                DropdownButton(
+                                  value: infoTypeValue,
+                                  icon: Icon(Icons.arrow_downward),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      infoTypeValue = value.toString();
+                                    });
+                                  },
+                                  items: infoTypeList.map((value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.05,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(
+                            MediaQuery.of(context).size.width.toDouble() * 0.02,
                           ),
-                          onPressed: () {},
-                          child: const Text(
-                            'Finish',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: const CustomColors().dark,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              minimumSize: Size(
+                                MediaQuery.of(context).size.width * 0.225,
+                                MediaQuery.of(context).size.height * 0.055,
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: const Text(
+                              'Finish',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  showImage,
                   TextButton(
                     style: TextButton.styleFrom(
-                      backgroundColor: const CustomColors().light,
+                      backgroundColor: Color.fromARGB(64, 255, 99, 61),
                       shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       ),
                       minimumSize: Size(
                         double.infinity,
-                        MediaQuery.of(context).size.height * 0.28,
+                        MediaQuery.of(context).size.height * 0.1,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      _selectImage(context);
+                      display = true;
+                    },
                     child: Column(
                       children: const [
                         Icon(
@@ -184,11 +316,23 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                       ],
                     ),
                   ),
-                  Text('Title'),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.025,
+                  ),
+                  Text(
+                    'Title',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.005,
+                  ),
                   Container(
                     decoration: const BoxDecoration(
                       color: Color.fromARGB(64, 255, 99, 61),
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     ),
                     child: const Padding(
                       padding: const EdgeInsets.only(left: 16.0),
@@ -201,14 +345,26 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                       ),
                     ),
                   ),
-                  Text('Caption'),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.025,
+                  ),
+                  Text(
+                    'Caption',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.005,
+                  ),
                   Container(
                     padding: EdgeInsets.symmetric(
                         // vertical: MediaQuery.of(context).size.height * 0.1,
                         ),
                     decoration: const BoxDecoration(
                       color: Color.fromARGB(64, 255, 99, 61),
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     ),
                     child: const Padding(
                       padding: const EdgeInsets.only(left: 16.0),
@@ -221,21 +377,75 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.025,
+                  ),
                   Row(
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Location'),
-                          MenuButton(
-                            icon: Icons.error,
-                            text: 'PLACEHOLDER',
-                            page: HomePage(),
+                          Text(
+                            'Location',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.005,
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Color.fromARGB(64, 255, 99, 61),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              minimumSize: Size(
+                                MediaQuery.of(context).size.width * 0.45,
+                                MediaQuery.of(context).size.height * 0.16,
+                              ),
+                            ),
+                            onPressed: () {
+                              _selectImage(context);
+                              display = true;
+                            },
+                            child: Column(
+                              children: const [
+                                Icon(
+                                  Icons.add_circle_outline,
+                                  color: Colors.black,
+                                ),
+                                Text(
+                                  'Add cover photo',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Tags'),
+                          Text(
+                            'Tags',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.005,
+                          ),
                           SizedBox(
                             // height: MediaQuery.of(context).size.height,
                             width: MediaQuery.of(context).size.width * 0.45,
@@ -243,7 +453,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                               decoration: const BoxDecoration(
                                 color: Color.fromARGB(64, 255, 99, 61),
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(16.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                               ),
                               child: const Padding(
                                 padding: const EdgeInsets.only(left: 16.0),
