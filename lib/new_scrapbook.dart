@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:scrapify/homepage.dart';
+import 'package:scrapify/storage_methods.dart';
 import 'package:scrapify/utils/choose_image.dart';
 import 'package:scrapify/utils/colors.dart';
-import 'package:scrapify/utils/menu_button.dart';
+import 'package:scrapify/utils/post_image.dart';
+import 'package:uuid/uuid.dart';
 
 class NewScrapbookPage extends StatefulWidget {
   NewScrapbookPage({super.key});
@@ -87,6 +90,58 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
   // Color buttonColor = CustomColors().lighter;
 
   //selecting image for post
+  final String? _uid = FirebaseAuth.instance.currentUser?.uid;
+  String getUsername() {
+    String res = 'error';
+    try {
+      final _firestoreRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser?.uid);
+
+      _firestoreRef.get().then((DocumentSnapshot doc) {
+        return doc.get('username');
+      });
+    } catch (e) {
+      res = e.toString();
+      return res;
+    }
+    return 'ERORRRRRR';
+  }
+
+  final _firestoreRef = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser?.uid);
+  // final String? _username = FirebaseAuth.instance.currentUser?.;
+
+  Future<String> postImage(String caption, Uint8List file, String uid,
+      String username, String profImage) async {
+    String res = "error";
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    try {
+      print('REACHED HERE');
+      String photoURL =
+          await Storage_Methods().uploadImageToStorage('posts', file, true);
+      print('REACHED HERE');
+      String postID = const Uuid().v1();
+
+      Post post = Post(
+          caption: caption,
+          uid: uid,
+          username: username,
+          likes: [],
+          postId: postID,
+          datePublished: DateTime.now(),
+          postUrl: photoURL,
+          profImage: profImage);
+
+      _firestore.collection('posts').doc(postID).set(post.toJson());
+      res = "success";
+    } catch (e) {
+      res = e.toString();
+      print(res);
+    }
+    return res;
+  }
 
   Uint8List? _file;
 
@@ -150,6 +205,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
     //   buttonImage = noPhoto;
     //   buttonColor = CustomColors().lighter;
     // }
+    print(_uid);
     if (_file == null) {
       showImage = Container();
     } else {
@@ -157,6 +213,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
         image: MemoryImage(_file!),
       );
     }
+    String username = getUsername();
     return Container(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -271,7 +328,15 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                                 MediaQuery.of(context).size.height * 0.055,
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              postImage(
+                                'JEDSF',
+                                _file!,
+                                _uid!,
+                                'ASDASD',
+                                'gs://scrapify-9bcaa.appspot.com/selfie.jpg',
+                              );
+                            },
                             child: const Text(
                               'Finish',
                               style: TextStyle(
@@ -339,7 +404,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                       child: TextField(
                         decoration: const InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Email Address',
+                          hintText: 'Title',
                         ),
                         style: TextStyle(fontSize: 14),
                       ),
@@ -366,12 +431,13 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                       color: Color.fromARGB(64, 255, 99, 61),
                       borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     ),
-                    child: const Padding(
+                    child: Padding(
                       padding: const EdgeInsets.only(left: 16.0),
                       child: TextField(
+                        controller: captionController,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Email Address',
+                          hintText: 'Caption',
                         ),
                         style: TextStyle(fontSize: 14),
                       ),
