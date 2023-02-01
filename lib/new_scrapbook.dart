@@ -107,7 +107,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     var snapshot = snap.data() as Map<String, dynamic>;
-    username = snapshot["username"];
+    username = await snapshot["username"];
     print(username);
   }
 
@@ -277,6 +277,16 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: Text(
+                      'Post Image',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -292,12 +302,12 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Jane Doe',
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
+                            // Text(
+                            //   username,
+                            //   style: TextStyle(
+                            //     fontSize: 20,
+                            //   ),
+                            // ),
                             Row(
                               children: [
                                 DropdownButton(
