@@ -90,22 +90,25 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
   // Color buttonColor = CustomColors().lighter;
 
   //selecting image for post
-  final String? _uid = FirebaseAuth.instance.currentUser?.uid;
-  String getUsername() {
-    String res = 'error';
-    try {
-      final _firestoreRef = FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser?.uid);
 
-      _firestoreRef.get().then((DocumentSnapshot doc) {
-        return doc.get('username');
-      });
-    } catch (e) {
-      res = e.toString();
-      return res;
-    }
-    return 'ERORRRRRR';
+  @override
+  void initState() {
+    super.initState();
+    getUsername();
+  }
+
+  //getting UID
+  final String? _uid = FirebaseAuth.instance.currentUser?.uid;
+
+  //Getting username
+  String username = 'EROORRR';
+
+  getUsername() async {
+    DocumentSnapshot snap =
+        await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    var snapshot = snap.data() as Map<String, dynamic>;
+    username = snapshot["username"];
+    print(username);
   }
 
   final _firestoreRef = FirebaseFirestore.instance
@@ -144,6 +147,8 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
   }
 
   Uint8List? _file;
+
+  String addOrReplace = 'Add cover photo';
 
   _selectImage(BuildContext context) async {
     return showDialog(
@@ -208,12 +213,34 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
     print(_uid);
     if (_file == null) {
       showImage = Container();
+      addOrReplace = 'Add cover photo';
     } else {
-      showImage = Image(
-        image: MemoryImage(_file!),
+      // showImage = Image(
+      //   image: MemoryImage(_file!),
+      //   fit: BoxFit.cover,
+      // );
+      addOrReplace = 'Replace cover photo';
+      showImage = Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.height * 0.025,
+        ),
+        child: Center(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.4,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(20.0),
+              ),
+              child: Image(
+                image: MemoryImage(_file!),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
       );
     }
-    String username = getUsername();
+
     return Container(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -328,14 +355,14 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                                 MediaQuery.of(context).size.height * 0.055,
                               ),
                             ),
-                            onPressed: () {
-                              postImage(
-                                'JEDSF',
-                                _file!,
-                                _uid!,
-                                'ASDASD',
-                                'gs://scrapify-9bcaa.appspot.com/selfie.jpg',
-                              );
+                            onPressed: () async {
+                              await postImage(
+                                  captionController.text,
+                                  _file!,
+                                  _uid!,
+                                  username,
+                                  'https://firebasestorage.googleapis.com/v0/b/scrapify-9bcaa.appspot.com/o/selfie.jpg?alt=media&token=9a6e5042-8868-4610-9641-2654362a8e32');
+                              Navigator.pop(context);
                             },
                             child: const Text(
                               'Finish',
@@ -366,13 +393,13 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                       display = true;
                     },
                     child: Column(
-                      children: const [
+                      children: [
                         Icon(
                           Icons.add_circle_outline,
                           color: Colors.black,
                         ),
                         Text(
-                          'Add cover photo',
+                          addOrReplace,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14,
@@ -480,11 +507,11 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                             child: Column(
                               children: const [
                                 Icon(
-                                  Icons.add_circle_outline,
+                                  Icons.location_pin,
                                   color: Colors.black,
                                 ),
                                 Text(
-                                  'Add cover photo',
+                                  'Location Placeholder',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14,

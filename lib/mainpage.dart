@@ -22,7 +22,7 @@ class _MainPageState extends State<MainPage> {
   // list of pages for the bottom navigation bar
   List<Widget> pages = const [
     HomePage(),
-    PostCard(), // placeholder
+    HomePage(), // placeholder
     HomePage(), // placeholder
     ProfileScreen(),
     Menu(),

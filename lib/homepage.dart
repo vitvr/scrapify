@@ -1,6 +1,8 @@
 /* the homepage of the app, it includes a feed of recommended posts as well as
 the option to create new ones */
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/new_scrapbook.dart';
 import 'package:scrapify/utils/post.dart';
@@ -48,6 +50,32 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: SafeArea(
+          child: StreamBuilder(
+            stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+            builder: (context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) => Row(
+                  children: [
+                    PostCard(
+                      snap: snapshot.data!.docs[index].data(),
+                    ),
+                    PostCard(
+                      snap: snapshot.data!.docs[index].data(),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+
           // child: GridView.builder(
           //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           //     crossAxisCount: 2,
@@ -60,17 +88,17 @@ class _HomePageState extends State<HomePage> {
           //   },
           // ),
 
-          child: ListView.builder(
-            itemCount: 20,
-            itemBuilder: (context, index) {
-              return Row(
-                children: [
-                  PostCard(),
-                  PostCard(),
-                ],
-              );
-            },
-          ),
+          // child: ListView.builder(
+          //   itemCount: 20,
+          //   itemBuilder: (context, index) {
+          //     return Row(
+          //       children: [
+          //         PostCard(),
+          //         PostCard(),
+          //       ],
+          //     );
+          //   },
+          // ),
 
           // child: Column(
           //   children: [

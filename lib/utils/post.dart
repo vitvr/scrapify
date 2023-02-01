@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:scrapify/utils/colors.dart';
 
-class PostCard extends StatelessWidget {
-  const PostCard({super.key});
+class PostCard extends StatefulWidget {
+  final snap;
+  const PostCard({
+    Key? key,
+    required this.snap,
+  }) : super(key: key);
 
+  @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,7 +39,7 @@ class PostCard extends StatelessWidget {
                     topRight: Radius.circular(20),
                   ),
                   child: Image(
-                    image: AssetImage('assets/desk.jpeg'),
+                    image: NetworkImage(widget.snap["postUrl"]),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -55,7 +64,7 @@ class PostCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'My very own scrapbook',
+                                  widget.snap["description"],
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -64,7 +73,7 @@ class PostCard extends StatelessWidget {
                                   height: 4,
                                 ),
                                 Text(
-                                  'Jane doe',
+                                  widget.snap["username"],
                                   style: const TextStyle(
                                     // fontWeight: FontWeight.bold,
                                     fontSize: 11,
@@ -78,7 +87,9 @@ class PostCard extends StatelessWidget {
                     ),
                     CircleAvatar(
                       radius: 20,
-                      backgroundImage: AssetImage('assets/selfie.jpg'),
+                      backgroundImage: NetworkImage(
+                        widget.snap['profImage'],
+                      ),
                     ),
                   ],
                 ),
