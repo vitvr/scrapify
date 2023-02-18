@@ -51,7 +51,10 @@ class _HomePageState extends State<HomePage> {
         ),
         body: SafeArea(
           child: StreamBuilder(
-            stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection('posts')
+                .orderBy('datePublished', descending: true)
+                .snapshots(),
             builder: (context,
                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -60,19 +63,37 @@ class _HomePageState extends State<HomePage> {
                 );
               }
 
-              return ListView.builder(
+              // return ListView.builder(
+              //   itemCount: snapshot.data!.docs.length,
+              //   itemBuilder: (context, index) => Row(
+              //     children: [
+              //       PostCard(
+              //         snap: snapshot.data!.docs[index].data(),
+              //       ),
+              //       PostCard(
+              //         snap: snapshot.data!.docs[index].data(),
+              //       ),
+              //     ],
+              //   ),
+              // );
+
+              return GridView.builder(
                 itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) => Row(
-                  children: [
-                    PostCard(
-                      snap: snapshot.data!.docs[index].data(),
-                    ),
-                    PostCard(
-                      snap: snapshot.data!.docs[index].data(),
-                    ),
-                  ],
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  // mainAxisSpacing: MediaQuery.of(context).size.height * 0.36,
+                  childAspectRatio: 0.52,
                 ),
+                itemBuilder: (context, index) {
+                  return Flexible(
+                    child: PostCard(
+                      snap: snapshot.data!.docs[index].data(),
+                    ),
+                  );
+                },
               );
+
+              // placeholder
             },
           ),
 
