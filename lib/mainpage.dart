@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:scrapify/homepage.dart';
 import 'package:scrapify/menuscreen.dart';
 import 'package:scrapify/profile.dart';
+import 'package:scrapify/search_screen.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/post.dart';
 
@@ -22,7 +23,7 @@ class _MainPageState extends State<MainPage> {
   // list of pages for the bottom navigation bar
   List<Widget> pages = const [
     HomePage(),
-    HomePage(), // placeholder
+    SearchPage(), // placeholder
     HomePage(), // placeholder
     ProfileScreen(),
     Menu(),

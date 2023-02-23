@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:scrapify/comentscreen.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/like_animation.dart';
 
@@ -40,6 +41,14 @@ class _PostCardState extends State<PostCard> {
       print(
         e.toString(),
       );
+    }
+  }
+
+  Future<void> deletePost(String postId) async {
+    try {
+      await FirebaseFirestore.instance.collection('posts').doc(postId).delete();
+    } catch (e) {
+      print(e.toString());
     }
   }
 
@@ -165,7 +174,15 @@ class _PostCardState extends State<PostCard> {
                   ),
                   IconButton(
                     padding: EdgeInsets.all(0),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CommentScreen(
+                            snap: widget.snap,
+                          ),
+                        ),
+                      );
+                    },
                     icon: Icon(
                       Icons.comment,
                       color: Colors.red,
@@ -174,7 +191,9 @@ class _PostCardState extends State<PostCard> {
                   ),
                   IconButton(
                     padding: EdgeInsets.all(0),
-                    onPressed: () {},
+                    onPressed: () async {
+                      deletePost(widget.snap['postId']);
+                    },
                     icon: Icon(
                       Icons.share,
                       color: Colors.red,
