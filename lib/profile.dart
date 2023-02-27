@@ -1,6 +1,11 @@
 /* page to see current user's profile info */
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:scrapify/utils/pic.dart';
+import 'package:scrapify/utils/post.dart';
 import 'utils/colors.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -12,6 +17,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String? _uid = FirebaseAuth.instance.currentUser?.uid;
+    double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.019;
     return Container(
       color: Colors.white,
       child: Scaffold(
@@ -134,21 +141,78 @@ class ProfileScreen extends StatelessWidget {
               Expanded(
                 child: Container(
                   color: CustomColors().lighter,
-                  child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          createBox(index),
-                          createBox(index + 1),
-                          createBox(index + 2),
-                        ],
+                  child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('posts')
+                        .orderBy('datePublished', descending: true)
+                        .snapshots(),
+                    builder: (context,
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      // return ListView.builder(
+                      //   itemCount: snapshot.data!.docs.length,
+                      //   itemBuilder: (context, index) => Row(
+                      //     children: [
+                      //       PostCard(
+                      //         snap: snapshot.data!.docs[index].data(),
+                      //       ),
+                      //       PostCard(
+                      //         snap: snapshot.data!.docs[index].data(),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // );
+
+                      // return GridView.builder(
+                      //   itemCount: snapshot.data!.docs.length,
+                      //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      //     crossAxisCount: 2,
+                      //     // mainAxisSpacing: MediaQuery.of(context).size.height * 0.36,
+                      //     childAspectRatio: 0.52,
+                      //   ),
+                      //   itemBuilder: (context, index) {
+                      //     return Flexible(
+                      //       child: PostCard(
+                      //         snap: snapshot.data!.docs[index].data(),
+                      //       ),
+                      //     );
+                      //   },
+                      // );
+
+                      return MasonryGridView.count(
+                        padding: EdgeInsets.all(postPadding),
+                        itemCount: snapshot.data!.docs.length,
+                        crossAxisCount: 2,
+                        mainAxisSpacing: postPadding,
+                        crossAxisSpacing: postPadding,
+                        itemBuilder: (context, index) {
+                          if (snapshot.data!.docs[index].get('uid') != _uid) {
+                            print(snapshot.data!.docs[index].data());
+                            return Container();
+                            // this approach returns an empty container
+                            // bad because it causes some padding to appear
+                            // not that noticeable ig
+                          }
+                          // return Tile(
+                          //   index: index,
+                          //   extent: (index % 5 + 1) * 100,
+                          // );
+                          return Flexible(
+                            child: Pic(
+                              snap: snapshot.data!.docs[index].data(),
+                            ),
+                          );
+                        },
                       );
+
+                      // placeholder
                     },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: 3);
-                    },
-                    itemCount: 30,
                   ),
                 ),
               ),

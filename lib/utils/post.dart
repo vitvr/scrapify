@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -52,13 +54,19 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
+  double getPicHeight() {
+    return 0.2 + (Random().nextDouble() % 0.25);
+  }
+
   @override
+  double picHeight = 0.3 + (Random().nextDouble() % 0.26);
   Widget build(BuildContext context) {
     final String? _uid = FirebaseAuth.instance.currentUser?.uid;
     return Padding(
-      padding: EdgeInsets.all(
-        MediaQuery.of(context).size.width.toDouble() * 0.013,
-      ),
+      // padding: EdgeInsets.all(
+      //   MediaQuery.of(context).size.width.toDouble() * 0.013,
+      // ),
+      padding: EdgeInsets.all(0),
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.46,
         child: Container(
@@ -72,7 +80,7 @@ class _PostCardState extends State<PostCard> {
           child: Column(
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height * picHeight,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),

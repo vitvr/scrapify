@@ -1,6 +1,7 @@
 /* the homepage of the app, it includes a feed of recommended posts as well as
 the option to create new ones */
 
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.019;
     return Container(
       color: Colors.white,
       child: Scaffold(
@@ -77,14 +79,32 @@ class _HomePageState extends State<HomePage> {
               //   ),
               // );
 
-              return GridView.builder(
+              // return GridView.builder(
+              //   itemCount: snapshot.data!.docs.length,
+              //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //     crossAxisCount: 2,
+              //     // mainAxisSpacing: MediaQuery.of(context).size.height * 0.36,
+              //     childAspectRatio: 0.52,
+              //   ),
+              //   itemBuilder: (context, index) {
+              //     return Flexible(
+              //       child: PostCard(
+              //         snap: snapshot.data!.docs[index].data(),
+              //       ),
+              //     );
+              //   },
+              // );
+              return MasonryGridView.count(
+                padding: EdgeInsets.all(postPadding),
                 itemCount: snapshot.data!.docs.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  // mainAxisSpacing: MediaQuery.of(context).size.height * 0.36,
-                  childAspectRatio: 0.52,
-                ),
+                crossAxisCount: 2,
+                mainAxisSpacing: postPadding,
+                crossAxisSpacing: postPadding,
                 itemBuilder: (context, index) {
+                  // return Tile(
+                  //   index: index,
+                  //   extent: (index % 5 + 1) * 100,
+                  // );
                   return Flexible(
                     child: PostCard(
                       snap: snapshot.data!.docs[index].data(),
