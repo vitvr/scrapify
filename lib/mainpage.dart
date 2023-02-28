@@ -4,6 +4,7 @@ not have to be rebuilt when moving to another page */
 
 import 'package:flutter/material.dart';
 import 'package:scrapify/homepage.dart';
+import 'package:scrapify/map_screen.dart';
 import 'package:scrapify/menuscreen.dart';
 import 'package:scrapify/profile.dart';
 import 'package:scrapify/search_screen.dart';
@@ -24,7 +25,7 @@ class _MainPageState extends State<MainPage> {
   List<Widget> pages = const [
     HomePage(),
     SearchPage(), // placeholder
-    HomePage(), // placeholder
+    MapScreen(), // placeholder
     ProfileScreen(),
     Menu(),
   ];

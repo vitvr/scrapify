@@ -55,12 +55,19 @@ class _PostCardState extends State<PostCard> {
   }
 
   double getPicHeight() {
-    return 0.2 + (Random().nextDouble() % 0.25);
+    // return 0.2 + (Random().nextDouble() % 0.25);
+    if (Random().nextDouble() > 0.5) {
+      return 0.3;
+    } else {
+      return 0.5;
+    }
   }
 
   @override
-  double picHeight = 0.3 + (Random().nextDouble() % 0.26);
+  // double picHeight = 0.3 + (Random().nextDouble() % 0.26);
+  double picHeight = 0.0;
   Widget build(BuildContext context) {
+    picHeight = getPicHeight();
     final String? _uid = FirebaseAuth.instance.currentUser?.uid;
     return Padding(
       // padding: EdgeInsets.all(

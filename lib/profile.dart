@@ -7,6 +7,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:scrapify/utils/pic.dart';
 import 'package:scrapify/utils/post.dart';
 import 'utils/colors.dart';
+import 'package:scrapify/utils/user_model.dart' as model;
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -15,9 +16,21 @@ class ProfileScreen extends StatelessWidget {
   final double profileRadius = 65;
   final double profileSpacing = 20;
 
+  Future<model.User> getUserDetails() async {
+    User currentUser = FirebaseAuth.instance.currentUser!;
+    print(currentUser);
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser.uid)
+        .get();
+
+    return model.User.fromSnap(documentSnapshot);
+  }
+
   @override
   Widget build(BuildContext context) {
     final String? _uid = FirebaseAuth.instance.currentUser?.uid;
+    var a = FirebaseFirestore.instance.collection('users').doc(_uid);
     double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.019;
     return Container(
       color: Colors.white,
@@ -40,104 +53,131 @@ class ProfileScreen extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      Column(
-                        children: [
-                          Image(
-                            image: const AssetImage('assets/desk.jpeg'),
-                            width: double.infinity,
-                            height: coverHeight,
-                            fit: BoxFit.cover,
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: (profileRadius + profileSpacing) * 2,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: profileSpacing,
-                                  ),
-                                  const Text(
-                                    'Jane Doe',
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
+              FutureBuilder(
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(_uid)
+                      .get(),
+                  // future: getUserDetails()
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    // return Text(snapshot.data!.username);
+                    return Column(
+                      children: [
+                        Stack(
+                          children: [
+                            Column(
+                              children: [
+                                Image(
+                                  image: const AssetImage('assets/desk.jpeg'),
+                                  width: double.infinity,
+                                  height: coverHeight,
+                                  fit: BoxFit.cover,
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width:
+                                          (profileRadius + profileSpacing) * 2,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: profileSpacing / 4,
-                                  ),
-                                  const Text(
-                                    '@jane.doe143',
-                                  ),
-                                  SizedBox(
-                                    height: profileSpacing / 4,
-                                  ),
-                                  Row(
-                                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Text(
-                                        '543 followers',
-                                      ),
-                                      SizedBox(
-                                        width: profileSpacing,
-                                      ),
-                                      Text(
-                                        '654 following',
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: profileSpacing,
+                                        ),
+                                        Text(
+                                          snapshot.data!.get('username'),
+                                          style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: profileSpacing / 4,
+                                        ),
+                                        Text(
+                                          '@' + snapshot.data!.get('username'),
+                                        ),
+                                        SizedBox(
+                                          height: profileSpacing / 4,
+                                        ),
+                                        Row(
+                                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                              snapshot.data!
+                                                      .get('followers')
+                                                      .length
+                                                      .toString() +
+                                                  ' followers',
+                                            ),
+                                            SizedBox(
+                                              width: profileSpacing,
+                                            ),
+                                            Text(
+                                              snapshot.data!
+                                                      .get('following')
+                                                      .length
+                                                      .toString() +
+                                                  ' following',
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Positioned(
+                              top: coverHeight - profileRadius / 2,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: profileSpacing),
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  backgroundImage: NetworkImage(
+                                      snapshot.data!.get('profImage')),
+                                  radius: profileRadius,
+                                ),
                               ),
-                            ],
-                          )
-                        ],
-                      ),
-                      Positioned(
-                        top: coverHeight - profileRadius / 2,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: profileSpacing),
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            backgroundImage: AssetImage('assets/selfie.jpg'),
-                            radius: profileRadius,
+                            ),
+                          ],
+                        ),
+                        // SizedBox(
+                        //   height: profileSpacing,
+                        // ),
+                        Padding(
+                          padding: EdgeInsets.all(profileSpacing),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: CustomColors().light,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16.0)),
+                              ),
+                              minimumSize: const Size(1000000, 30),
+                            ),
+                            onPressed: () {},
+                            child: const Text(
+                              'Edit Profile',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  // SizedBox(
-                  //   height: profileSpacing,
-                  // ),
-                  Padding(
-                    padding: EdgeInsets.all(profileSpacing),
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: CustomColors().light,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                        ),
-                        minimumSize: const Size(1000000, 30),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        'Edit Profile',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                      ],
+                    );
+                  }),
               Expanded(
                 child: Container(
                   color: CustomColors().lighter,
