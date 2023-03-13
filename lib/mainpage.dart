@@ -32,9 +32,7 @@ class _MainPageState extends State<MainPage> {
     SearchPage(), // placeholder
     MapScreen(), // placeholder
     ProfileGeneral(uid: FirebaseAuth.instance.currentUser?.uid),
-    // Menu(),
-    // currently using the menu button as a placeholder button for:
-    ScrapbookPage()
+    Menu(),
   ];
 
   @override
