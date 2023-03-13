@@ -6,6 +6,7 @@ class User {
   final String profImage;
   final String username;
   final String bio;
+  final bookmarks;
   final List followers;
   final List following;
 
@@ -15,6 +16,7 @@ class User {
       required this.profImage,
       required this.email,
       required this.bio,
+      required this.bookmarks,
       required this.followers,
       required this.following});
 
@@ -27,6 +29,7 @@ class User {
       email: snapshot["email"],
       profImage: snapshot["profImage"],
       bio: snapshot["bio"],
+      bookmarks: snapshot["bookmarks"],
       followers: snapshot["followers"],
       following: snapshot["following"],
     );
@@ -38,6 +41,7 @@ class User {
         "email": email,
         "profImage": profImage,
         "bio": bio,
+        "bookmarks": bookmarks,
         "followers": followers,
         "following": following,
       };

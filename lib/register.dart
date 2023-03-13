@@ -42,21 +42,14 @@ class RegisterPageState extends State<RegisterPage> {
         'username': usernameController.text,
         'uid': cred.user!.uid,
         'email': emailController.text,
+        'bio': "",
+        'bookmarks': [],
         'followers': [],
         'following': [],
       });
     } on FirebaseAuthException {
       // Should avoid empty try blocks like this
     }
-    //realtime database
-    // await ref.set({
-    //   uid: {
-    //     "username": usernameController.text,
-    //     "email": emailController.text,
-    //     "followers": 0,
-    //     "following": 0
-    //   }
-    // });
   }
 
   void signIn() async {

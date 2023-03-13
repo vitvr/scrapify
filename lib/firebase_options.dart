@@ -23,15 +23,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -55,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '322336638669',
     projectId: 'scrapify-9bcaa',
     authDomain: 'scrapify-9bcaa.firebaseapp.com',
+    databaseURL: 'https://scrapify-9bcaa-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'scrapify-9bcaa.appspot.com',
     measurementId: 'G-N9X8LEEJ47',
   );
@@ -64,6 +59,31 @@ class DefaultFirebaseOptions {
     appId: '1:322336638669:android:15ccdc4df6d12ab50a0b84',
     messagingSenderId: '322336638669',
     projectId: 'scrapify-9bcaa',
+    databaseURL: 'https://scrapify-9bcaa-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'scrapify-9bcaa.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyD-xPkPwx4i8aEM0zY787kfwLn6TXkIU_4',
+    appId: '1:322336638669:ios:5d3a1fd7d41bcd680a0b84',
+    messagingSenderId: '322336638669',
+    projectId: 'scrapify-9bcaa',
+    databaseURL: 'https://scrapify-9bcaa-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'scrapify-9bcaa.appspot.com',
+    androidClientId: '322336638669-1ra6bhf98bp8ka2baknsij1umr812oll.apps.googleusercontent.com',
+    iosClientId: '322336638669-rr1j7coavse8a1gbeu29n7r2j7j1okbq.apps.googleusercontent.com',
+    iosBundleId: 'com.example.scrapify',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyD-xPkPwx4i8aEM0zY787kfwLn6TXkIU_4',
+    appId: '1:322336638669:ios:5d3a1fd7d41bcd680a0b84',
+    messagingSenderId: '322336638669',
+    projectId: 'scrapify-9bcaa',
+    databaseURL: 'https://scrapify-9bcaa-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'scrapify-9bcaa.appspot.com',
+    androidClientId: '322336638669-1ra6bhf98bp8ka2baknsij1umr812oll.apps.googleusercontent.com',
+    iosClientId: '322336638669-rr1j7coavse8a1gbeu29n7r2j7j1okbq.apps.googleusercontent.com',
+    iosBundleId: 'com.example.scrapify',
   );
 }
