@@ -121,10 +121,8 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
     String res = "error";
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     try {
-      print('REACHED HERE');
       String photoURL =
           await Storage_Methods().uploadImageToStorage('posts', file, true);
-      print('REACHED HERE');
       String postID = const Uuid().v1();
 
       Post post = Post(

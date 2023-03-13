@@ -20,6 +20,7 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
+  bool isBookmark = false;
 
   Future<void> likePost(String postId, String uid, List likes) async {
     String res = 'ERROR';
@@ -43,6 +44,21 @@ class _PostCardState extends State<PostCard> {
       print(
         e.toString(),
       );
+    }
+  }
+
+  Future<void> bookmarkPost(String postId, String uid) async {
+    DocumentSnapshot snap1 =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    List bookmarking = (snap1.data()! as dynamic)['bookmarks'];
+    if (bookmarking.contains(postId)) {
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        'bookmarks': FieldValue.arrayRemove([postId])
+      });
+    } else {
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        'bookmarks': FieldValue.arrayUnion([postId])
+      });
     }
   }
 
@@ -177,10 +193,6 @@ class _PostCardState extends State<PostCard> {
                               : const Icon(
                                   Icons.favorite_border,
                                 ),
-                          // icon: Icon(
-                          //   Icons.favorite,
-                          //   color: Colors.red,
-                          // ),
                           visualDensity: VisualDensity.comfortable,
                         ),
                       ),
@@ -217,7 +229,12 @@ class _PostCardState extends State<PostCard> {
                   ),
                   IconButton(
                     padding: EdgeInsets.all(0),
-                    onPressed: () {},
+                    onPressed: () {
+                      bookmarkPost(
+                        widget.snap['postId'],
+                        _uid!,
+                      );
+                    },
                     icon: Icon(
                       Icons.bookmark,
                       color: Colors.red,

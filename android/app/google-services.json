@@ -38,6 +38,13 @@
             {
               "client_id": "322336638669-1t06k9qm6hv7qv1lnvkgj109eqbqsi8v.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "322336638669-di08n5cdav0pqjtp5mmkc8poth7200j9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.company.scrapify"
+              }
             }
           ]
         }
