@@ -170,7 +170,7 @@ class ProfileGeneral extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => EditPage(),
+                                  builder: (context) => const EditPage(),
                                 ),
                               );
                             },

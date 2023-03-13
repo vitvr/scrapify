@@ -66,35 +66,6 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
 
-                // return ListView.builder(
-                //   itemCount: snapshot.data!.docs.length,
-                //   itemBuilder: (context, index) => Row(
-                //     children: [
-                //       PostCard(
-                //         snap: snapshot.data!.docs[index].data(),
-                //       ),
-                //       PostCard(
-                //         snap: snapshot.data!.docs[index].data(),
-                //       ),
-                //     ],
-                //   ),
-                // );
-
-                // return GridView.builder(
-                //   itemCount: snapshot.data!.docs.length,
-                //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                //     crossAxisCount: 2,
-                //     // mainAxisSpacing: MediaQuery.of(context).size.height * 0.36,
-                //     childAspectRatio: 0.52,
-                //   ),
-                //   itemBuilder: (context, index) {
-                //     return Flexible(
-                //       child: PostCard(
-                //         snap: snapshot.data!.docs[index].data(),
-                //       ),
-                //     );
-                //   },
-                // );
                 return MasonryGridView.count(
                   padding: EdgeInsets.all(postPadding),
                   itemCount: snapshot.data!.docs.length,
@@ -102,10 +73,6 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSpacing: postPadding,
                   crossAxisSpacing: postPadding,
                   itemBuilder: (context, index) {
-                    // return Tile(
-                    //   index: index,
-                    //   extent: (index % 5 + 1) * 100,
-                    // );
                     return Flexible(
                       child: PostCard(
                         snap: snapshot.data!.docs[index].data(),

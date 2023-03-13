@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:scrapify/bookmarks.dart';
 import 'package:scrapify/comentscreen.dart';
 import 'package:scrapify/utils/like_animation.dart';
 
@@ -112,7 +113,7 @@ class _PostCardState extends State<PostCard> {
           child: Column(
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * picHeight,
+                // height: MediaQuery.of(context).size.height * picHeight,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
@@ -227,8 +228,12 @@ class _PostCardState extends State<PostCard> {
                   ),
                   IconButton(
                     padding: EdgeInsets.all(0),
-                    onPressed: () async {
-                      deletePost(widget.snap['postId']);
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BookmarkPage(),
+                        ),
+                      );
                     },
                     icon: Icon(
                       Icons.share,
