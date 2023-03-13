@@ -1,10 +1,10 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/comentscreen.dart';
-import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/like_animation.dart';
 
 class PostCard extends StatefulWidget {
@@ -63,11 +63,20 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
+  Future<double> getPicHeightByRatio() async {
+    // File img = File.fromUri(widget.snap["postUrl"]);
+    // var decodedImg = await decodeImageFromList(img.readAsBytesSync());
+    // print(decodedImg.height);
+    // print(decodedImg.width);
+    return 2;
+  }
+
   @override
   // double picHeight = 0.3 + (Random().nextDouble() % 0.26);
   double picHeight = 0.0;
   Widget build(BuildContext context) {
     picHeight = getPicHeight();
+    getPicHeightByRatio();
     final String? _uid = FirebaseAuth.instance.currentUser?.uid;
     return Padding(
       // padding: EdgeInsets.all(

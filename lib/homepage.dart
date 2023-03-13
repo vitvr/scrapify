@@ -19,146 +19,148 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.019;
-    return Container(
-      color: Colors.white,
-      child: Scaffold(
-        backgroundColor: const Color.fromARGB(14, 255, 99, 61),
-        // currently, the 'create scrapbook' button is being used as a
-        // placeholder sign out button
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(255, 255, 99, 61),
-          child: const Icon(Icons.create),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => NewScrapbookPage(),
-              ),
-            );
-          },
-        ),
-        appBar: AppBar(
-          title: const Text(
-            'SCRAPIFY',
-            style: TextStyle(fontSize: 35),
-          ),
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notification_add_outlined),
-            ),
-          ],
-        ),
-        body: SafeArea(
-          child: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('posts')
-                .orderBy('datePublished', descending: true)
-                .snapshots(),
-            builder: (context,
-                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              // return ListView.builder(
-              //   itemCount: snapshot.data!.docs.length,
-              //   itemBuilder: (context, index) => Row(
-              //     children: [
-              //       PostCard(
-              //         snap: snapshot.data!.docs[index].data(),
-              //       ),
-              //       PostCard(
-              //         snap: snapshot.data!.docs[index].data(),
-              //       ),
-              //     ],
-              //   ),
-              // );
-
-              // return GridView.builder(
-              //   itemCount: snapshot.data!.docs.length,
-              //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //     crossAxisCount: 2,
-              //     // mainAxisSpacing: MediaQuery.of(context).size.height * 0.36,
-              //     childAspectRatio: 0.52,
-              //   ),
-              //   itemBuilder: (context, index) {
-              //     return Flexible(
-              //       child: PostCard(
-              //         snap: snapshot.data!.docs[index].data(),
-              //       ),
-              //     );
-              //   },
-              // );
-              return MasonryGridView.count(
-                padding: EdgeInsets.all(postPadding),
-                itemCount: snapshot.data!.docs.length,
-                crossAxisCount: 2,
-                mainAxisSpacing: postPadding,
-                crossAxisSpacing: postPadding,
-                itemBuilder: (context, index) {
-                  // return Tile(
-                  //   index: index,
-                  //   extent: (index % 5 + 1) * 100,
-                  // );
-                  return Flexible(
-                    child: PostCard(
-                      snap: snapshot.data!.docs[index].data(),
-                    ),
-                  );
-                },
+    return Scaffold(
+      body: Container(
+        color: Colors.white,
+        child: Scaffold(
+          backgroundColor: const Color.fromARGB(14, 255, 99, 61),
+          // currently, the 'create scrapbook' button is being used as a
+          // placeholder sign out button
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: const Color.fromARGB(255, 255, 99, 61),
+            child: const Icon(Icons.create),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => NewScrapbookPage(),
+                ),
               );
-
-              // placeholder
             },
           ),
+          appBar: AppBar(
+            title: const Text(
+              'SCRAPIFY',
+              style: TextStyle(fontSize: 35),
+            ),
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.notification_add_outlined),
+              ),
+            ],
+          ),
+          body: SafeArea(
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .orderBy('datePublished', descending: true)
+                  .snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-          // child: GridView.builder(
-          //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //     crossAxisCount: 2,
-          //   ),
-          //   itemBuilder: (context, index) {
-          //     return Padding(
-          //       padding: EdgeInsets.all(2),
-          //       child: PostCard(),
-          //     );
-          //   },
-          // ),
+                // return ListView.builder(
+                //   itemCount: snapshot.data!.docs.length,
+                //   itemBuilder: (context, index) => Row(
+                //     children: [
+                //       PostCard(
+                //         snap: snapshot.data!.docs[index].data(),
+                //       ),
+                //       PostCard(
+                //         snap: snapshot.data!.docs[index].data(),
+                //       ),
+                //     ],
+                //   ),
+                // );
 
-          // child: ListView.builder(
-          //   itemCount: 20,
-          //   itemBuilder: (context, index) {
-          //     return Row(
-          //       children: [
-          //         PostCard(),
-          //         PostCard(),
-          //       ],
-          //     );
-          //   },
-          // ),
+                // return GridView.builder(
+                //   itemCount: snapshot.data!.docs.length,
+                //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                //     crossAxisCount: 2,
+                //     // mainAxisSpacing: MediaQuery.of(context).size.height * 0.36,
+                //     childAspectRatio: 0.52,
+                //   ),
+                //   itemBuilder: (context, index) {
+                //     return Flexible(
+                //       child: PostCard(
+                //         snap: snapshot.data!.docs[index].data(),
+                //       ),
+                //     );
+                //   },
+                // );
+                return MasonryGridView.count(
+                  padding: EdgeInsets.all(postPadding),
+                  itemCount: snapshot.data!.docs.length,
+                  crossAxisCount: 2,
+                  mainAxisSpacing: postPadding,
+                  crossAxisSpacing: postPadding,
+                  itemBuilder: (context, index) {
+                    // return Tile(
+                    //   index: index,
+                    //   extent: (index % 5 + 1) * 100,
+                    // );
+                    return Flexible(
+                      child: PostCard(
+                        snap: snapshot.data!.docs[index].data(),
+                      ),
+                    );
+                  },
+                );
 
-          // child: Column(
-          //   children: [
-          //     Row(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         PostCard(),
-          //         PostCard(),
-          //       ],
-          //     ),
-          //     Row(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         PostCard(),
-          //         PostCard(),
-          //       ],
-          //     ),
-          //   ],
-          // ),
+                // placeholder
+              },
+            ),
+
+            // child: GridView.builder(
+            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //     crossAxisCount: 2,
+            //   ),
+            //   itemBuilder: (context, index) {
+            //     return Padding(
+            //       padding: EdgeInsets.all(2),
+            //       child: PostCard(),
+            //     );
+            //   },
+            // ),
+
+            // child: ListView.builder(
+            //   itemCount: 20,
+            //   itemBuilder: (context, index) {
+            //     return Row(
+            //       children: [
+            //         PostCard(),
+            //         PostCard(),
+            //       ],
+            //     );
+            //   },
+            // ),
+
+            // child: Column(
+            //   children: [
+            //     Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         PostCard(),
+            //         PostCard(),
+            //       ],
+            //     ),
+            //     Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         PostCard(),
+            //         PostCard(),
+            //       ],
+            //     ),
+            //   ],
+            // ),
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:scrapify/profile_general.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -64,6 +65,15 @@ class _SearchPageState extends State<SearchPage> {
                         title: Text(
                           (snapshot.data! as dynamic).docs[index]['username'],
                         ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ProfileGeneral(
+                                  uid: (snapshot.data! as dynamic).docs[index]
+                                      ['uid']),
+                            ),
+                          );
+                        },
                       );
                     },
                   );

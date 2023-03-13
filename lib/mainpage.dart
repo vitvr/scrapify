@@ -7,9 +7,14 @@ import 'package:scrapify/homepage.dart';
 import 'package:scrapify/map_screen.dart';
 import 'package:scrapify/menuscreen.dart';
 import 'package:scrapify/profile.dart';
+import 'package:scrapify/profile_general.dart';
+import 'package:scrapify/scrapbook_page.dart';
 import 'package:scrapify/search_screen.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/post.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -22,12 +27,14 @@ class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
 
   // list of pages for the bottom navigation bar
-  List<Widget> pages = const [
+  List<Widget> pages = [
     HomePage(),
     SearchPage(), // placeholder
     MapScreen(), // placeholder
-    ProfileScreen(),
-    Menu(),
+    ProfileGeneral(uid: FirebaseAuth.instance.currentUser?.uid),
+    // Menu(),
+    // currently using the menu button as a placeholder button for:
+    ScrapbookPage()
   ];
 
   @override
