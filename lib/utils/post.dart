@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:scrapify/bookmarks.dart';
 import 'package:scrapify/comentscreen.dart';
 import 'package:scrapify/utils/like_animation.dart';
+import 'package:scrapify/view_page.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -114,15 +115,32 @@ class _PostCardState extends State<PostCard> {
             children: [
               SizedBox(
                 // height: MediaQuery.of(context).size.height * picHeight,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                  child: Image(
-                    image: NetworkImage(widget.snap["postUrl"]),
-                    fit: BoxFit.cover,
-                  ),
+                child: Stack(
+                  fit: StackFit.passthrough,
+                  alignment: Alignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ViewPage(
+                                snap: widget.snap,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Image(
+                          image: NetworkImage(widget.snap["postUrl"]),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(

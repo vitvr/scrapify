@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -14,7 +16,7 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
-  List content = [
+  List contents = [
     null,
     null,
     null,
@@ -44,21 +46,31 @@ class _EditPageState extends State<EditPage> {
   Future<String> postImage(int i) async {
     Uint8List file = files[i]!;
     String photoURL =
-        await Storage_Methods().uploadImageToStorage('posts', file, true);
-    return "1";
+        await Storage_Methods().uploadImageToStorage('temp', file, true);
+    contents[i] = photoURL;
+    return "";
   }
 
-  void postList() {}
+  Future<void> postList() async {
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc('4ddf5dd0-c1bc-11ed-89a5-ddc41581b6ca')
+        .collection('pages')
+        .doc('0')
+        .set({
+      'contents': contents,
+    });
+  }
 
-  void postPage() {
+  Future<void> postPage() async {
     for (int i = 0; i < 6; i++) {
       if (files[i] != null) {
-        postImage(i);
+        await postImage(i);
       } else {
         continue;
       }
     }
-    postList();
+    await postList();
   }
 
   _selectImage(BuildContext context, int index) async {
@@ -133,7 +145,9 @@ class _EditPageState extends State<EditPage> {
     }
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {}),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        postPage();
+      }),
       body: Column(
         children: <Widget>[
           Expanded(
