@@ -58,14 +58,12 @@ class ProfileGeneral extends StatelessWidget {
                       .collection('users')
                       .doc(uid)
                       .get(),
-                  // future: getUserDetails()
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
-                    // return Text(snapshot.data!.username);
                     return Column(
                       children: [
                         Stack(

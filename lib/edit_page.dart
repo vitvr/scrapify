@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:scrapify/storage_methods.dart';
 import 'package:scrapify/utils/choose_image.dart';
 
 class EditPage extends StatefulWidget {
@@ -39,6 +40,26 @@ class _EditPageState extends State<EditPage> {
     null,
     null,
   ];
+
+  Future<String> postImage(int i) async {
+    Uint8List file = files[i]!;
+    String photoURL =
+        await Storage_Methods().uploadImageToStorage('posts', file, true);
+    return "1";
+  }
+
+  void postList() {}
+
+  void postPage() {
+    for (int i = 0; i < 6; i++) {
+      if (files[i] != null) {
+        postImage(i);
+      } else {
+        continue;
+      }
+    }
+    postList();
+  }
 
   _selectImage(BuildContext context, int index) async {
     return showDialog(
@@ -91,18 +112,28 @@ class _EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget showImage = Container();
+    List<Widget> showImage = [
+      Container(),
+      Container(),
+      Container(),
+      Container(),
+      Container(),
+      Container(),
+    ];
 
-    if (files[2] == null) {
-      showImage = Container();
-    } else {
-      showImage = Image(
-        image: MemoryImage(files[2]!),
-        fit: BoxFit.cover,
-      );
+    for (int i = 0; i < 6; i++) {
+      if (files[i] == null) {
+        showImage[i] = Container();
+      } else {
+        showImage[i] = Image(
+          image: MemoryImage(files[i]!),
+          fit: BoxFit.cover,
+        );
+      }
     }
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {}),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -110,18 +141,39 @@ class _EditPageState extends State<EditPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Expanded(
-                  child: Image.network(
-                    'https://static01.nyt.com/images/2020/06/30/business/30india-tech-1/30india-tech-1-articleLarge.jpg?quality=75&auto=webp&disable=upscale',
-                    fit: BoxFit.cover,
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    alignment: Alignment.center,
+                    children: [
+                      Expanded(
+                        child: showImage[0],
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          _selectImage(context, 0);
+                        },
+                        iconSize: MediaQuery.of(context).size.width * 0.2,
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
-                  child: IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      _selectImage(context, 1);
-                    },
-                    iconSize: MediaQuery.of(context).size.width * 0.2,
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    alignment: Alignment.center,
+                    children: [
+                      Expanded(
+                        child: showImage[1],
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          _selectImage(context, 1);
+                        },
+                        iconSize: MediaQuery.of(context).size.width * 0.2,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -137,7 +189,7 @@ class _EditPageState extends State<EditPage> {
                     alignment: Alignment.center,
                     children: [
                       Expanded(
-                        child: showImage,
+                        child: showImage[2],
                       ),
                       IconButton(
                         icon: Icon(Icons.add),
@@ -150,9 +202,21 @@ class _EditPageState extends State<EditPage> {
                   ),
                 ),
                 Expanded(
-                  child: Image.network(
-                    'https://static01.nyt.com/images/2020/06/30/business/30india-tech-1/30india-tech-1-articleLarge.jpg?quality=75&auto=webp&disable=upscale',
-                    fit: BoxFit.cover,
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    alignment: Alignment.center,
+                    children: [
+                      Expanded(
+                        child: showImage[3],
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          _selectImage(context, 3);
+                        },
+                        iconSize: MediaQuery.of(context).size.width * 0.2,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -163,15 +227,39 @@ class _EditPageState extends State<EditPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Expanded(
-                  child: Image.network(
-                    'https://static01.nyt.com/images/2020/06/30/business/30india-tech-1/30india-tech-1-articleLarge.jpg?quality=75&auto=webp&disable=upscale',
-                    fit: BoxFit.cover,
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    alignment: Alignment.center,
+                    children: [
+                      Expanded(
+                        child: showImage[4],
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          _selectImage(context, 4);
+                        },
+                        iconSize: MediaQuery.of(context).size.width * 0.2,
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
-                  child: Image.network(
-                    'https://static01.nyt.com/images/2020/06/30/business/30india-tech-1/30india-tech-1-articleLarge.jpg?quality=75&auto=webp&disable=upscale',
-                    fit: BoxFit.cover,
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    alignment: Alignment.center,
+                    children: [
+                      Expanded(
+                        child: showImage[5],
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          _selectImage(context, 5);
+                        },
+                        iconSize: MediaQuery.of(context).size.width * 0.2,
+                      ),
+                    ],
                   ),
                 ),
               ],
