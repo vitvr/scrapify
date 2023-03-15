@@ -24,8 +24,6 @@ class _HomePageState extends State<HomePage> {
         color: Colors.white,
         child: Scaffold(
           backgroundColor: const Color.fromARGB(14, 255, 99, 61),
-          // currently, the 'create scrapbook' button is being used as a
-          // placeholder sign out button
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color.fromARGB(255, 255, 99, 61),
             child: const Icon(Icons.create),
@@ -74,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisSpacing: postPadding,
                   itemBuilder: (context, index) {
                     return Flexible(
-                      child: PostCard(
+                       child: PostCard(
                         snap: snapshot.data!.docs[index].data(),
                       ),
                     );
