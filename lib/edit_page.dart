@@ -10,9 +10,11 @@ import 'package:scrapify/utils/choose_image.dart';
 
 class EditPage extends StatefulWidget {
   final snap;
+  int page;
   EditPage({
     Key? key,
     required this.snap,
+    required this.page,
   }) : super(key: key);
 
   @override
@@ -60,7 +62,7 @@ class _EditPageState extends State<EditPage> {
         .collection('posts')
         .doc('4ddf5dd0-c1bc-11ed-89a5-ddc41581b6ca')
         .collection('pages')
-        .doc('0')
+        .doc(widget.page.toString())
         .set({
       'contents': contents,
     });
@@ -127,13 +129,13 @@ class _EditPageState extends State<EditPage> {
   }
 
   bool received = false;
-  int page = 0;
 
   void loadContents() {
     for (int i = 0; i < 6; i++) {
       if (contents[i] != null) {
         showImage[i] = Image(
           image: NetworkImage(contents[i]),
+          fit: BoxFit.cover,
         );
       }
     }
@@ -147,10 +149,14 @@ class _EditPageState extends State<EditPage> {
         .collection('posts')
         .doc(widget.snap['postId'])
         .collection('pages')
-        .doc(page.toString())
+        .doc(widget.page.toString())
         .get();
     var ss = s.data() as Map<String, dynamic>;
-    contents = await ss['contents'];
+    if (ss['contents'] == null) {
+      contents = [null, null, null, null, null, null];
+    } else {
+      contents = await ss['contents'];
+    }
     received = true;
     loadContents();
     setState(() {});
