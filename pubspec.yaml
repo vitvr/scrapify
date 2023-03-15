@@ -54,6 +54,7 @@ dependencies:
   google_maps_flutter: ^2.2.5
   geolocator: ^9.0.2
   geocoding: ^2.0.5
+  sliding_up_panel: ^2.0.0+1
 
 flutter_icons:
   image_path: "assets/appLogo.png"
