@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
           appBar: AppBar(
             title: Image(
               image: AssetImage('assets/mainLogoNoLogo.png'),
-              width: MediaQuery.of(context).size.width * 0.5,
+              height: 35,
             ),
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
