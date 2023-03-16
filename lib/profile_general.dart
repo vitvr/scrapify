@@ -165,13 +165,7 @@ class ProfileGeneral extends StatelessWidget {
                               ),
                               minimumSize: const Size(1000000, 30),
                             ),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const EditPage(),
-                                ),
-                              );
-                            },
+                            onPressed: () {},
                             child: const Text(
                               'Edit Profile',
                               style: TextStyle(

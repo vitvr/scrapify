@@ -9,7 +9,13 @@ import 'package:scrapify/storage_methods.dart';
 import 'package:scrapify/utils/choose_image.dart';
 
 class EditPage extends StatefulWidget {
-  const EditPage({super.key});
+  final snap;
+  int page;
+  EditPage({
+    Key? key,
+    required this.snap,
+    required this.page,
+  }) : super(key: key);
 
   @override
   State<EditPage> createState() => _EditPageState();
@@ -56,7 +62,7 @@ class _EditPageState extends State<EditPage> {
         .collection('posts')
         .doc('4ddf5dd0-c1bc-11ed-89a5-ddc41581b6ca')
         .collection('pages')
-        .doc('0')
+        .doc(widget.page.toString())
         .set({
       'contents': contents,
     });
@@ -122,20 +128,57 @@ class _EditPageState extends State<EditPage> {
         });
   }
 
+  bool received = false;
+
+  void loadContents() {
+    for (int i = 0; i < 6; i++) {
+      if (contents[i] != null) {
+        showImage[i] = Image(
+          image: NetworkImage(contents[i]),
+          fit: BoxFit.cover,
+        );
+      }
+    }
+  }
+
+  Future<void> getContents() async {
+    if (received) {
+      return;
+    }
+    DocumentSnapshot s = await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(widget.snap['postId'])
+        .collection('pages')
+        .doc(widget.page.toString())
+        .get();
+    var ss = s.data() as Map<String, dynamic>;
+    if (ss['contents'] == null) {
+      contents = [null, null, null, null, null, null];
+    } else {
+      contents = await ss['contents'];
+    }
+    received = true;
+    loadContents();
+    setState(() {});
+    print(contents);
+  }
+
+  List<Widget> showImage = [
+    Container(),
+    Container(),
+    Container(),
+    Container(),
+    Container(),
+    Container(),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    List<Widget> showImage = [
-      Container(),
-      Container(),
-      Container(),
-      Container(),
-      Container(),
-      Container(),
-    ];
+    getContents();
 
     for (int i = 0; i < 6; i++) {
       if (files[i] == null) {
-        showImage[i] = Container();
+        showImage[i] = showImage[i];
       } else {
         showImage[i] = Image(
           image: MemoryImage(files[i]!),

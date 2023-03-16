@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:scrapify/edit_page.dart';
 
 class ViewPage extends StatefulWidget {
   final snap;
@@ -50,14 +51,26 @@ class _ViewPageState extends State<ViewPage> {
     if (received) {
       return;
     }
-    DocumentSnapshot s = await FirebaseFirestore.instance
-        .collection('posts')
-        .doc(widget.snap['postId'])
-        .collection('pages')
-        .doc(page.toString())
-        .get();
-    var ss = s.data() as Map<String, dynamic>;
-    contents = await ss['contents'];
+    var ss;
+    try {
+      DocumentSnapshot s = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(widget.snap['postId'])
+          .collection('pages')
+          .doc(page.toString())
+          .get();
+      ss = s.data() as Map<String, dynamic>;
+    } catch (e) {
+      print('error');
+      page--;
+      setState(() {});
+      return;
+    }
+    if (ss['contents'] == null) {
+      contents = [null, null, null, null, null, null];
+    } else {
+      contents = await ss['contents'];
+    }
     received = true;
     setState(() {});
     print(contents);
@@ -95,6 +108,20 @@ class _ViewPageState extends State<ViewPage> {
     }
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => EditPage(
+                snap: widget.snap,
+                page: page,
+              ),
+            ),
+          );
+          received = false;
+          getContents();
+        },
+      ),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -166,6 +193,39 @@ class _ViewPageState extends State<ViewPage> {
                   ),
                 ),
               ],
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: Container(
+              color: Colors.amber,
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      page--;
+                      received = false;
+                      setState(() {});
+                    },
+                    icon: Icon(
+                      Icons.arrow_left,
+                    ),
+                    iconSize: MediaQuery.of(context).size.width * 0.1,
+                  ),
+                  Text('Page: ' + page.toString()),
+                  IconButton(
+                    onPressed: () {
+                      page++;
+                      received = false;
+                      setState(() {});
+                    },
+                    icon: Icon(
+                      Icons.arrow_right,
+                    ),
+                    iconSize: MediaQuery.of(context).size.width * 0.1,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
