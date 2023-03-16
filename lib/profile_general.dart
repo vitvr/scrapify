@@ -36,9 +36,9 @@ class ProfileGeneral extends StatelessWidget {
       color: Colors.white,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'SCRAPIFY',
-            style: TextStyle(fontSize: 35),
+          title: Image(
+            image: AssetImage('assets/mainLogoNoLogo.png'),
+            width: MediaQuery.of(context).size.width * 0.5,
           ),
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,

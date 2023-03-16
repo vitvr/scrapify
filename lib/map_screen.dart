@@ -3,6 +3,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
+import 'package:scrapify/utils/colors.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -12,48 +16,205 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
-  static const LatLng currentLocation =
+  // Default coordinates (HWUD)
+  static final LatLng defaultLocation =
       LatLng(25.102288819629432, 55.162327475793415);
-  static const LatLng currentLocation2 =
-      LatLng(25.102288819629432, 55.262427475793415);
-  late GoogleMapController _mapController;
+  // Coordinates to update when interactions happen
+  static LatLng currentLocation = defaultLocation;
+
+  // A Controller for Google Maps
+  Completer<GoogleMapController> _controller = Completer();
+  // A Controller for user input (search)
+  TextEditingController _searchController = TextEditingController();
+  // A set of markers to display on the map
   Map<String, Marker> _markers = {};
-  static final CameraPosition _defaultCameraPosition =
-      CameraPosition(target: currentLocation, zoom: 14);
+  // Default camera position on the map
+  static late CameraPosition _defaultCameraPosition;
+  // A Position that may be defined later
+  Position? _currentPosition;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentPosition();
+  }
+
+  void _setMarker(LatLng point) {
+    setState(() {
+      addMarker("main", point); //"Current ", "test1");
+    });
+  }
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    EasyLoading.show(status: "Loading...");
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position1) {
+      currentLocation = LatLng(position1.latitude, position1.longitude);
+      print("Hello1");
+      _setMarker(currentLocation);
+      print("Hello2");
+      _defaultCameraPosition =
+          CameraPosition(target: currentLocation, zoom: 14);
+      _currentPosition = position1;
+    }).catchError((e) {
+      debugPrint(e);
+    });
+
+    EasyLoading.dismiss();
+  }
+
+  Future<void> _goToPlace(Map<String, dynamic> place) async {
+    final double lat = place['geometry']['location']['lat'];
+    final double lng = place['geometry']['location']['lng'];
+
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: LatLng(lat, lng), zoom: 12)));
+
+    _setMarker(LatLng(lat, lng));
+  }
+
+  addMarker(
+      String id, LatLng location /*, String markerTitle, String desc*/) async {
+    var marker = Marker(
+        markerId: MarkerId(id),
+        position: location,
+        // infoWindow: InfoWindow(title: markerTitle, snippet: desc),
+        icon: BitmapDescriptor.defaultMarkerWithHue(12));
+    _markers[id] = marker;
+  }
 
   @override
   Widget build(BuildContext context) {
+    Size deviceSize = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: Image(
+          image: AssetImage('assets/mainLogoNoLogo.png'),
+          width: MediaQuery.of(context).size.width * 0.5,
+        ),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.notification_add_outlined),
+          ),
+        ],
+      ),
       body: SlidingUpPanel(
-        minHeight: MediaQuery.of(context).size.height * 0.2,
-        maxHeight: MediaQuery.of(context).size.height * 0.5,
-        body: GoogleMap(
-          mapType: MapType.normal,
-          initialCameraPosition: _defaultCameraPosition,
-          onMapCreated: (controller) {
-            _mapController = controller;
-            addMarker(
-                "test1", currentLocation, "ScrapifyAR1", "ScrapifyARTest1");
-            addMarker(
-                "test2", currentLocation2, "ScrapifyAR2", "ScrapifyARTest2");
-          },
-          markers: _markers.values.toSet(),
+        minHeight: deviceSize.height * 0.2,
+        maxHeight: deviceSize.height * 0.4,
+        body: Column(
+          children: [
+            Container(
+              height: deviceSize.height * 0.6 + 4,
+              child: GoogleMap(
+                myLocationButtonEnabled: true,
+                myLocationEnabled: true,
+                onCameraMove: (CameraPosition position) {
+                  currentLocation = LatLng(
+                      position.target.latitude, position.target.longitude);
+                  _setMarker(currentLocation);
+                },
+                mapType: MapType.normal,
+                initialCameraPosition: _MapScreenState._defaultCameraPosition,
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+                markers: _markers.values.toSet(),
+              ),
+            )
+          ],
         ),
         panelBuilder: (controller) => PanelWidget(
           controller: controller,
         ),
+        header: Container(
+          height: deviceSize.height * 0.2,
+          width: deviceSize.width,
+          color: Colors.white,
+          child: Column(children: [
+            Container(
+              height: deviceSize.height * 0.04,
+              padding: EdgeInsets.fromLTRB(
+                  0, deviceSize.height * 0.0125, 0, deviceSize.height * 0.02),
+              child: buildDragHandle(),
+            ),
+            Container(
+                height: deviceSize.height * 0.16,
+                width: deviceSize.width,
+                padding: EdgeInsets.only(left: deviceSize.width * 0.075),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Enter a location: ",
+                      textAlign: TextAlign.left,
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: TextFormField(
+                          controller: _searchController,
+                          textCapitalization: TextCapitalization.words,
+                          decoration: InputDecoration(
+                              hintText:
+                                  "Places of interest, cities, states, etc."),
+                        )),
+                        IconButton(
+                            onPressed: () async {
+                              var place = await LocationService()
+                                  .getPlace(_searchController.text);
+                              _goToPlace(place);
+                            },
+                            icon: Icon(Icons.search))
+                      ],
+                    )
+                  ],
+                )),
+          ]),
+        ),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        parallaxEnabled: true,
+        parallaxOffset: 0.5,
       ),
     );
-  }
-
-  addMarker(String id, LatLng location, String markerTitle, String desc) async {
-    var marker = Marker(
-        markerId: MarkerId(id),
-        position: location,
-        infoWindow: InfoWindow(title: markerTitle, snippet: desc),
-        icon: BitmapDescriptor.defaultMarkerWithHue(12));
-    _markers[id] = marker;
-    setState(() {});
   }
 }
 
@@ -64,17 +225,6 @@ class PanelWidget extends StatelessWidget {
     Key? key,
     required this.controller,
   }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => ListView(
-        padding: EdgeInsets.zero,
-        controller: controller,
-        children: <Widget>[
-          SizedBox(height: 36),
-          buildAboutText(),
-          SizedBox(height: 24),
-        ],
-      );
 
   Widget buildAboutText() => Container(
       padding: EdgeInsets.symmetric(horizontal: 24),
@@ -92,4 +242,47 @@ class PanelWidget extends StatelessWidget {
 Morbi id sodales mi, euismod tempus justo. Mauris non consequat ex, et blandit arcu. Ut in lacinia elit. Nunc id efficitur leo, vitae scelerisque elit. Nulla varius in arcu nec consectetur. Aliquam dictum, purus non finibus volutpat, velit nunc cursus neque, at congue lorem orci vel metus. Vivamus tortor purus, auctor vitae lobortis sed, dictum quis mauris. Ut tempor vel lacus a venenatis. Nam sit amet blandit mi. Quisque vel neque eu odio condimentum porta eget vitae sapien. Sed non mauris volutpat, faucibus metus ac, congue nibh. Donec id nunc sapien.''')
         ],
       ));
+
+  @override
+  Widget build(BuildContext context) => ListView(
+        padding: EdgeInsets.zero,
+        controller: controller,
+        children: <Widget>[
+          SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+          buildAboutText(),
+          SizedBox(height: 24),
+        ],
+      );
+}
+
+Widget buildDragHandle() => Center(
+      child: Container(
+        width: 50,
+        height: 5,
+        decoration: BoxDecoration(
+            color: CustomColors().lightTextInput,
+            borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+
+class LocationService {
+  final String key = 'AIzaSyA7f8dT30Z8ZPGBKGxWd-768yqlfcHiXnE';
+  Future<String> getPlaceId(String input) async {
+    final String url =
+        'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=$input&inputtype=textquery&key=$key';
+    var response = await http.get(Uri.parse(url));
+    var json = convert.jsonDecode(response.body);
+    var placeId = json['candidates'][0]['place_id'] as String;
+    return placeId;
+  }
+
+  Future<Map<String, dynamic>> getPlace(String input) async {
+    final placeId = await getPlaceId(input);
+    final String url =
+        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$key';
+    var response = await http.get(Uri.parse(url));
+    var json = convert.jsonDecode(response.body);
+    var results = json['result'] as Map<String, dynamic>;
+    return results;
+  }
 }
