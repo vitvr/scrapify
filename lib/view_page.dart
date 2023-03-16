@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:scrapify/edit_page.dart';
+import 'package:scrapify/utils/colors.dart';
 
 class ViewPage extends StatefulWidget {
   final snap;
@@ -122,113 +123,116 @@ class _ViewPageState extends State<ViewPage> {
           getContents();
         },
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: showImage[0],
-                ),
-                Expanded(
-                  child: showImage[1],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      Expanded(
-                        child: showImage[2],
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      Expanded(
-                        child: showImage[3],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      Expanded(
-                        child: showImage[4],
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      Expanded(
-                        child: showImage[5],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: Container(
-              color: Colors.amber,
+      body: Container(
+        color: CustomColors().extremelyLight,
+        child: Column(
+          children: <Widget>[
+            Expanded(
               child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      page--;
-                      received = false;
-                      setState(() {});
-                    },
-                    icon: Icon(
-                      Icons.arrow_left,
-                    ),
-                    iconSize: MediaQuery.of(context).size.width * 0.1,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    child: showImage[0],
                   ),
-                  Text('Page: ' + page.toString()),
-                  IconButton(
-                    onPressed: () {
-                      page++;
-                      received = false;
-                      setState(() {});
-                    },
-                    icon: Icon(
-                      Icons.arrow_right,
-                    ),
-                    iconSize: MediaQuery.of(context).size.width * 0.1,
+                  Expanded(
+                    child: showImage[1],
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    child: Stack(
+                      fit: StackFit.passthrough,
+                      alignment: Alignment.center,
+                      children: [
+                        Expanded(
+                          child: showImage[2],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Stack(
+                      fit: StackFit.passthrough,
+                      alignment: Alignment.center,
+                      children: [
+                        Expanded(
+                          child: showImage[3],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    child: Stack(
+                      fit: StackFit.passthrough,
+                      alignment: Alignment.center,
+                      children: [
+                        Expanded(
+                          child: showImage[4],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Stack(
+                      fit: StackFit.passthrough,
+                      alignment: Alignment.center,
+                      children: [
+                        Expanded(
+                          child: showImage[5],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: Container(
+                color: CustomColors().lighter,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        page--;
+                        received = false;
+                        setState(() {});
+                      },
+                      icon: Icon(
+                        Icons.arrow_left,
+                      ),
+                      iconSize: MediaQuery.of(context).size.width * 0.1,
+                    ),
+                    Text('Page: ' + page.toString()),
+                    IconButton(
+                      onPressed: () {
+                        page++;
+                        received = false;
+                        setState(() {});
+                      },
+                      icon: Icon(
+                        Icons.arrow_right,
+                      ),
+                      iconSize: MediaQuery.of(context).size.width * 0.1,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

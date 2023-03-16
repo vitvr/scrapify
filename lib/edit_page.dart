@@ -31,15 +31,6 @@ class _EditPageState extends State<EditPage> {
     null,
   ];
 
-  List cols = [
-    Colors.red,
-    Colors.blue,
-    Colors.amber,
-    Colors.white,
-    Colors.black,
-    Colors.green,
-  ];
-
   List<Uint8List?> files = [
     null,
     null,
@@ -79,6 +70,38 @@ class _EditPageState extends State<EditPage> {
     await postList();
   }
 
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  Future<dynamic> pickText() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Text'),
+          content: TextField(
+            autofocus: true,
+            decoration: InputDecoration(hintText: 'write here...'),
+            controller: controller,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {},
+              child: Text('Submit'),
+            ),
+          ],
+        ),
+      );
+
   _selectImage(BuildContext context, int index) async {
     return showDialog(
         context: context,
@@ -100,7 +123,6 @@ class _EditPageState extends State<EditPage> {
                   });
                 },
               ),
-
               //gallery option
               SimpleDialogOption(
                 padding: const EdgeInsets.all(20),
@@ -113,6 +135,14 @@ class _EditPageState extends State<EditPage> {
                   setState(() {
                     files[index] = file;
                   });
+                },
+              ),
+              SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Enter Text'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  String text = await pickText();
                 },
               ),
               //cancel
