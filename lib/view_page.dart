@@ -101,7 +101,14 @@ class _ViewPageState extends State<ViewPage> {
           fit: BoxFit.cover,
         );
       } else {
-        showImage[i] = Center(child: Text(contents[i]));
+        // showImage[i] = Center(child: Text(contents[i]));
+        showImage[i] = Padding(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+          child: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Text(contents[i]),
+          ),
+        );
       }
     }
 

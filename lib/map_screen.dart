@@ -241,14 +241,72 @@ class PanelWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            'About',
-            style: TextStyle(fontWeight: FontWeight.w600),
+          SafeArea(
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .orderBy('datePublished', descending: true)
+                  .snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                // return MasonryGridView.count(
+                //   scrollDirection: Axis.vertical,
+                //   shrinkWrap: true,
+                //   padding: EdgeInsets.all(
+                //       MediaQuery.of(context).size.width.toDouble() * 0.019),
+                //   itemCount: snapshot.data!.docs.length,
+                //   crossAxisCount: 2,
+                //   mainAxisSpacing:
+                //       MediaQuery.of(context).size.width.toDouble() * 0.019,
+                //   crossAxisSpacing:
+                //       MediaQuery.of(context).size.width.toDouble() * 0.019,
+                //   itemBuilder: (context, index) {
+                //     return Flexible(
+                //       child: PostCard(
+                //         snap: snapshot.data!.docs[index].data(),
+                //       ),
+                //     );
+                //   },
+                // );
+
+                return ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.all(
+                      MediaQuery.of(context).size.width.toDouble() * 0.019),
+                  itemCount: snapshot.data!.docs.length,
+                  separatorBuilder: (context, index) {
+                    return SizedBox(
+                      height: 13,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    return Flexible(
+                      child: PostCard(
+                        snap: snapshot.data!.docs[index].data(),
+                      ),
+                    );
+                  },
+                );
+
+                // placeholder
+              },
+            ),
           ),
-          SizedBox(height: 12),
-          Text(
-              '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultricies sem sit amet purus venenatis hendrerit. Aenean pulvinar auctor volutpat. Vivamus non nibh nisi. Aliquam aliquet magna sit amet libero sollicitudin imperdiet. Aenean vitae massa sed eros blandit pellentesque. Etiam elit arcu, pharetra nec velit quis, consectetur iaculis ligula. Aenean ac sagittis odio. Sed at interdum arcu. Vivamus dignissim augue nec velit auctor pulvinar. Vestibulum aliquet odio risus, at tempor orci fermentum pulvinar. Donec a placerat urna. Ut sed magna sed neque pulvinar faucibus.
-Morbi id sodales mi, euismod tempus justo. Mauris non consequat ex, et blandit arcu. Ut in lacinia elit. Nunc id efficitur leo, vitae scelerisque elit. Nulla varius in arcu nec consectetur. Aliquam dictum, purus non finibus volutpat, velit nunc cursus neque, at congue lorem orci vel metus. Vivamus tortor purus, auctor vitae lobortis sed, dictum quis mauris. Ut tempor vel lacus a venenatis. Nam sit amet blandit mi. Quisque vel neque eu odio condimentum porta eget vitae sapien. Sed non mauris volutpat, faucibus metus ac, congue nibh. Donec id nunc sapien.''')
+//           Text(
+//             'About',
+//             style: TextStyle(fontWeight: FontWeight.w600),
+//           ),
+//           SizedBox(height: 12),
+//           Text(
+//               '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultricies sem sit amet purus venenatis hendrerit. Aenean pulvinar auctor volutpat. Vivamus non nibh nisi. Aliquam aliquet magna sit amet libero sollicitudin imperdiet. Aenean vitae massa sed eros blandit pellentesque. Etiam elit arcu, pharetra nec velit quis, consectetur iaculis ligula. Aenean ac sagittis odio. Sed at interdum arcu. Vivamus dignissim augue nec velit auctor pulvinar. Vestibulum aliquet odio risus, at tempor orci fermentum pulvinar. Donec a placerat urna. Ut sed magna sed neque pulvinar faucibus.
+// Morbi id sodales mi, euismod tempus justo. Mauris non consequat ex, et blandit arcu. Ut in lacinia elit. Nunc id efficitur leo, vitae scelerisque elit. Nulla varius in arcu nec consectetur. Aliquam dictum, purus non finibus volutpat, velit nunc cursus neque, at congue lorem orci vel metus. Vivamus tortor purus, auctor vitae lobortis sed, dictum quis mauris. Ut tempor vel lacus a venenatis. Nam sit amet blandit mi. Quisque vel neque eu odio condimentum porta eget vitae sapien. Sed non mauris volutpat, faucibus metus ac, congue nibh. Donec id nunc sapien.''')
         ],
       ));
 

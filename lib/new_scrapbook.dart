@@ -133,7 +133,8 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
           postId: postID,
           datePublished: DateTime.now(),
           postUrl: photoURL,
-          profImage: profImage);
+          profImage: profImage,
+          location: const GeoPoint(0.0, 0.0));
 
       _firestore.collection('posts').doc(postID).set(post.toJson());
       res = "success";

@@ -40,8 +40,15 @@ class _EditPageState extends State<EditPage> {
     null,
   ];
 
+  String text = "THE ERROR";
+
   Future<String> postImage(int i) async {
     var file = files[i]!;
+    print(file);
+    if (file.runtimeType == String) {
+      contents[i] = file;
+      return "";
+    }
     String photoURL =
         await Storage_Methods().uploadImageToStorage('temp', file, true);
     contents[i] = photoURL;
@@ -84,8 +91,7 @@ class _EditPageState extends State<EditPage> {
     super.dispose();
   }
 
-  Future<dynamic> pickText() async {
-    String str = "";
+  Future<dynamic> pickText(int index) async {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -98,14 +104,18 @@ class _EditPageState extends State<EditPage> {
         actions: [
           TextButton(
             onPressed: () {
-              str = controller.text;
+              text = controller.text;
+              files[index] = text;
+              Navigator.of(context).pop();
+              setState(() {
+                // files[index] = text;
+              });
             },
             child: Text('Submit'),
           ),
         ],
       ),
     );
-    return str;
   }
 
   _selectImage(BuildContext context, int index) async {
@@ -148,10 +158,9 @@ class _EditPageState extends State<EditPage> {
                 child: const Text('Enter Text'),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  String text = await pickText();
-                  setState(() {
-                    files[index] = text;
-                  });
+                  await pickText(index);
+                  // files[index] = text;
+                  setState(() {});
                 },
               ),
               //cancel
@@ -181,7 +190,13 @@ class _EditPageState extends State<EditPage> {
           fit: BoxFit.cover,
         );
       } else {
-        showImage[i] = Center(child: Text(contents[i]));
+        showImage[i] = Padding(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+          child: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Text(contents[i]),
+          ),
+        );
       }
     }
   }
@@ -230,8 +245,13 @@ class _EditPageState extends State<EditPage> {
           fit: BoxFit.cover,
         );
       } else {
-        showImage[i] = Text(files[i]);
-        print("ay");
+        showImage[i] = Padding(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+          child: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Text(contents[i]),
+          ),
+        );
       }
     }
 
