@@ -93,18 +93,15 @@ class _ViewPageState extends State<ViewPage> {
     for (int i = 0; i < 6; i++) {
       if (contents[i] == null) {
         showImage[i] = Container();
-      } else {
+      } else if (List.from(contents[i].split("")).take(5).toString() ==
+          "(h, t, t, p, s)") {
+        // print(List.from(contents[i].split("")).take(5).toString());
         showImage[i] = Image(
           image: NetworkImage(contents[i]!),
           fit: BoxFit.cover,
         );
-        // showImage[i] = SizedBox(
-        //   height: 20,
-        //   width: 20,
-        //   child: Container(
-        //     color: Colors.black,
-        //   ),
-        // );
+      } else {
+        showImage[i] = Center(child: Text(contents[i]));
       }
     }
 

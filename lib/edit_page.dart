@@ -31,7 +31,7 @@ class _EditPageState extends State<EditPage> {
     null,
   ];
 
-  List<Uint8List?> files = [
+  List files = [
     null,
     null,
     null,
@@ -41,7 +41,7 @@ class _EditPageState extends State<EditPage> {
   ];
 
   Future<String> postImage(int i) async {
-    Uint8List file = files[i]!;
+    var file = files[i]!;
     String photoURL =
         await Storage_Methods().uploadImageToStorage('temp', file, true);
     contents[i] = photoURL;
@@ -84,23 +84,29 @@ class _EditPageState extends State<EditPage> {
     super.dispose();
   }
 
-  Future<dynamic> pickText() => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Text'),
-          content: TextField(
-            autofocus: true,
-            decoration: InputDecoration(hintText: 'write here...'),
-            controller: controller,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {},
-              child: Text('Submit'),
-            ),
-          ],
+  Future<dynamic> pickText() async {
+    String str = "";
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Text'),
+        content: TextField(
+          autofocus: true,
+          decoration: InputDecoration(hintText: 'write here...'),
+          controller: controller,
         ),
-      );
+        actions: [
+          TextButton(
+            onPressed: () {
+              str = controller.text;
+            },
+            child: Text('Submit'),
+          ),
+        ],
+      ),
+    );
+    return str;
+  }
 
   _selectImage(BuildContext context, int index) async {
     return showDialog(
@@ -143,6 +149,9 @@ class _EditPageState extends State<EditPage> {
                 onPressed: () async {
                   Navigator.of(context).pop();
                   String text = await pickText();
+                  setState(() {
+                    files[index] = text;
+                  });
                 },
               ),
               //cancel
@@ -162,11 +171,17 @@ class _EditPageState extends State<EditPage> {
 
   void loadContents() {
     for (int i = 0; i < 6; i++) {
-      if (contents[i] != null) {
+      if (contents[i] == null) {
+        showImage[i] = Container();
+      } else if (List.from(contents[i].split("")).take(5).toString() ==
+          "(h, t, t, p, s)") {
+        // print(List.from(contents[i].split("")).take(5).toString());
         showImage[i] = Image(
-          image: NetworkImage(contents[i]),
+          image: NetworkImage(contents[i]!),
           fit: BoxFit.cover,
         );
+      } else {
+        showImage[i] = Center(child: Text(contents[i]));
       }
     }
   }
@@ -209,11 +224,14 @@ class _EditPageState extends State<EditPage> {
     for (int i = 0; i < 6; i++) {
       if (files[i] == null) {
         showImage[i] = showImage[i];
-      } else {
+      } else if (files[i].runtimeType != String) {
         showImage[i] = Image(
           image: MemoryImage(files[i]!),
           fit: BoxFit.cover,
         );
+      } else {
+        showImage[i] = Text(files[i]);
+        print("ay");
       }
     }
 
