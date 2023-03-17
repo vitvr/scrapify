@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage> {
     HomePage(),
     SearchPage(), // placeholder
     MapScreen(), // placeholder
-    ProfileGeneral(uid: FirebaseAuth.instance.currentUser?.uid),
+    ProfilePersonal(),
     Menu(),
   ];
 

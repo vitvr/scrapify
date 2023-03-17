@@ -10,28 +10,145 @@ import 'package:scrapify/utils/post.dart';
 import 'utils/colors.dart';
 import 'package:scrapify/utils/user_model.dart' as model;
 
-class ProfileGeneral extends StatelessWidget {
+class ProfileGeneral extends StatefulWidget {
   final uid;
   const ProfileGeneral({
     Key? key,
     required this.uid,
   }) : super(key: key);
 
+  @override
+  State<ProfileGeneral> createState() => _ProfileGeneralState();
+}
+
+class _ProfileGeneralState extends State<ProfileGeneral> {
   final double coverHeight = 180;
+
   final double profileRadius = 65;
+
   final double profileSpacing = 20;
 
-  Future<model.User> getUserDetails() async {
-    DocumentSnapshot documentSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+  bool isFollowing = false;
 
-    return model.User.fromSnap(documentSnapshot);
+  Future<void> checkFollowing() async {
+    var userSnap = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.uid)
+        .get();
+    isFollowing = userSnap
+        .data()!['followers']
+        .contains(FirebaseAuth.instance.currentUser!.uid);
+    print(isFollowing);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkFollowing();
+  }
+
+  // Future<model.User> getUserDetails() async {
+  //   DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(widget.uid)
+  //       .get();
+
+  //   return model.User.fromSnap(documentSnapshot);
+  // }
+
+  Future<void> followUser(String cuid, String followId) async {
+    try {
+      DocumentSnapshot snap =
+          await FirebaseFirestore.instance.collection('users').doc(cuid).get();
+      List following = (snap.data()! as dynamic)['following'];
+
+      if (following.contains(followId)) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(followId)
+            .update({
+          'followers': FieldValue.arrayRemove([cuid])
+        });
+
+        await FirebaseFirestore.instance.collection('users').doc(cuid).update({
+          'following': FieldValue.arrayRemove([followId])
+        });
+      } else {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(followId)
+            .update({
+          'followers': FieldValue.arrayUnion([cuid])
+        });
+
+        await FirebaseFirestore.instance.collection('users').doc(cuid).update({
+          'following': FieldValue.arrayUnion([followId])
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var a = FirebaseFirestore.instance.collection('users').doc(uid);
-    double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.019;
+    Widget followButton = Container();
+    if (isFollowing) {
+      followButton = Padding(
+        padding: EdgeInsets.all(profileSpacing),
+        child: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: CustomColors().light,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            ),
+            minimumSize: const Size(1000000, 30),
+          ),
+          onPressed: () async {
+            await followUser(
+                FirebaseAuth.instance.currentUser!.uid, widget.uid);
+            isFollowing = !isFollowing;
+            setState(() {});
+          },
+          child: const Text(
+            'Unfollow',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      );
+    } else {
+      followButton = Padding(
+        padding: EdgeInsets.all(profileSpacing),
+        child: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: CustomColors().light,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            ),
+            minimumSize: const Size(1000000, 30),
+          ),
+          onPressed: () async {
+            await followUser(
+                FirebaseAuth.instance.currentUser!.uid, widget.uid);
+            isFollowing = !isFollowing;
+            setState(() {});
+          },
+          child: const Text(
+            'Follow',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      );
+    }
+    var a = FirebaseFirestore.instance.collection('users').doc(widget.uid);
+    double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.02;
     return Container(
       color: Colors.white,
       child: Scaffold(
@@ -56,7 +173,7 @@ class ProfileGeneral extends StatelessWidget {
               FutureBuilder(
                   future: FirebaseFirestore.instance
                       .collection('users')
-                      .doc(uid)
+                      .doc(widget.uid)
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -154,41 +271,19 @@ class ProfileGeneral extends StatelessWidget {
                         // SizedBox(
                         //   height: profileSpacing,
                         // ),
-                        Padding(
-                          padding: EdgeInsets.all(profileSpacing),
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: CustomColors().light,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(16.0)),
-                              ),
-                              minimumSize: const Size(1000000, 30),
-                            ),
-                            onPressed: () {},
-                            child: const Text(
-                              'Edit Profile',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
+                        followButton
                       ],
                     );
                   }),
               Expanded(
                 child: Container(
                   color: CustomColors().lighter,
-                  child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
+                  child: FutureBuilder(
+                    future: FirebaseFirestore.instance
                         .collection('posts')
-                        .orderBy('datePublished', descending: true)
-                        .snapshots(),
-                    builder: (context,
-                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                            snapshot) {
+                        .where('uid', isEqualTo: widget.uid)
+                        .get(),
+                    builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
                           child: CircularProgressIndicator(),
@@ -197,25 +292,32 @@ class ProfileGeneral extends StatelessWidget {
 
                       return MasonryGridView.count(
                         padding: EdgeInsets.all(postPadding),
-                        itemCount: snapshot.data!.docs.length,
+                        itemCount: (snapshot.data! as dynamic)!.docs.length,
                         crossAxisCount: 2,
                         mainAxisSpacing: postPadding,
                         crossAxisSpacing: postPadding,
                         itemBuilder: (context, index) {
-                          if (snapshot.data!.docs[index].get('uid') != uid) {
-                            print(snapshot.data!.docs[index].data());
-                            return Container();
-                            // this approach returns an empty container
-                            // bad because it causes some padding to appear
-                            // not that noticeable ig
-                          }
-                          // return Tile(
-                          //   index: index,
-                          //   extent: (index % 5 + 1) * 100,
-                          // );
+                          DocumentSnapshot snap =
+                              (snapshot.data! as dynamic).docs[index];
+                          // if (snapshot.data!.docs[index].get('uid') !=
+                          //     widget.uid) {
+                          //   print(snapshot.data!.docs[index].data());
+                          //   return Container();
+                          //   // this approach returns an empty container
+                          //   // bad because it causes some padding to appear
+                          //   // not that noticeable ig
+                          // }
+                          // // return Tile(
+                          // //   index: index,
+                          // //   extent: (index % 5 + 1) * 100,
+                          // // );
                           return Flexible(
-                            child: Pic(
-                              snap: snapshot.data!.docs[index].data(),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: Image(
+                                image: NetworkImage(snap['postUrl']),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           );
                         },

@@ -37,59 +37,12 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
 
   String infoTypeValue = 'Opinion';
 
-  // Widget noPhoto = Column(
-  //   children: const [
-  //     Icon(
-  //       Icons.add_circle_outline,
-  //       color: Colors.black,
-  //     ),
-  //     Text(
-  //       'Add cover photo',
-  //       style: TextStyle(
-  //         color: Colors.black,
-  //         fontSize: 14,
-  //       ),
-  //     ),
-  //   ],
-  // );
-
-  // Image image = Image.asset(
-  //   'assets/parrot.png',
-  //   fit: BoxFit.cover,
-  // );
-
-  // Widget showImage = Image.asset(
-  //   'assets/parrot.png',
-  //   fit: BoxFit.cover,
-  // );
-
   Image image = Image.asset(
     'assets/parrot.png',
     fit: BoxFit.cover,
   );
 
   Widget showImage = Container();
-
-  // bool hasImage = false;
-  // Widget buttonImage = Column(
-  //   children: const [
-  //     Icon(
-  //       Icons.add_circle_outline,
-  //       color: Colors.black,
-  //     ),
-  //     Text(
-  //       'Add cover photo',
-  //       style: TextStyle(
-  //         color: Colors.black,
-  //         fontSize: 14,
-  //       ),
-  //     ),
-  //   ],
-  // );
-
-  // Color buttonColor = CustomColors().lighter;
-
-  //selecting image for post
 
   @override
   void initState() {
@@ -114,7 +67,6 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
   final _firestoreRef = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser?.uid);
-  // final String? _username = FirebaseAuth.instance.currentUser?.;
 
   Future<String> postImage(String caption, Uint8List file, String uid,
       String username, String profImage) async {
@@ -137,6 +89,10 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
           location: const GeoPoint(0.0, 0.0));
 
       _firestore.collection('posts').doc(postID).set(post.toJson());
+
+      await FirebaseFirestore.instance.collection('users').doc(_uid).update({
+        'posts': FieldValue.arrayUnion([postID])
+      });
       res = "success";
     } catch (e) {
       res = e.toString();
@@ -202,22 +158,11 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
 
   @override
   Widget build(BuildContext context) {
-    // if (hasImage) {
-    //   buttonImage = image;
-    //   buttonColor = Colors.white;
-    // } else {
-    //   buttonImage = noPhoto;
-    //   buttonColor = CustomColors().lighter;
-    // }
     print(_uid);
     if (_file == null) {
       showImage = Container();
       addOrReplace = 'Add cover photo';
     } else {
-      // showImage = Image(
-      //   image: MemoryImage(_file!),
-      //   fit: BoxFit.cover,
-      // );
       addOrReplace = 'Replace cover photo';
       showImage = Padding(
         padding: EdgeInsets.symmetric(
@@ -301,12 +246,6 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Text(
-                            //   username,
-                            //   style: TextStyle(
-                            //     fontSize: 20,
-                            //   ),
-                            // ),
                             Row(
                               children: [
                                 DropdownButton(

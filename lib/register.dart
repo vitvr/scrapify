@@ -42,8 +42,13 @@ class RegisterPageState extends State<RegisterPage> {
         'username': usernameController.text,
         'uid': cred.user!.uid,
         'email': emailController.text,
-        'bio': "",
+        'profImage':
+            'https://firebasestorage.googleapis.com/v0/b/scrapify-9bcaa.appspot.com/o/Default_pfp.svg.png?alt=media&token=5f34d45e-9105-4a70-901a-1cbc8ce4866b',
+        'header':
+            'https://firebasestorage.googleapis.com/v0/b/scrapify-9bcaa.appspot.com/o/Grey_full.png?alt=media&token=cf4a2d92-cbd5-4588-aa26-19fe0182177b',
+        'bio': "available",
         'bookmarks': [],
+        'posts': [],
         'followers': [],
         'following': [],
       });
