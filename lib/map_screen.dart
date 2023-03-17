@@ -7,6 +7,9 @@ import 'package:scrapify/utils/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:scrapify/utils/post.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -36,6 +39,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _defaultCameraPosition = CameraPosition(target: defaultLocation, zoom: 14);
     _getCurrentPosition();
   }
 
@@ -48,7 +52,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
-
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -82,9 +85,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position1) {
       currentLocation = LatLng(position1.latitude, position1.longitude);
-      print("Hello1");
       _setMarker(currentLocation);
-      print("Hello2");
       _defaultCameraPosition =
           CameraPosition(target: currentLocation, zoom: 14);
       _currentPosition = position1;
@@ -121,10 +122,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     Size deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Image(
-          image: AssetImage('assets/mainLogoNoLogo.png'),
-          width: MediaQuery.of(context).size.width * 0.5,
-        ),
+        title: const Image(
+            image: AssetImage('assets/mainLogoNoLogo.png'), height: 35),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
@@ -136,12 +135,16 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         ],
       ),
       body: SlidingUpPanel(
-        minHeight: deviceSize.height * 0.2,
-        maxHeight: deviceSize.height * 0.4,
+        minHeight: deviceSize.height * 0.18,
+        maxHeight: deviceSize.height * 0.42,
         body: Column(
           children: [
             Container(
-              height: deviceSize.height * 0.6 + 4,
+              height: deviceSize.height * 0.62 + 4,
+              decoration: BoxDecoration(
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(20)),
+              ),
               child: GoogleMap(
                 myLocationButtonEnabled: true,
                 myLocationEnabled: true,
@@ -164,9 +167,16 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           controller: controller,
         ),
         header: Container(
-          height: deviceSize.height * 0.2,
+          height: deviceSize.height * 0.18,
           width: deviceSize.width,
-          color: Colors.white,
+          decoration: BoxDecoration(color: Colors.white, boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 4,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ]),
           child: Column(children: [
             Container(
               height: deviceSize.height * 0.04,
@@ -175,13 +185,13 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               child: buildDragHandle(),
             ),
             Container(
-                height: deviceSize.height * 0.16,
+                height: deviceSize.height * 0.14,
                 width: deviceSize.width,
                 padding: EdgeInsets.only(left: deviceSize.width * 0.075),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Enter a location: ",
                       textAlign: TextAlign.left,
                       style:
@@ -193,7 +203,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                             child: TextFormField(
                           controller: _searchController,
                           textCapitalization: TextCapitalization.words,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               hintText:
                                   "Places of interest, cities, states, etc."),
                         )),
@@ -203,7 +213,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                   .getPlace(_searchController.text);
                               _goToPlace(place);
                             },
-                            icon: Icon(Icons.search))
+                            icon: const Icon(Icons.search))
                       ],
                     )
                   ],
@@ -226,7 +236,7 @@ class PanelWidget extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
-  Widget buildAboutText() => Container(
+  Widget buildFeed() => Container(
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,7 +248,6 @@ class PanelWidget extends StatelessWidget {
           SizedBox(height: 12),
           Text(
               '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultricies sem sit amet purus venenatis hendrerit. Aenean pulvinar auctor volutpat. Vivamus non nibh nisi. Aliquam aliquet magna sit amet libero sollicitudin imperdiet. Aenean vitae massa sed eros blandit pellentesque. Etiam elit arcu, pharetra nec velit quis, consectetur iaculis ligula. Aenean ac sagittis odio. Sed at interdum arcu. Vivamus dignissim augue nec velit auctor pulvinar. Vestibulum aliquet odio risus, at tempor orci fermentum pulvinar. Donec a placerat urna. Ut sed magna sed neque pulvinar faucibus.
-
 Morbi id sodales mi, euismod tempus justo. Mauris non consequat ex, et blandit arcu. Ut in lacinia elit. Nunc id efficitur leo, vitae scelerisque elit. Nulla varius in arcu nec consectetur. Aliquam dictum, purus non finibus volutpat, velit nunc cursus neque, at congue lorem orci vel metus. Vivamus tortor purus, auctor vitae lobortis sed, dictum quis mauris. Ut tempor vel lacus a venenatis. Nam sit amet blandit mi. Quisque vel neque eu odio condimentum porta eget vitae sapien. Sed non mauris volutpat, faucibus metus ac, congue nibh. Donec id nunc sapien.''')
         ],
       ));
@@ -249,7 +258,7 @@ Morbi id sodales mi, euismod tempus justo. Mauris non consequat ex, et blandit a
         controller: controller,
         children: <Widget>[
           SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-          buildAboutText(),
+          buildFeed(),
           SizedBox(height: 24),
         ],
       );
