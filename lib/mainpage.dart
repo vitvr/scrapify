@@ -55,7 +55,7 @@ class _MainPageState extends State<MainPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'Search',
+            label: 'Browse',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
