@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/bookmarks.dart';
 import 'package:scrapify/comentscreen.dart';
+import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/like_animation.dart';
 import 'package:scrapify/view_page.dart';
 
@@ -21,9 +22,6 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  bool isLikeAnimating = false;
-  bool isBookmark = false;
-
   Future<void> likePost(String postId, String uid, List likes) async {
     String res = 'ERROR';
     try {
@@ -199,33 +197,51 @@ class _PostCardState extends State<PostCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Column(
-                    children: [
-                      LikeAnimation(
-                        isAnimating: widget.snap['likes'].contains(_uid),
-                        smallLike: true,
-                        child: IconButton(
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {
-                            likePost(
-                              widget.snap['postId'],
-                              _uid!,
-                              widget.snap['likes'],
-                            );
-                          },
-                          icon: widget.snap['likes'].contains(_uid)
-                              ? const Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
-                                )
-                              : const Icon(
-                                  Icons.favorite_border,
-                                ),
-                          visualDensity: VisualDensity.comfortable,
+                  FittedBox(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: CustomColors().extremelyLight,
+                          // border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child:
+                                  Text(widget.snap['likes'].length.toString()),
+                            ),
+                            LikeAnimation(
+                              isAnimating: widget.snap['likes'].contains(_uid),
+                              smallLike: true,
+                              child: IconButton(
+                                padding: EdgeInsets.all(0),
+                                onPressed: () {
+                                  likePost(
+                                    widget.snap['postId'],
+                                    _uid!,
+                                    widget.snap['likes'],
+                                  );
+                                },
+                                icon: widget.snap['likes'].contains(_uid)
+                                    ? const Icon(
+                                        Icons.favorite,
+                                        color: Colors.red,
+                                      )
+                                    : const Icon(
+                                        Icons.favorite_border,
+                                      ),
+                                visualDensity: VisualDensity.comfortable,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Text('${widget.snap['likes'].length} likes'),
-                    ],
+                    ),
                   ),
                   IconButton(
                     padding: EdgeInsets.all(0),
@@ -244,35 +260,68 @@ class _PostCardState extends State<PostCard> {
                     ),
                     visualDensity: VisualDensity.comfortable,
                   ),
-                  IconButton(
-                    padding: EdgeInsets.all(0),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => BookmarkPage(),
-                        ),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.share,
-                      color: Colors.red,
-                    ),
-                    visualDensity: VisualDensity.comfortable,
-                  ),
-                  IconButton(
-                    padding: EdgeInsets.all(0),
-                    onPressed: () {
-                      bookmarkPost(
-                        widget.snap['postId'],
-                        _uid!,
-                      );
-                    },
-                    icon: Icon(
-                      Icons.bookmark,
-                      color: Colors.red,
-                    ),
-                    visualDensity: VisualDensity.comfortable,
-                  ),
+                  // IconButton(
+                  //   padding: EdgeInsets.all(0),
+                  //   onPressed: () {
+                  //     Navigator.of(context).push(
+                  //       MaterialPageRoute(
+                  //         builder: (context) => BookmarkPage(),
+                  //       ),
+                  //     );
+                  //   },
+                  //   icon: Icon(
+                  //     Icons.share,
+                  //     color: Colors.red,
+                  //   ),
+                  //   visualDensity: VisualDensity.comfortable,
+                  // ),
+                  FutureBuilder(
+                      future: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(_uid)
+                          .get(),
+                      builder: (context, snapshot) {
+                        // if (snapshot.connectionState ==
+                        //     ConnectionState.waiting) {
+                        //   return const Center(
+                        //     child: CircularProgressIndicator(),
+                        //   );
+                        // }
+                        bool bookmarked = false;
+                        print(_uid);
+                        print(snapshot.data);
+                        List bookmarks = [];
+                        if (snapshot.hasData) {
+                          bookmarks = snapshot.data!.get('bookmarks');
+                        }
+                        if (bookmarks.contains(widget.snap['postId'])) {
+                          bookmarked = true;
+                        }
+                        return LikeAnimation(
+                          isAnimating: bookmarked,
+                          smallLike: true,
+                          child: IconButton(
+                            padding: EdgeInsets.all(0),
+                            onPressed: () async {
+                              await bookmarkPost(
+                                widget.snap['postId'],
+                                _uid!,
+                              );
+                              bookmarked = !bookmarked;
+                              setState(() {});
+                            },
+                            icon: bookmarked
+                                ? Icon(
+                                    Icons.bookmark,
+                                    color: Colors.red,
+                                  )
+                                : Icon(
+                                    Icons.bookmark_outline,
+                                  ),
+                            visualDensity: VisualDensity.comfortable,
+                          ),
+                        );
+                      }),
                 ],
               )
             ],
