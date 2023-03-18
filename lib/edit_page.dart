@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _EditPageState extends State<EditPage> {
   Future<void> postList() async {
     await FirebaseFirestore.instance
         .collection('posts')
-        .doc('4ddf5dd0-c1bc-11ed-89a5-ddc41581b6ca')
+        .doc(widget.snap['postId'])
         .collection('pages')
         .doc(widget.page.toString())
         .set({
@@ -192,9 +193,14 @@ class _EditPageState extends State<EditPage> {
       } else {
         showImage[i] = Padding(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: Text(contents[i]),
+          child: Center(
+            child: AutoSizeText(
+              contents[i],
+              softWrap: true,
+              minFontSize: 26.0,
+              maxFontSize: 40.0,
+              textAlign: TextAlign.center,
+            ),
           ),
         );
       }
@@ -247,9 +253,14 @@ class _EditPageState extends State<EditPage> {
       } else {
         showImage[i] = Padding(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: Text(contents[i]),
+          child: Center(
+            child: AutoSizeText(
+              files[i],
+              softWrap: true,
+              minFontSize: 26.0,
+              maxFontSize: 40.0,
+              textAlign: TextAlign.center,
+            ),
           ),
         );
       }

@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:scrapify/edit_page.dart';
 import 'package:scrapify/utils/colors.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class ViewPage extends StatefulWidget {
   final snap;
@@ -104,9 +105,14 @@ class _ViewPageState extends State<ViewPage> {
         // showImage[i] = Center(child: Text(contents[i]));
         showImage[i] = Padding(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: Text(contents[i]),
+          child: Center(
+            child: AutoSizeText(
+              contents[i],
+              softWrap: true,
+              minFontSize: 26.0,
+              maxFontSize: 40.0,
+              textAlign: TextAlign.center,
+            ),
           ),
         );
       }
@@ -219,7 +225,7 @@ class _ViewPageState extends State<ViewPage> {
                       ),
                       iconSize: MediaQuery.of(context).size.width * 0.1,
                     ),
-                    Text('Page: ' + page.toString()),
+                    Text('Page: ' + (page + 1).toString()),
                     IconButton(
                       onPressed: () {
                         page++;

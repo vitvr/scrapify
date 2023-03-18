@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +143,7 @@ class _PostCardState extends State<PostCard> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.06,
+                height: MediaQuery.of(context).size.height * 0.077,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     vertical: 4,
@@ -162,20 +163,22 @@ class _PostCardState extends State<PostCard> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  AutoSizeText(
                                     widget.snap["description"],
                                     style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                      // fontWeight: FontWeight.bold,
+                                      fontSize: 17,
                                     ),
                                   ),
                                   SizedBox(
                                     height: 4,
                                   ),
                                   Text(
-                                    widget.snap["username"],
+                                    '@' + widget.snap["username"],
                                     style: const TextStyle(
                                       // fontWeight: FontWeight.bold,
-                                      fontSize: 11,
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ],
@@ -199,8 +202,8 @@ class _PostCardState extends State<PostCard> {
                 children: [
                   FittedBox(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8.0,
+                      padding: const EdgeInsets.only(
+                        bottom: 4.0,
                       ),
                       child: Container(
                         decoration: BoxDecoration(

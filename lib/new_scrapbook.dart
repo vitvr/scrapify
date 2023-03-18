@@ -55,12 +55,14 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
 
   //Getting username
   String username = 'EROORRR';
+  String profImage = 'EROORRR';
 
   getUsername() async {
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     var snapshot = snap.data() as Map<String, dynamic>;
     username = await snapshot["username"];
+    profImage = await snapshot["profImage"];
     print(username);
   }
 
@@ -305,11 +307,12 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                             ),
                             onPressed: () async {
                               await postImage(
-                                  captionController.text,
-                                  _file!,
-                                  _uid!,
-                                  username,
-                                  'https://firebasestorage.googleapis.com/v0/b/scrapify-9bcaa.appspot.com/o/selfie.jpg?alt=media&token=9a6e5042-8868-4610-9641-2654362a8e32');
+                                captionController.text,
+                                _file!,
+                                _uid!,
+                                username,
+                                profImage,
+                              );
                               Navigator.pop(context);
                             },
                             child: const Text(
