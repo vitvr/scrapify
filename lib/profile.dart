@@ -158,9 +158,6 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                             ),
                           ],
                         ),
-                        // SizedBox(
-                        //   height: profileSpacing,
-                        // ),
                         Padding(
                           padding: EdgeInsets.all(profileSpacing),
                           child: TextButton(
@@ -209,18 +206,7 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                         itemBuilder: (context, index) {
                           DocumentSnapshot snap =
                               (snapshot.data! as dynamic).docs[index];
-                          // if (snapshot.data!.docs[index].get('uid') !=
-                          //     widget.uid) {
-                          //   print(snapshot.data!.docs[index].data());
-                          //   return Container();
-                          //   // this approach returns an empty container
-                          //   // bad because it causes some padding to appear
-                          //   // not that noticeable ig
-                          // }
-                          // // return Tile(
-                          // //   index: index,
-                          // //   extent: (index % 5 + 1) * 100,
-                          // // );
+
                           return Flexible(
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
@@ -232,8 +218,6 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                           );
                         },
                       );
-
-                      // placeholder
                     },
                   ),
                 ),

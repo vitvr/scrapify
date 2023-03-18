@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:scrapify/profile.dart';
 import 'package:scrapify/profile_general.dart';
 
 class SearchPage extends StatefulWidget {
@@ -42,10 +44,12 @@ class _SearchPageState extends State<SearchPage> {
             ? FutureBuilder(
                 future: FirebaseFirestore.instance
                     .collection('users')
-                    .where(
-                      'username',
-                      isGreaterThanOrEqualTo: searchController.text,
-                    )
+                    .where('username',
+                        isGreaterThanOrEqualTo:
+                            searchController.text.trim().toLowerCase(),
+                        isLessThanOrEqualTo:
+                            searchController.text.trim().toLowerCase() +
+                                "\uf8ff")
                     .get(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -57,28 +61,40 @@ class _SearchPageState extends State<SearchPage> {
                     itemCount: (snapshot.data! as dynamic).docs.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        // leading: CircleAvatar(
-                        //   backgroundImage: NetworkImage(
-                        //       (snapshot.data! as dynamic).docs[index]
-                        //           ['photoURL']),
-                        // ),
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              (snapshot.data! as dynamic).docs[index]
+                                  ['profImage']),
+                        ),
                         title: Text(
                           (snapshot.data! as dynamic).docs[index]['username'],
                         ),
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ProfileGeneral(
-                                  uid: (snapshot.data! as dynamic).docs[index]
-                                      ['uid']),
-                            ),
-                          );
+                          final currentUser =
+                              FirebaseAuth.instance.currentUser?.uid;
+                          final targetUid =
+                              (snapshot.data! as dynamic).docs[index]['uid'];
+
+                          if (currentUser == targetUid) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProfilePersonal()),
+                            );
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfileGeneral(uid: targetUid),
+                              ),
+                            );
+                          }
                         },
                       );
                     },
                   );
                 },
               )
-            : Text('Posts'));
+            : Text('Post'));
   }
 }
