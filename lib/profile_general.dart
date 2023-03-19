@@ -99,7 +99,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
         padding: EdgeInsets.all(profileSpacing),
         child: TextButton(
           style: TextButton.styleFrom(
-            backgroundColor: CustomColors().light,
+            backgroundColor: CustomColors().lighter,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(16.0)),
             ),
