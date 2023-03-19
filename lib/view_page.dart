@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:scrapify/edit_page.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:uuid/uuid.dart';
 
 class ViewPage extends StatefulWidget {
   final snap;
@@ -21,6 +22,7 @@ class ViewPage extends StatefulWidget {
 class _ViewPageState extends State<ViewPage> {
   bool received = false;
   int page = 0;
+  List pageIndex = [];
 
   List contents = [
     null,
@@ -49,21 +51,66 @@ class _ViewPageState extends State<ViewPage> {
     null,
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    pageIndex = widget.snap['pageIndex'];
+    print(pageIndex);
+  }
+
+  Future<void> newPage() async {
+    String pageId = const Uuid().v1();
+    List newContents = [null, null, null, null, null, null];
+    Map<String, List> map = <String, List>{"contents": newContents};
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(widget.snap['postId'])
+        .collection('pages')
+        .doc(pageId)
+        .set(map);
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(widget.snap['postId'])
+        .update({
+      'pageIndex': FieldValue.arrayUnion([pageId])
+    });
+    pageIndex.add(pageId);
+  }
+
   Future<void> getContents() async {
     if (received) {
       return;
     }
     var ss;
     try {
+      // DocumentSnapshot slist = await FirebaseFirestore.instance
+      //     .collection('posts')
+      //     .doc(widget.snap['postId'])
+      //     .collection('pages')
+      //     .doc(page.toString())
+      //     .get();
+      if (pageIndex.length <= page) {
+        await newPage();
+      }
+      print(pageIndex);
       DocumentSnapshot s = await FirebaseFirestore.instance
           .collection('posts')
           .doc(widget.snap['postId'])
           .collection('pages')
-          .doc(page.toString())
+          .doc(pageIndex[page])
           .get();
+      print('here');
+      if (!s.exists) {
+        print('epic');
+      }
+      print('epic2');
+      if (s.data() == null) {
+        print('YEAAAAA');
+      }
+      print(s.data());
       ss = s.data() as Map<String, dynamic>;
     } catch (e) {
-      print('error');
+      print(e);
       page--;
       setState(() {});
       return;
@@ -216,6 +263,9 @@ class _ViewPageState extends State<ViewPage> {
                   children: [
                     IconButton(
                       onPressed: () {
+                        if (page == 0) {
+                          return;
+                        }
                         page--;
                         received = false;
                         setState(() {});

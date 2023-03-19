@@ -61,7 +61,7 @@ class _EditPageState extends State<EditPage> {
         .collection('posts')
         .doc(widget.snap['postId'])
         .collection('pages')
-        .doc(widget.page.toString())
+        .doc(widget.snap['pageIndex'][widget.page])
         .set({
       'contents': contents,
     });
@@ -215,7 +215,7 @@ class _EditPageState extends State<EditPage> {
         .collection('posts')
         .doc(widget.snap['postId'])
         .collection('pages')
-        .doc(widget.page.toString())
+        .doc(widget.snap['pageIndex'][widget.page])
         .get();
     var ss = s.data() as Map<String, dynamic>;
     if (ss['contents'] == null) {
