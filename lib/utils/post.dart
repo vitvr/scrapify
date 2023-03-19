@@ -95,59 +95,107 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
-  postOptions(BuildContext context) async {
+  Future<dynamic> postOptions(BuildContext context) async {
     return showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            children: [
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Delete Post'),
-                onPressed: () async {
-                  await deletePost(widget.snap['postId']);
-                  widget.update(100);
-                  Navigator.pop(context);
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Row(
-                        children: [
-                          Icon(Icons.check_circle_outline,
-                              color: Colors.white, size: 32),
-                          SizedBox(width: 10),
-                          Text(
-                            'Post deleted',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                      backgroundColor: Colors.red,
-                      duration: Duration(seconds: 3),
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Post Options",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 20),
+                ListTile(
+                  leading: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                  title: Text(
+                    "Delete Post",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
                     ),
-                  );
-                },
-              ),
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Edit Post'),
-                onPressed: () {},
-                //placeholder
-              ),
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text("Cancel"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          );
-        });
+                  ),
+                  onTap: () async {
+                    await deletePost(widget.snap['postId']);
+                    widget.update(100);
+                    Navigator.pop(context);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'Post deleted',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 3),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                Divider(),
+                SizedBox(height: 10),
+                ListTile(
+                  leading: Icon(Icons.edit),
+                  title: Text("Edit Post"),
+                  onTap: () {
+                    Navigator.pop(context);
+                    // Add your edit post code here
+                  },
+                ),
+                Divider(),
+                SizedBox(height: 20),
+                TextButton(
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override

@@ -108,19 +108,32 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
 
   String addOrReplace = 'Add cover photo';
 
-  _selectImage(BuildContext context) async {
+  Future<dynamic> _selectImage(BuildContext context) async {
     return showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            title: const Text('Create Post'),
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: Center(
+            child: Text(
+              "Create Post",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              //camera option
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Take a Photo'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
+              ListTile(
+                leading: Icon(Icons.camera_alt, color: Colors.blueGrey),
+                title: Text("Take a Photo",
+                    style: TextStyle(color: Colors.black54)),
+                onTap: () async {
+                  Navigator.pop(context);
                   Uint8List file = await pickImage(
                     ImageSource.camera,
                   );
@@ -129,13 +142,13 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                   });
                 },
               ),
-
-              //gallery option
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Choose From Gallery'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
+              Divider(color: Colors.grey[400]),
+              ListTile(
+                leading: Icon(Icons.photo, color: CustomColors().dark),
+                title: Text("Choose From Gallery",
+                    style: TextStyle(color: Colors.black54)),
+                onTap: () async {
+                  Navigator.pop(context);
                   Uint8List file = await pickImage(
                     ImageSource.gallery,
                   );
@@ -144,17 +157,22 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                   });
                 },
               ),
-              //cancel
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text("Cancel"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
             ],
-          );
-        });
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                "Cancel",
+                style: TextStyle(
+                  color: Colors.grey[700],
+                ),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   bool display = false;

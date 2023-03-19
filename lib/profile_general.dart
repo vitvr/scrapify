@@ -152,6 +152,10 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           actions: [
             IconButton(
               onPressed: () {},
@@ -239,7 +243,19 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                                                   ' following',
                                             ),
                                           ],
-                                        )
+                                        ),
+                                        SizedBox(
+                                          height: profileSpacing / 2,
+                                        ),
+                                        Text(
+                                          "\"" +
+                                              snapshot.data!.get('bio') +
+                                              "\"",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ],
