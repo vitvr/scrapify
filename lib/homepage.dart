@@ -1,9 +1,9 @@
 /* the homepage of the app, it includes a feed of recommended posts as well as
 the option to create new ones */
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/new_scrapbook.dart';
 import 'package:scrapify/utils/post.dart';
@@ -16,6 +16,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<String> followingIds = [];
+
+  Future<void> fetchFollowing() async {
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    followingIds = List<String>.from(snapshot.get('following'));
+    followingIds.add(uid);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchFollowing();
+  }
+
   @override
   Widget build(BuildContext context) {
     double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.019;
@@ -51,11 +68,15 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           body: SafeArea(
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
+            child: FutureBuilder(
+              future: FirebaseFirestore.instance
                   .collection('posts')
+                  .where('uid',
+                      whereIn: (followingIds.isEmpty
+                          ? [FirebaseAuth.instance.currentUser?.uid]
+                          : followingIds))
                   .orderBy('datePublished', descending: true)
-                  .snapshots(),
+                  .get(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -78,53 +99,8 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 );
-
-                // placeholder
               },
             ),
-
-            // child: GridView.builder(
-            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 2,
-            //   ),
-            //   itemBuilder: (context, index) {
-            //     return Padding(
-            //       padding: EdgeInsets.all(2),
-            //       child: PostCard(),
-            //     );
-            //   },
-            // ),
-
-            // child: ListView.builder(
-            //   itemCount: 20,
-            //   itemBuilder: (context, index) {
-            //     return Row(
-            //       children: [
-            //         PostCard(),
-            //         PostCard(),
-            //       ],
-            //     );
-            //   },
-            // ),
-
-            // child: Column(
-            //   children: [
-            //     Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         PostCard(),
-            //         PostCard(),
-            //       ],
-            //     ),
-            //     Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         PostCard(),
-            //         PostCard(),
-            //       ],
-            //     ),
-            //   ],
-            // ),
           ),
         ),
       ),

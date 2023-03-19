@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +9,8 @@ import 'package:scrapify/comentscreen.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/like_animation.dart';
 import 'package:scrapify/view_page.dart';
+import '../profile.dart';
+import '../profile_general.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -23,6 +24,29 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  String _username = "";
+  String _profImage = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(widget.snap["uid"])
+        .get();
+    Map<String, dynamic> data = snapshot.data()!;
+
+    setState(() {
+      _username = data['username'];
+      _profImage = data['profImage'];
+    });
+  }
+
   Future<void> likePost(String postId, String uid, List likes) async {
     String res = 'ERROR';
     try {
@@ -89,16 +113,12 @@ class _PostCardState extends State<PostCard> {
   }
 
   @override
-  // double picHeight = 0.3 + (Random().nextDouble() % 0.26);
   double picHeight = 0.0;
   Widget build(BuildContext context) {
     picHeight = getPicHeight();
     getPicHeightByRatio();
     final String? _uid = FirebaseAuth.instance.currentUser?.uid;
     return Padding(
-      // padding: EdgeInsets.all(
-      //   MediaQuery.of(context).size.width.toDouble() * 0.013,
-      // ),
       padding: EdgeInsets.all(0),
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.46,
@@ -160,37 +180,79 @@ class _PostCardState extends State<PostCard> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AutoSizeText(
-                                    widget.snap["description"],
-                                    style: const TextStyle(
-                                      // fontWeight: FontWeight.bold,
-                                      fontSize: 17,
+                              GestureDetector(
+                                onTap: () {
+                                  final currentUser =
+                                      FirebaseAuth.instance.currentUser?.uid;
+                                  final targetUid = widget.snap['uid'];
+
+                                  if (currentUser == targetUid) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ProfilePersonal()),
+                                    );
+                                  } else {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProfileGeneral(uid: targetUid),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AutoSizeText(
+                                      widget.snap["description"],
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    '@' + widget.snap["username"],
-                                    style: const TextStyle(
-                                      // fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 13,
+                                    SizedBox(
+                                      height: 4,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      '@' + _username,
+                                      style: const TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: NetworkImage(
-                          widget.snap['profImage'],
+                      GestureDetector(
+                        onTap: () {
+                          final currentUser =
+                              FirebaseAuth.instance.currentUser?.uid;
+                          final targetUid = widget.snap['uid'];
+
+                          if (currentUser == targetUid) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProfilePersonal()),
+                            );
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfileGeneral(uid: targetUid),
+                              ),
+                            );
+                          }
+                        },
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundImage: NetworkImage(
+                            _profImage,
+                          ),
                         ),
                       ),
                     ],
@@ -263,33 +325,12 @@ class _PostCardState extends State<PostCard> {
                     ),
                     visualDensity: VisualDensity.comfortable,
                   ),
-                  // IconButton(
-                  //   padding: EdgeInsets.all(0),
-                  //   onPressed: () {
-                  //     Navigator.of(context).push(
-                  //       MaterialPageRoute(
-                  //         builder: (context) => BookmarkPage(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   icon: Icon(
-                  //     Icons.share,
-                  //     color: Colors.red,
-                  //   ),
-                  //   visualDensity: VisualDensity.comfortable,
-                  // ),
                   FutureBuilder(
                       future: FirebaseFirestore.instance
                           .collection('users')
                           .doc(_uid)
                           .get(),
                       builder: (context, snapshot) {
-                        // if (snapshot.connectionState ==
-                        //     ConnectionState.waiting) {
-                        //   return const Center(
-                        //     child: CircularProgressIndicator(),
-                        //   );
-                        // }
                         bool bookmarked = false;
                         print(_uid);
                         print(snapshot.data);
