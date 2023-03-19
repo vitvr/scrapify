@@ -84,12 +84,6 @@ class _ViewPageState extends State<ViewPage> {
     }
     var ss;
     try {
-      // DocumentSnapshot slist = await FirebaseFirestore.instance
-      //     .collection('posts')
-      //     .doc(widget.snap['postId'])
-      //     .collection('pages')
-      //     .doc(page.toString())
-      //     .get();
       if (pageIndex.length <= page) {
         await newPage();
       }
@@ -279,6 +273,9 @@ class _ViewPageState extends State<ViewPage> {
                         if (!belongsToUser) {
                           return;
                         }
+                        if (page == 7) {
+                          return;
+                        }
                         page++;
                         received = false;
                         setState(() {});
@@ -288,6 +285,36 @@ class _ViewPageState extends State<ViewPage> {
                       ),
                       iconSize: MediaQuery.of(context).size.width * 0.1,
                     ),
+                    TextButton.icon(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            CustomColors().extremelyLight),
+                      ),
+                      onPressed: () async {
+                        int prevPage = page;
+                        if (page == 0) {
+                          page++;
+                        } else {
+                          page--;
+                        }
+                        await FirebaseFirestore.instance
+                            .collection('posts')
+                            .doc(widget.snap['postId'])
+                            .collection('pages')
+                            .doc(pageIndex[prevPage])
+                            .delete();
+                        pageIndex.removeAt(prevPage);
+                        await FirebaseFirestore.instance
+                            .collection('posts')
+                            .doc(widget.snap['postId'])
+                            .update({'pageIndex': pageIndex});
+                      },
+                      icon: Icon(Icons.delete),
+                      label: Text(
+                        'Delete Page',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    )
                   ],
                 ),
               ),
