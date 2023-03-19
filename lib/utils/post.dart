@@ -23,6 +23,29 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  String _username = "";
+  String _profImage = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(widget.snap["uid"])
+        .get();
+    Map<String, dynamic> data = snapshot.data()!;
+
+    setState(() {
+      _username = data['username'];
+      _profImage = data['profImage'];
+    });
+  }
+
   Future<void> likePost(String postId, String uid, List likes) async {
     String res = 'ERROR';
     try {
@@ -174,7 +197,7 @@ class _PostCardState extends State<PostCard> {
                                     height: 4,
                                   ),
                                   Text(
-                                    '@' + widget.snap["username"],
+                                    '@' + _username,
                                     style: const TextStyle(
                                       // fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
@@ -190,7 +213,7 @@ class _PostCardState extends State<PostCard> {
                       CircleAvatar(
                         radius: 20,
                         backgroundImage: NetworkImage(
-                          widget.snap['profImage'],
+                          _profImage,
                         ),
                       ),
                     ],
