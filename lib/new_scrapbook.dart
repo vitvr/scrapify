@@ -240,7 +240,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                       children: [
                         CircleAvatar(
                           backgroundColor: Colors.white,
-                          backgroundImage: AssetImage('assets/selfie.jpg'),
+                          backgroundImage: NetworkImage(profImage),
                           radius: 40,
                         ),
                         SizedBox(
@@ -307,14 +307,88 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                               ),
                             ),
                             onPressed: () async {
-                              await postImage(
-                                captionController.text,
-                                _file!,
-                                _uid!,
-                                username,
-                                profImage,
-                              );
-                              Navigator.pop(context);
+                              if (_file == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(Icons.error_outline,
+                                            color: Colors.white, size: 32),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'Please add an image',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16),
+                                        ),
+                                      ],
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                );
+                              } else if (captionController.text == "") {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(Icons.error_outline,
+                                            color: Colors.white, size: 32),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'Please write a caption',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16),
+                                        ),
+                                      ],
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                await postImage(
+                                  captionController.text,
+                                  _file!,
+                                  _uid!,
+                                  username,
+                                  profImage,
+                                );
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(Icons.check_circle_outline,
+                                            color: Colors.white, size: 32),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'Posted!',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16),
+                                        ),
+                                      ],
+                                    ),
+                                    backgroundColor: Colors.green,
+                                    duration: Duration(seconds: 3),
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              }
                             },
                             child: const Text(
                               'Finish',
@@ -426,6 +500,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                     height: MediaQuery.of(context).size.height * 0.025,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -442,13 +517,14 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                           ),
                           TextButton(
                             style: TextButton.styleFrom(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
                               backgroundColor: Color.fromARGB(64, 255, 99, 61),
                               shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20.0)),
                               ),
                               minimumSize: Size(
-                                MediaQuery.of(context).size.width * 0.45,
+                                MediaQuery.of(context).size.width * 0.945,
                                 MediaQuery.of(context).size.height * 0.16,
                               ),
                             ),
@@ -476,43 +552,6 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                       ),
                       Expanded(
                         child: SizedBox(),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Tags',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.005,
-                          ),
-                          SizedBox(
-                            // height: MediaQuery.of(context).size.height,
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: Color.fromARGB(64, 255, 99, 61),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
-                              ),
-                              child: const Padding(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: TextField(
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Insert text here',
-                                  ),
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   )

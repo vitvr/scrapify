@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:scrapify/profile.dart';
 import 'package:scrapify/profile_general.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:scrapify/utils/post_image.dart';
+import 'package:scrapify/view_page.dart';
+import 'package:scrapify/view_page.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -128,10 +131,22 @@ class _SearchPageState extends State<SearchPage> {
                 return MasonryGridView.count(
                   crossAxisCount: 2,
                   itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (context, index) => Image.network(
-                    (snapshot.data! as dynamic).docs[index]['postUrl'],
-                    fit: BoxFit.cover,
-                  ),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ViewPage(
+                                snap: snapshot.data!.docs[index].data()),
+                          ),
+                        );
+                      },
+                      child: Image.network(
+                        (snapshot.data! as dynamic).docs[index]['postUrl'],
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
                   mainAxisSpacing: postPadding,
                   crossAxisSpacing: postPadding,
                   padding: EdgeInsets.all(postPadding),

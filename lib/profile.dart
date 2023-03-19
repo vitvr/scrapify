@@ -5,8 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:scrapify/edit_page.dart';
+import 'package:scrapify/edit_user.dart';
 import 'package:scrapify/utils/pic.dart';
 import 'package:scrapify/utils/post.dart';
+import 'package:scrapify/view_page.dart';
 import 'utils/colors.dart';
 import 'package:scrapify/utils/user_model.dart' as model;
 
@@ -112,6 +114,9 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                                         ),
                                         Text(
                                           '@' + snapshot.data!.get('username'),
+                                          style: TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                          ),
                                         ),
                                         SizedBox(
                                           height: profileSpacing / 4,
@@ -158,6 +163,16 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                             ),
                           ],
                         ),
+                        SizedBox(
+                          height: profileSpacing / 2,
+                        ),
+                        Text(
+                          "\"" + snapshot.data!.get('bio') + "\"",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
                         Padding(
                           padding: EdgeInsets.all(profileSpacing),
                           child: TextButton(
@@ -169,7 +184,13 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                               ),
                               minimumSize: const Size(1000000, 30),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => editProfile(),
+                                ),
+                              );
+                            },
                             child: const Text(
                               'Edit Profile',
                               style: TextStyle(
@@ -204,16 +225,19 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                         mainAxisSpacing: postPadding,
                         crossAxisSpacing: postPadding,
                         itemBuilder: (context, index) {
-                          DocumentSnapshot snap =
-                              (snapshot.data! as dynamic).docs[index];
-
-                          return Flexible(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image(
-                                image: NetworkImage(snap['postUrl']),
-                                fit: BoxFit.cover,
-                              ),
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ViewPage(
+                                      snap: snapshot.data!.docs[index].data()),
+                                ),
+                              );
+                            },
+                            child: Image.network(
+                              (snapshot.data! as dynamic).docs[index]
+                                  ['postUrl'],
+                              fit: BoxFit.cover,
                             ),
                           );
                         },

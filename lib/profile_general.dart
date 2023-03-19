@@ -7,6 +7,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:scrapify/edit_page.dart';
 import 'package:scrapify/utils/pic.dart';
 import 'package:scrapify/utils/post.dart';
+import 'package:scrapify/view_page.dart';
 import 'utils/colors.dart';
 import 'package:scrapify/utils/user_model.dart' as model;
 
@@ -47,15 +48,6 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
     super.initState();
     checkFollowing();
   }
-
-  // Future<model.User> getUserDetails() async {
-  //   DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(widget.uid)
-  //       .get();
-
-  //   return model.User.fromSnap(documentSnapshot);
-  // }
 
   Future<void> followUser(String cuid, String followId) async {
     try {
@@ -268,9 +260,6 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                             ),
                           ],
                         ),
-                        // SizedBox(
-                        //   height: profileSpacing,
-                        // ),
                         followButton
                       ],
                     );
@@ -297,27 +286,19 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                         mainAxisSpacing: postPadding,
                         crossAxisSpacing: postPadding,
                         itemBuilder: (context, index) {
-                          DocumentSnapshot snap =
-                              (snapshot.data! as dynamic).docs[index];
-                          // if (snapshot.data!.docs[index].get('uid') !=
-                          //     widget.uid) {
-                          //   print(snapshot.data!.docs[index].data());
-                          //   return Container();
-                          //   // this approach returns an empty container
-                          //   // bad because it causes some padding to appear
-                          //   // not that noticeable ig
-                          // }
-                          // // return Tile(
-                          // //   index: index,
-                          // //   extent: (index % 5 + 1) * 100,
-                          // // );
-                          return Flexible(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image(
-                                image: NetworkImage(snap['postUrl']),
-                                fit: BoxFit.cover,
-                              ),
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ViewPage(
+                                      snap: snapshot.data!.docs[index].data()),
+                                ),
+                              );
+                            },
+                            child: Image.network(
+                              (snapshot.data! as dynamic).docs[index]
+                                  ['postUrl'],
+                              fit: BoxFit.cover,
                             ),
                           );
                         },

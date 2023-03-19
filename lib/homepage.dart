@@ -27,6 +27,12 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  int _count = 0;
+
+  void _update(int count) {
+    setState(() => _count = count);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -96,6 +102,7 @@ class _HomePageState extends State<HomePage> {
                     return Flexible(
                       child: PostCard(
                         snap: snapshot.data!.docs[index].data(),
+                        update: _update,
                       ),
                     );
                   },

@@ -32,6 +32,12 @@ class _BookmarkPageState extends State<BookmarkPage> {
     });
   }
 
+  int _count = 0;
+
+  void _update(int count) {
+    setState(() => _count = count);
+  }
+
   @override
   Widget build(BuildContext context) {
     double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.019;
@@ -90,6 +96,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                           return Flexible(
                             child: PostCard(
                               snap: snapshot.data!.docs[index].data(),
+                              update: _update,
                             ),
                           );
                         },

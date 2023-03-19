@@ -231,7 +231,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 class PanelWidget extends StatelessWidget {
   final ScrollController controller;
 
-  const PanelWidget({
+  int _count = 0;
+
+  void _update(int count) {}
+
+  PanelWidget({
     Key? key,
     required this.controller,
   }) : super(key: key);
@@ -290,6 +294,7 @@ class PanelWidget extends StatelessWidget {
                     return Flexible(
                       child: PostCard(
                         snap: snapshot.data!.docs[index].data(),
+                        update: _update,
                       ),
                     );
                   },
