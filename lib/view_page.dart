@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -99,15 +100,6 @@ class _ViewPageState extends State<ViewPage> {
           .collection('pages')
           .doc(pageIndex[page])
           .get();
-      print('here');
-      if (!s.exists) {
-        print('epic');
-      }
-      print('epic2');
-      if (s.data() == null) {
-        print('YEAAAAA');
-      }
-      print(s.data());
       ss = s.data() as Map<String, dynamic>;
     } catch (e) {
       print(e);
@@ -165,20 +157,26 @@ class _ViewPageState extends State<ViewPage> {
       }
     }
 
+    bool belongsToUser =
+        (widget.snap['uid'] == FirebaseAuth.instance.currentUser?.uid);
+
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => EditPage(
-                snap: widget.snap,
-                page: page,
+      floatingActionButton: Visibility(
+        visible: belongsToUser,
+        child: FloatingActionButton(
+          onPressed: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => EditPage(
+                  snap: widget.snap,
+                  page: page,
+                ),
               ),
-            ),
-          );
-          received = false;
-          getContents();
-        },
+            );
+            received = false;
+            getContents();
+          },
+        ),
       ),
       body: Container(
         color: CustomColors().extremelyLight,
@@ -278,6 +276,9 @@ class _ViewPageState extends State<ViewPage> {
                     Text('Page: ' + (page + 1).toString()),
                     IconButton(
                       onPressed: () {
+                        if (!belongsToUser) {
+                          return;
+                        }
                         page++;
                         received = false;
                         setState(() {});

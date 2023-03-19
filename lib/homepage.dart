@@ -44,12 +44,13 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color.fromARGB(255, 255, 99, 61),
             child: const Icon(Icons.create),
-            onPressed: () {
-              Navigator.of(context).push(
+            onPressed: () async {
+              await Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => NewScrapbookPage(),
                 ),
               );
+              setState(() {});
             },
           ),
           appBar: AppBar(

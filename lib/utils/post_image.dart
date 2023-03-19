@@ -10,18 +10,19 @@ class Post {
   final String postUrl;
   final String profImage;
   final GeoPoint location;
+  final List pageIndex;
 
-  const Post({
-    required this.caption,
-    required this.uid,
-    required this.username,
-    required this.likes,
-    required this.postId,
-    required this.datePublished,
-    required this.postUrl,
-    required this.profImage,
-    required this.location,
-  });
+  const Post(
+      {required this.caption,
+      required this.uid,
+      required this.username,
+      required this.likes,
+      required this.postId,
+      required this.datePublished,
+      required this.postUrl,
+      required this.profImage,
+      required this.location,
+      required this.pageIndex});
 
   static Post fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
@@ -35,7 +36,8 @@ class Post {
         username: snapshot["username"],
         postUrl: snapshot['postUrl'],
         profImage: snapshot['profImage'],
-        location: snapshot['location']);
+        location: snapshot['location'],
+        pageIndex: snapshot['pageIndex']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -47,6 +49,7 @@ class Post {
         "datePublished": datePublished,
         'postUrl': postUrl,
         'profImage': profImage,
-        'location': location
+        'location': location,
+        'pageIndex': pageIndex
       };
 }
