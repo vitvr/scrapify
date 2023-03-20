@@ -29,15 +29,73 @@ class RegisterPageState extends State<RegisterPage> {
   String? uid = '';
   late bool passwordVisible;
   late bool confirmPasswordVisible;
-
-  void register() async {
+  bool registered = false;
+  Future<void> register() async {
     try {
+      // Check if the username is already taken
+      QuerySnapshot snapshot = await _firestore
+          .collection('users')
+          .where('username', isEqualTo: usernameController.text)
+          .get();
+
+      QuerySnapshot snapshot1 = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: emailController.text)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.error_outline, color: Colors.white, size: 32),
+                SizedBox(width: 10),
+                Text(
+                  'Username already taken',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        );
+        return;
+      }
+
+      if (snapshot1.docs.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.error_outline, color: Colors.white, size: 32),
+                SizedBox(width: 10),
+                Text(
+                  'Account with this email already exists',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        );
+        return;
+      }
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
 
-      //add to firestore database
+      // Add the user to firestore database
       await _firestore.collection('users').doc(cred.user!.uid).set({
         'username': usernameController.text,
         'uid': cred.user!.uid,
@@ -53,7 +111,7 @@ class RegisterPageState extends State<RegisterPage> {
         'following': [],
       });
     } on FirebaseAuthException {
-      // Should avoid empty try blocks like this
+      // Handle FirebaseAuthException
     }
   }
 
@@ -235,25 +293,48 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                         minimumSize: const Size(1000000, 50),
                       ),
-                      onPressed: () {
-                        if (passwordController.text ==
+                      onPressed: () async {
+                        if (passwordController.text !=
                             passwordController2.text) {
-                          register();
-                          signIn();
-                          FirebaseAuth.instance
-                              .authStateChanges()
-                              .listen((User? user) {
-                            if (user == null) {
-                              // print('NO SUCH USER');
-                            } else {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const MainPage(),
-                                ),
-                              );
-                            }
-                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Row(
+                                children: [
+                                  Icon(Icons.error_outline,
+                                      color: Colors.white, size: 32),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Passwords do not match',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 3),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          );
+                          return;
                         }
+                        await register();
+                        signIn();
+                        FirebaseAuth.instance
+                            .authStateChanges()
+                            .listen((User? user) {
+                          if (user == null) {
+                            // print('NO SUCH USER');
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const MainPage(),
+                              ),
+                            );
+                          }
+                        });
                       },
                       child: const Text(
                         'Register',

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:scrapify/edit_page.dart';
 import 'package:scrapify/edit_user.dart';
+import 'package:scrapify/large_post.dart';
 import 'package:scrapify/utils/pic.dart';
 import 'package:scrapify/utils/post.dart';
 import 'package:scrapify/view_page.dart';
@@ -258,11 +259,19 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ViewPage(
-                                      snap: snapshot.data!.docs[index].data()),
-                                ),
+                              // Navigator.of(context).push(
+                              //   MaterialPageRoute(
+                              //     builder: (context) => LargePost(
+                              //         snap: snapshot.data!.docs[index].data()),
+                              //   ),
+                              // );
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return LargePost(
+                                    snap: snapshot.data!.docs[index].data(),
+                                  );
+                                },
                               );
                             },
                             child: ClipRRect(

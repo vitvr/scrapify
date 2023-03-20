@@ -25,6 +25,81 @@ class _editPageState extends State<editProfile> {
   String bio = "";
   String username = "";
 
+  Future<String> postImage(Uint8List file) async {
+    print(file);
+    String photoURL =
+        await Storage_Methods().uploadImageToStorage('user', file, true);
+    return photoURL;
+  }
+
+  Uint8List? _file;
+  Future<dynamic> _selectImage(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: Center(
+            child: Text(
+              "Choose Header",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.camera_alt, color: Colors.blueGrey),
+                title: Text("Take a Photo",
+                    style: TextStyle(color: Colors.black54)),
+                onTap: () async {
+                  Navigator.pop(context);
+                  Uint8List file = await pickImage(
+                    ImageSource.camera,
+                  );
+                  setState(() {
+                    _file = file;
+                  });
+                },
+              ),
+              Divider(color: Colors.grey[400]),
+              ListTile(
+                leading: Icon(Icons.photo, color: CustomColors().dark),
+                title: Text("Choose From Gallery",
+                    style: TextStyle(color: Colors.black54)),
+                onTap: () async {
+                  Navigator.pop(context);
+                  Uint8List file = await pickImage(
+                    ImageSource.gallery,
+                  );
+                  setState(() {
+                    _file = file;
+                  });
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                "Cancel",
+                style: TextStyle(
+                  color: Colors.grey[700],
+                ),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -85,26 +160,33 @@ class _editPageState extends State<editProfile> {
             Stack(
               alignment: Alignment.bottomRight,
               children: [
-                Container(
-                  height: 150,
-                  width: double.infinity,
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                      image: NetworkImage(header),
-                      fit: BoxFit.cover,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Container(
+                    height: 150,
+                    width: double.infinity,
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      image: DecorationImage(
+                        image: NetworkImage(header),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.camera_alt,
-                    color: Colors.white,
+                Padding(
+                  padding: EdgeInsets.only(right: 15),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.camera_alt,
+                      color: Colors.white,
+                    ),
+                    onPressed: () async {
+                      await _selectImage(context);
+                      header = await postImage(_file!);
+                    },
                   ),
-                  onPressed: () {
-                    _selectImage(context);
-                  },
                 ),
               ],
             ),
@@ -115,9 +197,16 @@ class _editPageState extends State<editProfile> {
               onTap: () {
                 _selectImage1(context);
               },
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: NetworkImage(profImage),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.35,
+                ),
+                child: FittedBox(
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundImage: NetworkImage(profImage),
+                  ),
+                ),
               ),
             ),
             SizedBox(
@@ -157,74 +246,6 @@ class _editPageState extends State<editProfile> {
     );
   }
 
-  Uint8List? _file;
-  Future<dynamic> _selectImage(BuildContext context) async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          title: Center(
-            child: Text(
-              "Create Post",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: Icon(Icons.camera_alt, color: Colors.blueGrey),
-                title: Text("Take a Photo",
-                    style: TextStyle(color: Colors.black54)),
-                onTap: () async {
-                  Navigator.pop(context);
-                  Uint8List file = await pickImage(
-                    ImageSource.camera,
-                  );
-                  setState(() {
-                    _file = file;
-                  });
-                },
-              ),
-              Divider(color: Colors.grey[400]),
-              ListTile(
-                leading: Icon(Icons.photo, color: CustomColors().dark),
-                title: Text("Choose From Gallery",
-                    style: TextStyle(color: Colors.black54)),
-                onTap: () async {
-                  Navigator.pop(context);
-                  Uint8List file = await pickImage(
-                    ImageSource.gallery,
-                  );
-                  setState(() {
-                    _file = file;
-                  });
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              child: Text(
-                "Cancel",
-                style: TextStyle(
-                  color: Colors.grey[700],
-                ),
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Uint8List? _file1;
   Future<dynamic> _selectImage1(BuildContext context) async {
     return showDialog(
@@ -236,7 +257,7 @@ class _editPageState extends State<editProfile> {
           ),
           title: Center(
             child: Text(
-              "Create Post",
+              "Choose Profile Image",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
