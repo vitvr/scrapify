@@ -23,7 +23,7 @@ class _LargePostState extends State<LargePost> {
           child: Padding(
             padding: EdgeInsets.symmetric(
               vertical: size.height * 0.1,
-              horizontal: size.width * 0.005,
+              horizontal: size.width * 0.01,
             ),
             child: PostCard(
               snap: widget.snap,
