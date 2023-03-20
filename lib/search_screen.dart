@@ -51,12 +51,35 @@ class _SearchPageState extends State<SearchPage> {
           controller: searchController,
           decoration: const InputDecoration(labelText: 'Search for a user'),
           onFieldSubmitted: (String _) {
-            setState(
-              () {
+            if (searchController.text.trim().isEmpty) {
+              showDialog(
+                context: context,
+                builder: (context) => ClipRRect(
+                  borderRadius: BorderRadius.circular(16.0),
+                  child: AlertDialog(
+                    title: Row(
+                      children: [
+                        const Icon(Icons.error_outline, color: Colors.red),
+                        const SizedBox(width: 8),
+                        const Text('Error',
+                            style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
+                    content: const Text('Please enter a search term.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              setState(() {
                 isShowUsers = true;
-              },
-            );
-            ;
+              });
+            }
           },
         ),
       ),
