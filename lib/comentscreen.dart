@@ -1,3 +1,4 @@
+/* Code that allows users to upload comments on posts */
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
@@ -11,6 +12,8 @@ import 'package:scrapify/utils/comment_card.dart';
 import 'package:scrapify/utils/menu_button.dart';
 import 'package:uuid/uuid.dart';
 
+// This class creates a comment box that allows users to type
+// their commentss and post them.
 class CommentScreen extends StatefulWidget {
   final snap;
   const CommentScreen({
@@ -23,6 +26,7 @@ class CommentScreen extends StatefulWidget {
 }
 
 class CommentScreenState extends State<CommentScreen> {
+  // This method adds comments to the firestore database
   Future<void> postComment(String postId, String text, String uid, String name,
       String profilePic) async {
     try {
@@ -128,6 +132,7 @@ class CommentScreenState extends State<CommentScreen> {
             backgroundColor: Colors.white,
             textColor: Colors.black,
             sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.black),
+            // This widget keeps watch on any updates on the comments
             child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('posts')
@@ -141,6 +146,7 @@ class CommentScreenState extends State<CommentScreen> {
                     child: CircularProgressIndicator(),
                   );
                 }
+                // The ListView displays the added comments
                 return ListView.builder(
                   itemCount: (snapshot.data! as dynamic).docs.length,
                   itemBuilder: (context, index) => CommentCard(

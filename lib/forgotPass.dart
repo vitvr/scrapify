@@ -6,6 +6,7 @@ import 'package:scrapify/login.dart';
 import 'package:scrapify/resetPass.dart';
 import 'package:scrapify/utils/colors.dart';
 
+// Defines a stateful widget for the forgot password page
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
@@ -13,9 +14,11 @@ class ForgotPasswordPage extends StatefulWidget {
   State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
+
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final emailController = TextEditingController();
 
+  // This widget sets the layout of the forgot password page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +64,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         ]),
                   ),
                   const SizedBox(height: 15),
+                  // The input field for the user's email
                   Container(
                     decoration: const BoxDecoration(
                       color: Color.fromARGB(64, 255, 99, 61),
@@ -79,6 +83,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  // Empty container
                   Container(
                     decoration: const BoxDecoration(
                       color: Color.fromARGB(64, 255, 99, 61),
@@ -86,6 +91,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  // The button to reset the user's password
                   TextButton(
                     style: TextButton.styleFrom(
                       backgroundColor: const CustomColors().dark,

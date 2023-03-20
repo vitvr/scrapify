@@ -1,4 +1,4 @@
-/* page for logging in with email and password */
+/* Page for logging in with email and password with authentication */
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +7,7 @@ import 'package:scrapify/mainpage.dart';
 import 'package:scrapify/register.dart';
 import 'package:scrapify/utils/colors.dart';
 
+// Defines a stateful widget for the login page
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -14,6 +15,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+// This class creates the UI of the login page
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();

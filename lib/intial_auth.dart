@@ -9,6 +9,8 @@ import 'package:scrapify/onboarding.dart';
 class InitialAuth extends StatelessWidget {
   const InitialAuth({super.key});
 
+  // This widget displays either the Main page or the Onboarding page
+  // depending on whether the user is logged in or not.
   @override
   Widget build(BuildContext context) {
     // FirebaseAuth.instance.signOut(); // I sign out on each app restart...
@@ -19,6 +21,8 @@ class InitialAuth extends StatelessWidget {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
+          // If user is logged in, display the Main page
+          // else (if user is not logged in), display the Onboarding page
           if (snapshot.hasData) {
             return const MainPage();
           } else {

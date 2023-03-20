@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:scrapify/new_scrapbook.dart';
 import 'package:scrapify/utils/post.dart';
 
+// Defines a stateful widget for the home page
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -18,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<String> followingIds = [];
   String profImage = "";
-
+  
   Future<void> fetchData() async {
     var uid = FirebaseAuth.instance.currentUser!.uid;
     DocumentSnapshot snapshot =
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
     fetchData();
   }
 
+  // Creates the user interface (UI) for the Home page 
   @override
   Widget build(BuildContext context) {
     double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.019;
