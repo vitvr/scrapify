@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:scrapify/new_scrapbook.dart';
 import 'package:scrapify/utils/post.dart';
 
+// This class is responsible for displaying the bookmark page
 class BookmarkPage extends StatefulWidget {
   BookmarkPage({Key? key}) : super(key: key);
 
@@ -18,12 +19,14 @@ class _BookmarkPageState extends State<BookmarkPage> {
 
   final String? _uid = FirebaseAuth.instance.currentUser?.uid;
 
+  // This method gets the user ID using firebase authentication
   @override
   void initState() {
     super.initState();
     getPosts(_uid!);
   }
 
+  // This method updates the bookmark list using the users data
   void getPosts(String uid) {
     FirebaseFirestore.instance.collection('users').doc(uid).get().then((snap) {
       setState(() {
@@ -38,6 +41,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
     setState(() => _count = count);
   }
 
+  // This methods sets the layout of the screen
   @override
   Widget build(BuildContext context) {
     double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.019;
