@@ -11,12 +11,10 @@ import 'package:textfields/textfields.dart';
 import 'package:uuid/uuid.dart';
 
 class editProfile extends StatefulWidget {
-  const editProfile({super.key});
+  const editProfile({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return _editPageState();
-  }
+  State<editProfile> createState() => _editPageState();
 }
 
 class _editPageState extends State<editProfile> {
@@ -26,141 +24,166 @@ class _editPageState extends State<editProfile> {
   String profImage = "";
   String bio = "";
   String username = "";
+
   @override
   void initState() {
     super.initState();
     getUserDetails();
   }
 
-  getUserDetails() async {
+  Future<void> getUserDetails() async {
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     var snapshot = snap.data() as Map<String, dynamic>;
-    header = await snapshot["header"];
-    profImage = await snapshot["profImage"];
-    bio = await snapshot["bio"];
-    username = await snapshot["username"];
-
-    print(username);
-    print(bio);
+    setState(() {
+      header = snapshot["header"];
+      profImage = snapshot["profImage"];
+      bio = snapshot["bio"];
+      username = snapshot["username"];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // username, bio, profImage, header.
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
           'Edit Profile',
           style: TextStyle(
             color: Colors.black,
+            fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              // TODO: save changes to profile
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.check,
-              // Icons.check,
               color: Colors.black,
             ),
           ),
         ],
       ),
-      body: FutureBuilder(builder: (context, snapshot) {
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 100,
-                ),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: CustomColors().light,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                Container(
+                  height: 150,
+                  width: double.infinity,
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    image: DecorationImage(
+                      image: NetworkImage(header),
+                      fit: BoxFit.cover,
                     ),
-                    minimumSize: const Size(1000000, 30),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.camera_alt,
+                    color: Colors.white,
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => editProfile(),
-                      ),
-                    );
+                    _selectImage(context);
                   },
-                  child: const Text(
-                    'Edit header picture',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                _selectImage1(context);
+              },
+              child: CircleAvatar(
+                radius: 60,
+                backgroundImage: NetworkImage(profImage),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextFormField(
+                initialValue: username,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
+                  labelText: username,
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 100,
-                ),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: CustomColors().light,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    ),
-                    minimumSize: const Size(1000000, 30),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextFormField(
+                initialValue: bio,
+                maxLines: 4,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => editProfile(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Edit profile picture',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
+                  labelText: bio,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: MultiLineTextField(
-                  maxLines: 4,
-                  bordercolor: Colors.black,
-                  label: 'Bio',
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   Uint8List? _file;
-  _selectImage(BuildContext context) async {
+  Future<dynamic> _selectImage(BuildContext context) async {
     return showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            title: const Text('Edit Profile Picture'),
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: Center(
+            child: Text(
+              "Create Post",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              //camera option
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Take a Photo'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
+              ListTile(
+                leading: Icon(Icons.camera_alt, color: Colors.blueGrey),
+                title: Text("Take a Photo",
+                    style: TextStyle(color: Colors.black54)),
+                onTap: () async {
+                  Navigator.pop(context);
                   Uint8List file = await pickImage(
                     ImageSource.camera,
                   );
@@ -169,13 +192,13 @@ class _editPageState extends State<editProfile> {
                   });
                 },
               ),
-
-              //gallery option
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Choose From Gallery'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
+              Divider(color: Colors.grey[400]),
+              ListTile(
+                leading: Icon(Icons.photo, color: CustomColors().dark),
+                title: Text("Choose From Gallery",
+                    style: TextStyle(color: Colors.black54)),
+                onTap: () async {
+                  Navigator.pop(context);
                   Uint8List file = await pickImage(
                     ImageSource.gallery,
                   );
@@ -184,72 +207,89 @@ class _editPageState extends State<editProfile> {
                   });
                 },
               ),
-              //cancel
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text("Cancel"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
             ],
-          );
-        });
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                "Cancel",
+                style: TextStyle(
+                  color: Colors.grey[700],
+                ),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Uint8List? _file1;
-  _selectImage2(BuildContext context) async {
+  Future<dynamic> _selectImage1(BuildContext context) async {
     return showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            title: const Text('Edit Header Picture'),
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: Center(
+            child: Text(
+              "Create Post",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              //camera option
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Take a Photo'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
+              ListTile(
+                leading: Icon(Icons.camera_alt, color: Colors.blueGrey),
+                title: Text("Take a Photo",
+                    style: TextStyle(color: Colors.black54)),
+                onTap: () async {
+                  Navigator.pop(context);
                   Uint8List file = await pickImage(
                     ImageSource.camera,
                   );
                   setState(() {
-                    _file1 = file;
+                    _file = file;
                   });
                 },
               ),
-
-              //gallery option
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Choose From Gallery'),
-                onPressed: () async {
-                  Navigator.of(context).pop();
+              Divider(color: Colors.grey[400]),
+              ListTile(
+                leading: Icon(Icons.photo, color: CustomColors().dark),
+                title: Text("Choose From Gallery",
+                    style: TextStyle(color: Colors.black54)),
+                onTap: () async {
+                  Navigator.pop(context);
                   Uint8List file = await pickImage(
                     ImageSource.gallery,
                   );
                   setState(() {
-                    _file1 = file;
+                    _file = file;
                   });
                 },
               ),
-              //cancel
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text("Cancel"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
             ],
-          );
-        });
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                "Cancel",
+                style: TextStyle(
+                  color: Colors.grey[700],
+                ),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   }
-  // _writeBio(BuildContext context) async {
-  //   return MultiLineTextField(
-  //     maxLines: 20,
-  //     bordercolor: Colors.black,
-  //   );
-  // }
 }
