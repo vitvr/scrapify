@@ -223,181 +223,180 @@ class _PostCardState extends State<PostCard> {
           return;
         }
       },
-      child: Padding(
-        padding: EdgeInsets.all(0),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.46,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(spreadRadius: 1, blurRadius: 3, color: Colors.grey),
-              ],
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) => ViewPage(
-                            //       snap: widget.snap,
-                            //     ),
-                            //   ),
-                            // );
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) => PostCard(
-                            //       snap: widget.snap,
-                            //       update: (int value) {},
-                            //     ),
-                            //   ),
-                            // );
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (context) => LargePost(
-                            //       snap: widget.snap,
-                            //     ),
-                            //   ),
-                            // );
-                            if (widget.large) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ViewPage(
-                                    snap: widget.snap,
-                                  ),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.46,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(spreadRadius: 1, blurRadius: 3, color: Colors.grey),
+            ],
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                child: Stack(
+                  fit: StackFit.passthrough,
+                  alignment: Alignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => ViewPage(
+                          //       snap: widget.snap,
+                          //     ),
+                          //   ),
+                          // );
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => PostCard(
+                          //       snap: widget.snap,
+                          //       update: (int value) {},
+                          //     ),
+                          //   ),
+                          // );
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => LargePost(
+                          //       snap: widget.snap,
+                          //     ),
+                          //   ),
+                          // );
+                          if (widget.large) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ViewPage(
+                                  snap: widget.snap,
                                 ),
-                              );
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return LargePost(
-                                    snap: widget.snap,
-                                  );
+                              ),
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return LargePost(
+                                  snap: widget.snap,
+                                );
+                              },
+                            );
+                          }
+                        },
+                        child: Image(
+                          image: NetworkImage(widget.snap["postUrl"]),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                // height: MediaQuery.of(context).size.height * 0.077,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 20,
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 0,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  final currentUser =
+                                      FirebaseAuth.instance.currentUser?.uid;
+                                  final targetUid = widget.snap['uid'];
+
+                                  if (currentUser == targetUid) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ProfilePersonal()),
+                                    );
+                                  } else {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProfileGeneral(uid: targetUid),
+                                      ),
+                                    );
+                                  }
                                 },
-                              );
-                            }
-                          },
-                          child: Image(
-                            image: NetworkImage(widget.snap["postUrl"]),
-                            fit: BoxFit.cover,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AutoSizeText(
+                                      widget.snap["description"],
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      '@' + _username,
+                                      style: const TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          final currentUser =
+                              FirebaseAuth.instance.currentUser?.uid;
+                          final targetUid = widget.snap['uid'];
+
+                          if (currentUser == targetUid) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProfilePersonal()),
+                            );
+                          } else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfileGeneral(uid: targetUid),
+                              ),
+                            );
+                          }
+                        },
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundImage: NetworkImage(
+                            _profImage,
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.077,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 4,
-                      horizontal: 20,
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 0,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    final currentUser =
-                                        FirebaseAuth.instance.currentUser?.uid;
-                                    final targetUid = widget.snap['uid'];
-
-                                    if (currentUser == targetUid) {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ProfilePersonal()),
-                                      );
-                                    } else {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProfileGeneral(uid: targetUid),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      AutoSizeText(
-                                        widget.snap["description"],
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        '@' + _username,
-                                        style: const TextStyle(
-                                          fontStyle: FontStyle.italic,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            final currentUser =
-                                FirebaseAuth.instance.currentUser?.uid;
-                            final targetUid = widget.snap['uid'];
-
-                            if (currentUser == targetUid) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ProfilePersonal()),
-                              );
-                            } else {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProfileGeneral(uid: targetUid),
-                                ),
-                              );
-                            }
-                          },
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundImage: NetworkImage(
-                              _profImage,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Row(
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.06,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     FittedBox(
@@ -524,9 +523,9 @@ class _PostCardState extends State<PostCard> {
                           );
                         }),
                   ],
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),
