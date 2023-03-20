@@ -3,6 +3,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
+import 'dart:math';
+import 'dart:io';
 import 'package:scrapify/utils/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -136,7 +138,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       ),
       body: SlidingUpPanel(
         minHeight: deviceSize.height * 0.18,
-        maxHeight: deviceSize.height * 0.42,
+        maxHeight: deviceSize.height * 0.5,
         body: Column(
           children: [
             Container(
@@ -247,10 +249,7 @@ class PanelWidget extends StatelessWidget {
         children: <Widget>[
           SafeArea(
             child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('posts')
-                  .orderBy('datePublished', descending: true)
-                  .snapshots(),
+              stream: getNearbyResults(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -258,26 +257,6 @@ class PanelWidget extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 }
-
-                // return MasonryGridView.count(
-                //   scrollDirection: Axis.vertical,
-                //   shrinkWrap: true,
-                //   padding: EdgeInsets.all(
-                //       MediaQuery.of(context).size.width.toDouble() * 0.019),
-                //   itemCount: snapshot.data!.docs.length,
-                //   crossAxisCount: 2,
-                //   mainAxisSpacing:
-                //       MediaQuery.of(context).size.width.toDouble() * 0.019,
-                //   crossAxisSpacing:
-                //       MediaQuery.of(context).size.width.toDouble() * 0.019,
-                //   itemBuilder: (context, index) {
-                //     return Flexible(
-                //       child: PostCard(
-                //         snap: snapshot.data!.docs[index].data(),
-                //       ),
-                //     );
-                //   },
-                // );
 
                 return ListView.separated(
                   scrollDirection: Axis.vertical,
@@ -299,19 +278,9 @@ class PanelWidget extends StatelessWidget {
                     );
                   },
                 );
-
-                // placeholder
               },
             ),
           ),
-//           Text(
-//             'About',
-//             style: TextStyle(fontWeight: FontWeight.w600),
-//           ),
-//           SizedBox(height: 12),
-//           Text(
-//               '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultricies sem sit amet purus venenatis hendrerit. Aenean pulvinar auctor volutpat. Vivamus non nibh nisi. Aliquam aliquet magna sit amet libero sollicitudin imperdiet. Aenean vitae massa sed eros blandit pellentesque. Etiam elit arcu, pharetra nec velit quis, consectetur iaculis ligula. Aenean ac sagittis odio. Sed at interdum arcu. Vivamus dignissim augue nec velit auctor pulvinar. Vestibulum aliquet odio risus, at tempor orci fermentum pulvinar. Donec a placerat urna. Ut sed magna sed neque pulvinar faucibus.
-// Morbi id sodales mi, euismod tempus justo. Mauris non consequat ex, et blandit arcu. Ut in lacinia elit. Nunc id efficitur leo, vitae scelerisque elit. Nulla varius in arcu nec consectetur. Aliquam dictum, purus non finibus volutpat, velit nunc cursus neque, at congue lorem orci vel metus. Vivamus tortor purus, auctor vitae lobortis sed, dictum quis mauris. Ut tempor vel lacus a venenatis. Nam sit amet blandit mi. Quisque vel neque eu odio condimentum porta eget vitae sapien. Sed non mauris volutpat, faucibus metus ac, congue nibh. Donec id nunc sapien.''')
         ],
       ));
 
@@ -336,6 +305,40 @@ Widget buildDragHandle() => Center(
             borderRadius: BorderRadius.circular(12)),
       ),
     );
+
+Stream<QuerySnapshot<Map<String, dynamic>>>? getNearbyResults() {
+  Stream<QuerySnapshot<Map<String, dynamic>>>? rawResults = FirebaseFirestore
+      .instance
+      .collection('posts')
+      .orderBy('datePublished', descending: true)
+      .snapshots();
+
+  // TODO: ADD LOGIC TO FILTER NEAREST LOCATIONS
+
+  return rawResults;
+}
+
+double haversineDistance(
+    {required double lat1,
+    required double lat2,
+    required double long1,
+    required double long2}) {
+  const radius = (6378137 + 6357852.3) / 2;
+  double latDelta = _toRadians(lat1 - lat2);
+  double longDelta = _toRadians(long1 - long2);
+
+  double a = (sin(latDelta / 2) * sin(latDelta / 2)) +
+      (cos(_toRadians(lat1)) *
+          cos(_toRadians(lat2)) *
+          sin(longDelta / 2) *
+          sin(longDelta / 2));
+  double distance = radius * 2 * atan2(sqrt(a), sqrt(1 - a)) / 1000;
+  return double.parse(distance.toStringAsFixed(3));
+}
+
+double _toRadians(double num) {
+  return num * (pi / 180.0);
+}
 
 class LocationService {
   final String key = 'AIzaSyA7f8dT30Z8ZPGBKGxWd-768yqlfcHiXnE';
