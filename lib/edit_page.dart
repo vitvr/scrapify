@@ -8,14 +8,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:scrapify/storage_methods.dart';
 import 'package:scrapify/utils/choose_image.dart';
+import 'package:scrapify/utils/colors.dart';
 
 class EditPage extends StatefulWidget {
   final snap;
   int page;
+  final pageIndex;
   EditPage({
     Key? key,
     required this.snap,
     required this.page,
+    required this.pageIndex,
   }) : super(key: key);
 
   @override
@@ -267,8 +270,9 @@ class _EditPageState extends State<EditPage> {
     }
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        postPage();
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        await postPage();
+        Navigator.of(context).pop();
       }),
       body: Column(
         children: <Widget>[
@@ -285,7 +289,10 @@ class _EditPageState extends State<EditPage> {
                         child: showImage[0],
                       ),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: Icon(
+                          Icons.add,
+                          color: Color.fromARGB(75, 0, 0, 0),
+                        ),
                         onPressed: () {
                           _selectImage(context, 0);
                         },
@@ -303,7 +310,10 @@ class _EditPageState extends State<EditPage> {
                         child: showImage[1],
                       ),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: Icon(
+                          Icons.add,
+                          color: Color.fromARGB(75, 0, 0, 0),
+                        ),
                         onPressed: () {
                           _selectImage(context, 1);
                         },
@@ -328,7 +338,10 @@ class _EditPageState extends State<EditPage> {
                         child: showImage[2],
                       ),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: Icon(
+                          Icons.add,
+                          color: Color.fromARGB(75, 0, 0, 0),
+                        ),
                         onPressed: () {
                           _selectImage(context, 2);
                         },
@@ -346,7 +359,10 @@ class _EditPageState extends State<EditPage> {
                         child: showImage[3],
                       ),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: Icon(
+                          Icons.add,
+                          color: Color.fromARGB(75, 0, 0, 0),
+                        ),
                         onPressed: () {
                           _selectImage(context, 3);
                         },
@@ -371,7 +387,10 @@ class _EditPageState extends State<EditPage> {
                         child: showImage[4],
                       ),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: Icon(
+                          Icons.add,
+                          color: Color.fromARGB(75, 0, 0, 0),
+                        ),
                         onPressed: () {
                           _selectImage(context, 4);
                         },
@@ -389,7 +408,10 @@ class _EditPageState extends State<EditPage> {
                         child: showImage[5],
                       ),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: Icon(
+                          Icons.add,
+                          color: Color.fromARGB(75, 0, 0, 0),
+                        ),
                         onPressed: () {
                           _selectImage(context, 5);
                         },
@@ -399,6 +421,41 @@ class _EditPageState extends State<EditPage> {
                   ),
                 ),
               ],
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: Container(
+              color: CustomColors().extremelyLight,
+              child: Row(
+                children: [
+                  TextButton.icon(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(
+                          CustomColors().extremelyLight),
+                    ),
+                    onPressed: () async {
+                      await FirebaseFirestore.instance
+                          .collection('posts')
+                          .doc(widget.snap['postId'])
+                          .collection('pages')
+                          .doc(widget.pageIndex[widget.page])
+                          .delete();
+                      widget.pageIndex.removeAt(widget.page);
+                      await FirebaseFirestore.instance
+                          .collection('posts')
+                          .doc(widget.snap['postId'])
+                          .update({'pageIndex': widget.pageIndex});
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(Icons.delete),
+                    label: Text(
+                      'Delete Page',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

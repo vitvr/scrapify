@@ -154,199 +154,191 @@ class _ViewPageState extends State<ViewPage> {
     bool belongsToUser =
         (widget.snap['uid'] == FirebaseAuth.instance.currentUser?.uid);
 
-    return Scaffold(
-      floatingActionButton: Visibility(
-        visible: belongsToUser,
-        child: FloatingActionButton(
-          onPressed: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => EditPage(
-                  snap: widget.snap,
-                  page: page,
-                ),
+    return SafeArea(
+      child: Stack(
+        children: [
+          Scaffold(
+            floatingActionButton: Visibility(
+              visible: belongsToUser,
+              child: FloatingActionButton(
+                child: Icon(Icons.edit),
+                backgroundColor: Color.fromARGB(75, 0, 0, 0),
+                onPressed: () async {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditPage(
+                        snap: widget.snap,
+                        page: page,
+                        pageIndex: pageIndex,
+                      ),
+                    ),
+                  );
+                  received = false;
+                  page = 0;
+                  getContents();
+                },
               ),
-            );
-            received = false;
-            getContents();
-          },
-        ),
-      ),
-      body: GestureDetector(
-        onPanEnd: (details) {
-          // print(details.velocity.pixelsPerSecond.dx > 0);
-          // Swipe left
-          if (details.velocity.pixelsPerSecond.dx < 0) {
-            if (!belongsToUser) {
-              return;
-            }
-            if (page == 7) {
-              return;
-            }
-            page++;
-            received = false;
-            setState(() {});
-          }
-          // Swipe right
-          if (details.velocity.pixelsPerSecond.dx > 0) {
-            if (page == 0) {
-              return;
-            }
-            page--;
-            received = false;
-            setState(() {});
-          }
-        },
-        child: Container(
-          color: CustomColors().extremelyLight,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+            ),
+            body: GestureDetector(
+              onPanEnd: (details) {
+                // print(details.velocity.pixelsPerSecond.dx > 0);
+                // Swipe left
+                if (details.velocity.pixelsPerSecond.dx < 0) {
+                  if (!belongsToUser) {
+                    return;
+                  }
+                  if (page == 7) {
+                    return;
+                  }
+                  page++;
+                  received = false;
+                  setState(() {});
+                }
+                // Swipe right
+                if (details.velocity.pixelsPerSecond.dx > 0) {
+                  if (page == 0) {
+                    return;
+                  }
+                  page--;
+                  received = false;
+                  setState(() {});
+                }
+              },
+              child: Container(
+                color: CustomColors().extremelyLight,
+                child: Column(
                   children: <Widget>[
                     Expanded(
-                      child: showImage[0],
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Expanded(
+                            child: showImage[0],
+                          ),
+                          Expanded(
+                            child: showImage[1],
+                          ),
+                        ],
+                      ),
                     ),
                     Expanded(
-                      child: showImage[1],
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Expanded(
+                            child: Stack(
+                              fit: StackFit.passthrough,
+                              alignment: Alignment.center,
+                              children: [
+                                Expanded(
+                                  child: showImage[2],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Stack(
+                              fit: StackFit.passthrough,
+                              alignment: Alignment.center,
+                              children: [
+                                Expanded(
+                                  child: showImage[3],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Expanded(
+                            child: Stack(
+                              fit: StackFit.passthrough,
+                              alignment: Alignment.center,
+                              children: [
+                                Expanded(
+                                  child: showImage[4],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Stack(
+                              fit: StackFit.passthrough,
+                              alignment: Alignment.center,
+                              children: [
+                                Expanded(
+                                  child: showImage[5],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.height * 0.1,
+                    //   child: Container(
+                    //     color: CustomColors().lighter,
+                    //     child: Row(
+                    //       children: [
+                    //         IconButton(
+                    //           onPressed: () {
+                    //             if (page == 0) {
+                    //               return;
+                    //             }
+                    //             page--;
+                    //             received = false;
+                    //             setState(() {});
+                    //           },
+                    //           icon: Icon(
+                    //             Icons.arrow_left,
+                    //           ),
+                    //           iconSize: MediaQuery.of(context).size.width * 0.1,
+                    //         ),
+                    //         Text('Page: ' + (page + 1).toString()),
+                    //         IconButton(
+                    //           onPressed: () {
+                    //             if (!belongsToUser) {
+                    //               return;
+                    //             }
+                    //             if (page == 7) {
+                    //               return;
+                    //             }
+                    //             page++;
+                    //             received = false;
+                    //             setState(() {});
+                    //           },
+                    //           icon: Icon(
+                    //             Icons.arrow_right,
+                    //           ),
+                    //           iconSize: MediaQuery.of(context).size.width * 0.1,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Expanded(
-                      child: Stack(
-                        fit: StackFit.passthrough,
-                        alignment: Alignment.center,
-                        children: [
-                          Expanded(
-                            child: showImage[2],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Stack(
-                        fit: StackFit.passthrough,
-                        alignment: Alignment.center,
-                        children: [
-                          Expanded(
-                            child: showImage[3],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Expanded(
-                      child: Stack(
-                        fit: StackFit.passthrough,
-                        alignment: Alignment.center,
-                        children: [
-                          Expanded(
-                            child: showImage[4],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Stack(
-                        fit: StackFit.passthrough,
-                        alignment: Alignment.center,
-                        children: [
-                          Expanded(
-                            child: showImage[5],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
-                child: Container(
-                  color: CustomColors().lighter,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          if (page == 0) {
-                            return;
-                          }
-                          page--;
-                          received = false;
-                          setState(() {});
-                        },
-                        icon: Icon(
-                          Icons.arrow_left,
-                        ),
-                        iconSize: MediaQuery.of(context).size.width * 0.1,
-                      ),
-                      Text('Page: ' + (page + 1).toString()),
-                      IconButton(
-                        onPressed: () {
-                          if (!belongsToUser) {
-                            return;
-                          }
-                          if (page == 7) {
-                            return;
-                          }
-                          page++;
-                          received = false;
-                          setState(() {});
-                        },
-                        icon: Icon(
-                          Icons.arrow_right,
-                        ),
-                        iconSize: MediaQuery.of(context).size.width * 0.1,
-                      ),
-                      TextButton.icon(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
-                              CustomColors().extremelyLight),
-                        ),
-                        onPressed: () async {
-                          int prevPage = page;
-                          if (page == 0) {
-                            page++;
-                          } else {
-                            page--;
-                          }
-                          await FirebaseFirestore.instance
-                              .collection('posts')
-                              .doc(widget.snap['postId'])
-                              .collection('pages')
-                              .doc(pageIndex[prevPage])
-                              .delete();
-                          pageIndex.removeAt(prevPage);
-                          await FirebaseFirestore.instance
-                              .collection('posts')
-                              .doc(widget.snap['postId'])
-                              .update({'pageIndex': pageIndex});
-                        },
-                        icon: Icon(Icons.delete),
-                        label: Text(
-                          'Delete Page',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: FloatingActionButton(
+                heroTag: null,
+                onPressed: () {},
+                backgroundColor: Color.fromARGB(75, 0, 0, 0),
+                child: Text((page + 1).toString()),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
