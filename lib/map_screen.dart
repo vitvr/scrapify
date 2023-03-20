@@ -340,8 +340,13 @@ Stream<QuerySnapshot<Map<String, dynamic>>>? getNearbyResults() {
   Stream<QuerySnapshot<Map<String, dynamic>>>? rawResults = FirebaseFirestore
       .instance
       .collection('posts')
-      .orderBy('datePublished', descending: true)
+      //.orderBy('datePublished', descending: true)
+      .where("latitude", isLessThan: _MapScreenState.currentLocation.latitude)
+      .where("latitude",
+          isGreaterThanOrEqualTo:
+              (_MapScreenState.currentLocation.latitude - 0.030120))
       .snapshots();
+  //.snapshots();
 
   // TODO: ADD LOGIC TO FILTER NEAREST LOCATIONS
 
