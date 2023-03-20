@@ -174,10 +174,27 @@ class _ViewPageState extends State<ViewPage> {
       ),
       body: GestureDetector(
         onPanUpdate: (details) {
-          // Swipe right.
-          if (details.delta.dx > 0) {}
-          // Swipeleft.
-          if (details.delta.dx < 0) {}
+          // Swipe left
+          if (details.delta.dx < 0) {
+            if (!belongsToUser) {
+              return;
+            }
+            if (page == 7) {
+              return;
+            }
+            page++;
+            received = false;
+            setState(() {});
+          }
+          // Swipe right
+          if (details.delta.dx > 0) {
+            if (page == 0) {
+              return;
+            }
+            page--;
+            received = false;
+            setState(() {});
+          }
         },
         child: Container(
           color: CustomColors().extremelyLight,
