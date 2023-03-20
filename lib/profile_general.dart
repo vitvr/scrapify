@@ -214,6 +214,9 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                                         ),
                                         Text(
                                           '@' + snapshot.data!.get('username'),
+                                          style: TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                          ),
                                         ),
                                         SizedBox(
                                           height: profileSpacing / 4,
@@ -295,10 +298,13 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                                 ),
                               );
                             },
-                            child: Image.network(
-                              (snapshot.data! as dynamic).docs[index]
-                                  ['postUrl'],
-                              fit: BoxFit.cover,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: Image.network(
+                                (snapshot.data! as dynamic).docs[index]
+                                    ['postUrl'],
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           );
                         },

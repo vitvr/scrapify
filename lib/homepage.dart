@@ -17,12 +17,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> followingIds = [];
+  String profImage = "";
 
-  Future<void> fetchFollowing() async {
+  Future<void> fetchData() async {
     var uid = FirebaseAuth.instance.currentUser!.uid;
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     followingIds = List<String>.from(snapshot.get('following'));
+    profImage = snapshot.get('profImage');
     followingIds.add(uid);
     setState(() {});
   }
@@ -36,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    fetchFollowing();
+    fetchData();
   }
 
   @override
@@ -68,10 +70,26 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
             actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.notification_add_outlined),
-              ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: const Icon(Icons.notification_add_outlined),
+              // ),
+              (profImage != "")
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 5,
+                      ),
+                      child: FittedBox(
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundImage: NetworkImage(
+                            profImage,
+                          ),
+                        ),
+                      ),
+                    )
+                  : CircularProgressIndicator(),
             ],
           ),
           body: SafeArea(
@@ -103,6 +121,7 @@ class _HomePageState extends State<HomePage> {
                       child: PostCard(
                         snap: snapshot.data!.docs[index].data(),
                         update: _update,
+                        large: false,
                       ),
                     );
                   },

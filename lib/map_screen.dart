@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -36,11 +37,23 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   // A Position that may be defined later
   Position? _currentPosition;
 
+  String profImage = "";
+
+  Future<void> fetchData() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get();
+    profImage = snapshot.get('profImage');
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
     _defaultCameraPosition = CameraPosition(target: defaultLocation, zoom: 14);
     _getCurrentPosition();
+    fetchData();
   }
 
   void _setMarker(LatLng point) {
@@ -128,10 +141,26 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notification_add_outlined),
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: const Icon(Icons.notification_add_outlined),
+          // ),
+          (profImage != "")
+              ? Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 5,
+                  ),
+                  child: FittedBox(
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(
+                        profImage,
+                      ),
+                    ),
+                  ),
+                )
+              : CircularProgressIndicator(),
         ],
       ),
       body: SlidingUpPanel(
@@ -295,6 +324,7 @@ class PanelWidget extends StatelessWidget {
                       child: PostCard(
                         snap: snapshot.data!.docs[index].data(),
                         update: _update,
+                        large: false,
                       ),
                     );
                   },

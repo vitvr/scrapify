@@ -3,17 +3,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/comentscreen.dart';
+import 'package:scrapify/large_post.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/like_animation.dart';
+import 'package:scrapify/utils/post_image.dart';
 import 'package:scrapify/view_page.dart';
 import '../profile.dart';
 import '../profile_general.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
+  final bool large;
   final ValueChanged<int> update;
-  const PostCard({Key? key, required this.snap, required this.update})
-      : super(key: key);
+  const PostCard({
+    Key? key,
+    required this.snap,
+    required this.update,
+    required this.large,
+  }) : super(key: key);
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -187,13 +194,46 @@ class _PostCardState extends State<PostCard> {
                         ),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ViewPage(
-                                  snap: widget.snap,
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //     builder: (context) => ViewPage(
+                            //       snap: widget.snap,
+                            //     ),
+                            //   ),
+                            // );
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //     builder: (context) => PostCard(
+                            //       snap: widget.snap,
+                            //       update: (int value) {},
+                            //     ),
+                            //   ),
+                            // );
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //     builder: (context) => LargePost(
+                            //       snap: widget.snap,
+                            //     ),
+                            //   ),
+                            // );
+                            if (widget.large) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ViewPage(
+                                    snap: widget.snap,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return LargePost(
+                                    snap: widget.snap,
+                                  );
+                                },
+                              );
+                            }
                           },
                           child: Image(
                             image: NetworkImage(widget.snap["postUrl"]),
