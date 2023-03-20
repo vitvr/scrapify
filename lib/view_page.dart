@@ -173,9 +173,10 @@ class _ViewPageState extends State<ViewPage> {
         ),
       ),
       body: GestureDetector(
-        onPanUpdate: (details) {
+        onPanEnd: (details) {
+          // print(details.velocity.pixelsPerSecond.dx > 0);
           // Swipe left
-          if (details.delta.dx < 0) {
+          if (details.velocity.pixelsPerSecond.dx < 0) {
             if (!belongsToUser) {
               return;
             }
@@ -187,7 +188,7 @@ class _ViewPageState extends State<ViewPage> {
             setState(() {});
           }
           // Swipe right
-          if (details.delta.dx > 0) {
+          if (details.velocity.pixelsPerSecond.dx > 0) {
             if (page == 0) {
               return;
             }
