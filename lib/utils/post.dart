@@ -397,133 +397,138 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FittedBox(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 4.0,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: CustomColors().extremelyLight,
-                            // border: Border.all(color: Colors.black),
-                            borderRadius: BorderRadius.circular(20.0),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.06,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FittedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 4.0,
                           ),
-                          child: FutureBuilder(
-                            future: FirebaseFirestore.instance
-                                .collection('posts')
-                                .doc(widget.snap['postId'])
-                                .get(),
-                            builder: (context, snapshot) {
-                              int likes = 0;
-                              bool liked = false;
-                              List likesList = [];
-                              if (snapshot.hasData) {
-                                likesList = snapshot.data!.get('likes');
-                              }
-                              if (likesList.contains(_uid)) {
-                                liked = true;
-                              }
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: CustomColors().extremelyLight,
+                              // border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: FutureBuilder(
+                              future: FirebaseFirestore.instance
+                                  .collection('posts')
+                                  .doc(widget.snap['postId'])
+                                  .get(),
+                              builder: (context, snapshot) {
+                                int likes = 0;
+                                bool liked = false;
+                                List likesList = [];
+                                if (snapshot.hasData) {
+                                  likesList = snapshot.data!.get('likes');
+                                }
+                                if (likesList.contains(_uid)) {
+                                  liked = true;
+                                }
 
-                              return Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: Text(likesList.length.toString()),
-                                  ),
-                                  LikeAnimation(
-                                    isAnimating: liked,
-                                    smallLike: true,
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(0),
-                                      onPressed: () async {
-                                        await likePost(
-                                          widget.snap['postId'],
-                                          _uid!,
-                                          snapshot.data!.get('likes'),
-                                        );
-                                        liked = !liked;
-                                        setState(() {});
-                                      },
-                                      icon: liked
-                                          ? const Icon(
-                                              Icons.favorite,
-                                              color: Colors.red,
-                                            )
-                                          : const Icon(
-                                              Icons.favorite_border,
-                                            ),
-                                      visualDensity: VisualDensity.comfortable,
+                                return Row(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Text(likesList.length.toString()),
                                     ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => CommentScreen(
-                              snap: widget.snap,
+                                    LikeAnimation(
+                                      isAnimating: liked,
+                                      smallLike: true,
+                                      child: IconButton(
+                                        padding: EdgeInsets.all(0),
+                                        onPressed: () async {
+                                          await likePost(
+                                            widget.snap['postId'],
+                                            _uid!,
+                                            snapshot.data!.get('likes'),
+                                          );
+                                          liked = !liked;
+                                          setState(() {});
+                                        },
+                                        icon: liked
+                                            ? const Icon(
+                                                Icons.favorite,
+                                                color: Colors.red,
+                                              )
+                                            : const Icon(
+                                                Icons.favorite_border,
+                                              ),
+                                        visualDensity:
+                                            VisualDensity.comfortable,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                           ),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.comment,
-                        color: Colors.red,
+                        ),
                       ),
-                      visualDensity: VisualDensity.comfortable,
-                    ),
-                    FutureBuilder(
-                        future: FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(_uid)
-                            .get(),
-                        builder: (context, snapshot) {
-                          bool bookmarked = false;
-                          print(_uid);
-                          print(snapshot.data);
-                          List bookmarks = [];
-                          if (snapshot.hasData) {
-                            bookmarks = snapshot.data!.get('bookmarks');
-                          }
-                          if (bookmarks.contains(widget.snap['postId'])) {
-                            bookmarked = true;
-                          }
-                          return LikeAnimation(
-                            isAnimating: bookmarked,
-                            smallLike: true,
-                            child: IconButton(
-                              padding: EdgeInsets.all(0),
-                              onPressed: () async {
-                                await bookmarkPost(
-                                  widget.snap['postId'],
-                                  _uid!,
-                                );
-                                bookmarked = !bookmarked;
-                                setState(() {});
-                              },
-                              icon: bookmarked
-                                  ? Icon(
-                                      Icons.bookmark,
-                                      color: Colors.black,
-                                    )
-                                  : Icon(
-                                      Icons.bookmark_outline,
-                                    ),
-                              visualDensity: VisualDensity.comfortable,
+                      IconButton(
+                        padding: EdgeInsets.all(0),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CommentScreen(
+                                snap: widget.snap,
+                              ),
                             ),
                           );
-                        }),
-                  ],
+                        },
+                        icon: Icon(
+                          Icons.comment,
+                          color: Colors.red,
+                        ),
+                        visualDensity: VisualDensity.comfortable,
+                      ),
+                      FutureBuilder(
+                          future: FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(_uid)
+                              .get(),
+                          builder: (context, snapshot) {
+                            bool bookmarked = false;
+                            print(_uid);
+                            print(snapshot.data);
+                            List bookmarks = [];
+                            if (snapshot.hasData) {
+                              bookmarks = snapshot.data!.get('bookmarks');
+                            }
+                            if (bookmarks.contains(widget.snap['postId'])) {
+                              bookmarked = true;
+                            }
+                            return LikeAnimation(
+                              isAnimating: bookmarked,
+                              smallLike: true,
+                              child: IconButton(
+                                padding: EdgeInsets.all(0),
+                                onPressed: () async {
+                                  await bookmarkPost(
+                                    widget.snap['postId'],
+                                    _uid!,
+                                  );
+                                  bookmarked = !bookmarked;
+                                  setState(() {});
+                                },
+                                icon: bookmarked
+                                    ? Icon(
+                                        Icons.bookmark,
+                                        color: Colors.black,
+                                      )
+                                    : Icon(
+                                        Icons.bookmark_outline,
+                                      ),
+                                visualDensity: VisualDensity.comfortable,
+                              ),
+                            );
+                          }),
+                    ],
+                  ),
                 )
               ],
             ),

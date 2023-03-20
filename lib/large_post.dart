@@ -15,15 +15,23 @@ class _LargePostState extends State<LargePost> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: size.width * 0.05,
-        vertical: size.height * 0.13,
-      ),
-      child: PostCard(
-        snap: widget.snap,
-        update: (int value) {},
-        large: true,
+    return SizedBox(
+      height: size.height * 0.4,
+      child: Container(
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: size.height * 0.1,
+              horizontal: size.width * 0.005,
+            ),
+            child: PostCard(
+              snap: widget.snap,
+              update: (int value) {},
+              large: true,
+            ),
+          ),
+        ),
       ),
     );
   }
