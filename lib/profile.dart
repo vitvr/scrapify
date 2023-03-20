@@ -30,6 +30,21 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
 
   var uid = FirebaseAuth.instance.currentUser?.uid;
 
+  String profImage = "";
+
+  Future<void> fetchData() async {
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    profImage = snapshot.get('profImage');
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
   Future<model.User> getUserDetails() async {
     DocumentSnapshot documentSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
@@ -53,10 +68,26 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notification_add_outlined),
-            ),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: const Icon(Icons.notification_add_outlined),
+            // ),
+            (profImage != "")
+                ? Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 5,
+                    ),
+                    child: FittedBox(
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(
+                          profImage,
+                        ),
+                      ),
+                    ),
+                  )
+                : CircularProgressIndicator(),
           ],
         ),
         body: SafeArea(
@@ -234,10 +265,13 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                                 ),
                               );
                             },
-                            child: Image.network(
-                              (snapshot.data! as dynamic).docs[index]
-                                  ['postUrl'],
-                              fit: BoxFit.cover,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: Image.network(
+                                (snapshot.data! as dynamic).docs[index]
+                                    ['postUrl'],
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           );
                         },

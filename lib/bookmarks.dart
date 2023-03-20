@@ -97,6 +97,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                             child: PostCard(
                               snap: snapshot.data!.docs[index].data(),
                               update: _update,
+                              large: false,
                             ),
                           );
                         },

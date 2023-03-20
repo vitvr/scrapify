@@ -172,154 +172,162 @@ class _ViewPageState extends State<ViewPage> {
           },
         ),
       ),
-      body: Container(
-        color: CustomColors().extremelyLight,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                    child: showImage[0],
-                  ),
-                  Expanded(
-                    child: showImage[1],
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                    child: Stack(
-                      fit: StackFit.passthrough,
-                      alignment: Alignment.center,
-                      children: [
-                        Expanded(
-                          child: showImage[2],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Stack(
-                      fit: StackFit.passthrough,
-                      alignment: Alignment.center,
-                      children: [
-                        Expanded(
-                          child: showImage[3],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                    child: Stack(
-                      fit: StackFit.passthrough,
-                      alignment: Alignment.center,
-                      children: [
-                        Expanded(
-                          child: showImage[4],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Stack(
-                      fit: StackFit.passthrough,
-                      alignment: Alignment.center,
-                      children: [
-                        Expanded(
-                          child: showImage[5],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-              child: Container(
-                color: CustomColors().lighter,
+      body: GestureDetector(
+        onPanUpdate: (details) {
+          // Swipe right.
+          if (details.delta.dx > 0) {}
+          // Swipeleft.
+          if (details.delta.dx < 0) {}
+        },
+        child: Container(
+          color: CustomColors().extremelyLight,
+          child: Column(
+            children: <Widget>[
+              Expanded(
                 child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        if (page == 0) {
-                          return;
-                        }
-                        page--;
-                        received = false;
-                        setState(() {});
-                      },
-                      icon: Icon(
-                        Icons.arrow_left,
-                      ),
-                      iconSize: MediaQuery.of(context).size.width * 0.1,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      child: showImage[0],
                     ),
-                    Text('Page: ' + (page + 1).toString()),
-                    IconButton(
-                      onPressed: () {
-                        if (!belongsToUser) {
-                          return;
-                        }
-                        if (page == 7) {
-                          return;
-                        }
-                        page++;
-                        received = false;
-                        setState(() {});
-                      },
-                      icon: Icon(
-                        Icons.arrow_right,
-                      ),
-                      iconSize: MediaQuery.of(context).size.width * 0.1,
+                    Expanded(
+                      child: showImage[1],
                     ),
-                    TextButton.icon(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            CustomColors().extremelyLight),
-                      ),
-                      onPressed: () async {
-                        int prevPage = page;
-                        if (page == 0) {
-                          page++;
-                        } else {
-                          page--;
-                        }
-                        await FirebaseFirestore.instance
-                            .collection('posts')
-                            .doc(widget.snap['postId'])
-                            .collection('pages')
-                            .doc(pageIndex[prevPage])
-                            .delete();
-                        pageIndex.removeAt(prevPage);
-                        await FirebaseFirestore.instance
-                            .collection('posts')
-                            .doc(widget.snap['postId'])
-                            .update({'pageIndex': pageIndex});
-                      },
-                      icon: Icon(Icons.delete),
-                      label: Text(
-                        'Delete Page',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    )
                   ],
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Expanded(
+                            child: showImage[2],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Expanded(
+                            child: showImage[3],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Expanded(
+                            child: showImage[4],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Expanded(
+                            child: showImage[5],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.1,
+                child: Container(
+                  color: CustomColors().lighter,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          if (page == 0) {
+                            return;
+                          }
+                          page--;
+                          received = false;
+                          setState(() {});
+                        },
+                        icon: Icon(
+                          Icons.arrow_left,
+                        ),
+                        iconSize: MediaQuery.of(context).size.width * 0.1,
+                      ),
+                      Text('Page: ' + (page + 1).toString()),
+                      IconButton(
+                        onPressed: () {
+                          if (!belongsToUser) {
+                            return;
+                          }
+                          if (page == 7) {
+                            return;
+                          }
+                          page++;
+                          received = false;
+                          setState(() {});
+                        },
+                        icon: Icon(
+                          Icons.arrow_right,
+                        ),
+                        iconSize: MediaQuery.of(context).size.width * 0.1,
+                      ),
+                      TextButton.icon(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(
+                              CustomColors().extremelyLight),
+                        ),
+                        onPressed: () async {
+                          int prevPage = page;
+                          if (page == 0) {
+                            page++;
+                          } else {
+                            page--;
+                          }
+                          await FirebaseFirestore.instance
+                              .collection('posts')
+                              .doc(widget.snap['postId'])
+                              .collection('pages')
+                              .doc(pageIndex[prevPage])
+                              .delete();
+                          pageIndex.removeAt(prevPage);
+                          await FirebaseFirestore.instance
+                              .collection('posts')
+                              .doc(widget.snap['postId'])
+                              .update({'pageIndex': pageIndex});
+                        },
+                        icon: Icon(Icons.delete),
+                        label: Text(
+                          'Delete Page',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -164,9 +164,12 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         );
                       },
-                      child: Image.network(
-                        (snapshot.data! as dynamic).docs[index]['postUrl'],
-                        fit: BoxFit.cover,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: Image.network(
+                          (snapshot.data! as dynamic).docs[index]['postUrl'],
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     );
                   },
