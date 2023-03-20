@@ -8,7 +8,6 @@ import 'package:scrapify/utils/choose_image.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/post_image.dart';
 import 'package:textfields/textfields.dart';
-import 'package:uuid/uuid.dart';
 
 class editProfile extends StatefulWidget {
   const editProfile({Key? key}) : super(key: key);
@@ -19,11 +18,16 @@ class editProfile extends StatefulWidget {
 
 class _editPageState extends State<editProfile> {
   var _uid = FirebaseAuth.instance.currentUser?.uid;
+  final usernameController = TextEditingController();
+  final bioController = TextEditingController();
 
   String header = "";
   String profImage = "";
   String bio = "";
   String username = "";
+  var userRef = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser?.uid);
 
   Future<String> postImage(Uint8List file) async {
     print(file);
@@ -32,8 +36,16 @@ class _editPageState extends State<editProfile> {
     return photoURL;
   }
 
-  Uint8List? _file;
-  Future<dynamic> _selectImage(BuildContext context) async {
+  @override
+  void dispose() {
+    usernameController.dispose();
+    bioController.dispose();
+    super.dispose();
+  }
+
+  List<Uint8List?> _files = [null, null]; // header, profile
+
+  Future<dynamic> _selectImage(BuildContext context, int index) async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -63,7 +75,7 @@ class _editPageState extends State<editProfile> {
                     ImageSource.camera,
                   );
                   setState(() {
-                    _file = file;
+                    _files[index] = file;
                   });
                 },
               ),
@@ -78,7 +90,7 @@ class _editPageState extends State<editProfile> {
                     ImageSource.gallery,
                   );
                   setState(() {
-                    _file = file;
+                    _files[index] = file;
                   });
                 },
               ),
@@ -118,6 +130,8 @@ class _editPageState extends State<editProfile> {
     });
   }
 
+  Future<void> postChanges() async {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,8 +154,31 @@ class _editPageState extends State<editProfile> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              // TODO: save changes to profile
+            onPressed: () async {
+              if (_files[0] != null) {
+                String photoUrl = await postImage(_files[0]!);
+                await userRef.update({
+                  'header': photoUrl,
+                });
+              }
+              if (_files[1] != null) {
+                String photoUrl = await postImage(_files[1]!);
+                await userRef.update({
+                  'profImage': photoUrl,
+                });
+              }
+              if (usernameController.text != "") {
+                await userRef.update({
+                  'username': usernameController.text.toLowerCase(),
+                });
+              }
+              if (bioController.text != "") {
+                await userRef.update({
+                  'bio': bioController.text,
+                });
+              }
+
+              Navigator.pop(context);
             },
             icon: Icon(
               Icons.check,
@@ -169,7 +206,9 @@ class _editPageState extends State<editProfile> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       image: DecorationImage(
-                        image: NetworkImage(header),
+                        image: (_files[0] == null)
+                            ? NetworkImage(header)
+                            : Image(image: MemoryImage(_files[0]!)).image,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -183,8 +222,7 @@ class _editPageState extends State<editProfile> {
                       color: Colors.white,
                     ),
                     onPressed: () async {
-                      await _selectImage(context);
-                      header = await postImage(_file!);
+                      _selectImage(context, 0);
                     },
                   ),
                 ),
@@ -195,7 +233,7 @@ class _editPageState extends State<editProfile> {
             ),
             GestureDetector(
               onTap: () {
-                _selectImage1(context);
+                _selectImage(context, 1);
               },
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -204,7 +242,9 @@ class _editPageState extends State<editProfile> {
                 child: FittedBox(
                   child: CircleAvatar(
                     radius: 60,
-                    backgroundImage: NetworkImage(profImage),
+                    backgroundImage: (_files[1] == null)
+                        ? NetworkImage(profImage)
+                        : Image(image: MemoryImage(_files[1]!)).image,
                   ),
                 ),
               ),
@@ -215,7 +255,7 @@ class _editPageState extends State<editProfile> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextFormField(
-                initialValue: username,
+                controller: usernameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -230,7 +270,7 @@ class _editPageState extends State<editProfile> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextFormField(
-                initialValue: bio,
+                controller: bioController,
                 maxLines: 4,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -243,74 +283,6 @@ class _editPageState extends State<editProfile> {
           ],
         ),
       ),
-    );
-  }
-
-  Uint8List? _file1;
-  Future<dynamic> _selectImage1(BuildContext context) async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          title: Center(
-            child: Text(
-              "Choose Profile Image",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: Icon(Icons.camera_alt, color: Colors.blueGrey),
-                title: Text("Take a Photo",
-                    style: TextStyle(color: Colors.black54)),
-                onTap: () async {
-                  Navigator.pop(context);
-                  Uint8List file = await pickImage(
-                    ImageSource.camera,
-                  );
-                  setState(() {
-                    _file = file;
-                  });
-                },
-              ),
-              Divider(color: Colors.grey[400]),
-              ListTile(
-                leading: Icon(Icons.photo, color: CustomColors().dark),
-                title: Text("Choose From Gallery",
-                    style: TextStyle(color: Colors.black54)),
-                onTap: () async {
-                  Navigator.pop(context);
-                  Uint8List file = await pickImage(
-                    ImageSource.gallery,
-                  );
-                  setState(() {
-                    _file = file;
-                  });
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              child: Text(
-                "Cancel",
-                style: TextStyle(
-                  color: Colors.grey[700],
-                ),
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
-      },
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:scrapify/large_post.dart';
 import 'package:scrapify/profile.dart';
 import 'package:scrapify/profile_general.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -157,11 +158,13 @@ class _SearchPageState extends State<SearchPage> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ViewPage(
-                                snap: snapshot.data!.docs[index].data()),
-                          ),
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return LargePost(
+                              snap: snapshot.data!.docs[index].data(),
+                            );
+                          },
                         );
                       },
                       child: ClipRRect(

@@ -239,7 +239,6 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 4),
@@ -456,35 +455,6 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                     height: MediaQuery.of(context).size.height * 0.025,
                   ),
                   Text(
-                    'Title',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.005,
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(64, 255, 99, 61),
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    child: const Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Title',
-                        ),
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.025,
-                  ),
-                  Text(
                     'Caption',
                     style: TextStyle(
                       fontSize: 20,
@@ -495,9 +465,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                     height: MediaQuery.of(context).size.height * 0.005,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        // vertical: MediaQuery.of(context).size.height * 0.1,
-                        ),
+                    padding: EdgeInsets.symmetric(),
                     decoration: const BoxDecoration(
                       color: Color.fromARGB(64, 255, 99, 61),
                       borderRadius: BorderRadius.all(Radius.circular(20.0)),

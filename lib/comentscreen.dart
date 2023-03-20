@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart';
 import 'package:scrapify/homepage.dart';
 import 'package:scrapify/onboarding.dart';
 import 'package:scrapify/utils/colors.dart';
@@ -34,6 +35,7 @@ class CommentScreenState extends State<CommentScreen> {
             .doc(commentId)
             .set({
           'profilePic': profilePic,
+          'postId': postId,
           'name': name,
           'uid': uid,
           'text': text,
@@ -99,43 +101,13 @@ class CommentScreenState extends State<CommentScreen> {
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
-          // actions: [
-          //   IconButton(
-          //     onPressed: () {},
-          //     icon: const Icon(Icons.notification_add_outlined),
-          //   ),
-          //],
         ),
-        // body: CommentCard(),
         body: Container(
           child: CommentBox(
             userImage: CommentBox.commentImageParser(
               imageURLorPath: NetworkImage(
                 widget.snap["profImage"],
               ),
-            ),
-            // child: ListView(
-            //   children: [CommentCard()],
-            // ),
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('posts')
-                  .doc(widget.snap['postId'])
-                  .collection('comments')
-                  .orderBy('datePublished', descending: false)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (context, index) => CommentCard(
-                      snap: (snapshot.data! as dynamic).docs[index].data()),
-                );
-              },
             ),
             labelText: 'Write a comment...',
             errorText: 'Comment cannot be blank',
@@ -156,6 +128,26 @@ class CommentScreenState extends State<CommentScreen> {
             backgroundColor: Colors.white,
             textColor: Colors.black,
             sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.black),
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .doc(widget.snap['postId'])
+                  .collection('comments')
+                  .orderBy('datePublished', descending: false)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: (snapshot.data! as dynamic).docs.length,
+                  itemBuilder: (context, index) => CommentCard(
+                      snap: (snapshot.data! as dynamic).docs[index].data()),
+                );
+              },
+            ),
           ),
         ),
       ),

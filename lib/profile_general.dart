@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:scrapify/edit_page.dart';
+import 'package:scrapify/large_post.dart';
 import 'package:scrapify/utils/pic.dart';
 import 'package:scrapify/utils/post.dart';
 import 'package:scrapify/view_page.dart';
@@ -43,10 +44,22 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
     setState(() {});
   }
 
+  String profImage = "";
+
+  Future<void> fetchData() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get();
+    profImage = snapshot.get('profImage');
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
     checkFollowing();
+    fetchData();
   }
 
   Future<void> followUser(String cuid, String followId) async {
@@ -157,10 +170,22 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notification_add_outlined),
-            ),
+            (profImage != "")
+                ? Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 5,
+                    ),
+                    child: FittedBox(
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(
+                          profImage,
+                        ),
+                      ),
+                    ),
+                  )
+                : CircularProgressIndicator(),
           ],
         ),
         body: SafeArea(
@@ -307,11 +332,13 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ViewPage(
-                                      snap: snapshot.data!.docs[index].data()),
-                                ),
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return LargePost(
+                                    snap: snapshot.data!.docs[index].data(),
+                                  );
+                                },
                               );
                             },
                             child: ClipRRect(

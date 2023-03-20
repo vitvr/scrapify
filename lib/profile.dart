@@ -69,10 +69,6 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           actions: [
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: const Icon(Icons.notification_add_outlined),
-            // ),
             (profImage != "")
                 ? Padding(
                     padding: EdgeInsets.symmetric(
@@ -154,7 +150,6 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                                           height: profileSpacing / 4,
                                         ),
                                         Row(
-                                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                           children: [
                                             Text(
                                               snapshot.data!
@@ -216,12 +211,13 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                               ),
                               minimumSize: const Size(1000000, 30),
                             ),
-                            onPressed: () {
-                              Navigator.of(context).push(
+                            onPressed: () async {
+                              await Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => editProfile(),
                                 ),
                               );
+                              setState(() {});
                             },
                             child: const Text(
                               'Edit Profile',
@@ -259,12 +255,6 @@ class _ProfilePersonalState extends State<ProfilePersonal> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) => LargePost(
-                              //         snap: snapshot.data!.docs[index].data()),
-                              //   ),
-                              // );
                               showDialog(
                                 context: context,
                                 builder: (context) {

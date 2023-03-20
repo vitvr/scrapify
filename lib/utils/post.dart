@@ -97,6 +97,13 @@ class _PostCardState extends State<PostCard> {
   Future<void> deletePost(String postId) async {
     try {
       await FirebaseFirestore.instance.collection('posts').doc(postId).delete();
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser?.uid)
+          .update({
+        'posts': FieldValue.arrayRemove([postId]),
+      });
     } catch (e) {
       print(e.toString());
     }

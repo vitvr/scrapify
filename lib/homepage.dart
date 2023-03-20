@@ -93,66 +93,67 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           body: SafeArea(
-            child: followingIds.isEmpty
-                ? FutureBuilder(
-                    future: FirebaseFirestore.instance
-                        .collection('posts')
-                        .where('uid',
-                            whereIn: (followingIds.isEmpty
-                                ? [FirebaseAuth.instance.currentUser?.uid]
-                                : followingIds))
-                        .orderBy('datePublished', descending: true)
-                        .get(),
-                    builder: (context,
-                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                            snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-
-                      return MasonryGridView.count(
-                        padding: EdgeInsets.all(postPadding),
-                        itemCount: snapshot.data!.docs.length,
-                        crossAxisCount: 2,
-                        mainAxisSpacing: postPadding,
-                        crossAxisSpacing: postPadding,
-                        itemBuilder: (context, index) {
-                          return Flexible(
-                            child: PostCard(
-                              snap: snapshot.data!.docs[index].data(),
-                              update: _update,
-                              large: false,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Not following anyone\nCheck out the browse page!',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.grey,
-                          ),
+              child: FutureBuilder(
+            future: FirebaseFirestore.instance
+                .collection('posts')
+                .where('uid',
+                    whereIn: (followingIds.isEmpty
+                        ? [FirebaseAuth.instance.currentUser?.uid]
+                        : followingIds))
+                .orderBy('datePublished', descending: true)
+                .get(),
+            builder: (context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              print(followingIds);
+              if (snapshot.data!.docs.isNotEmpty) {
+                return MasonryGridView.count(
+                  padding: EdgeInsets.all(postPadding),
+                  itemCount: snapshot.data!.docs.length,
+                  crossAxisCount: 2,
+                  mainAxisSpacing: postPadding,
+                  crossAxisSpacing: postPadding,
+                  itemBuilder: (context, index) {
+                    return Flexible(
+                      child: PostCard(
+                        snap: snapshot.data!.docs[index].data(),
+                        update: _update,
+                        large: false,
+                      ),
+                    );
+                  },
+                );
+              } else {
+                print('HEREEERERE');
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        'Not following anyone\nCheck out the browse page!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.grey,
                         ),
                       ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Icon(
-                        Icons.search,
-                        color: Colors.grey,
-                      ),
-                    ],
-                  ),
-          ),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Icon(
+                      Icons.search,
+                      color: Colors.grey,
+                    ),
+                  ],
+                );
+              }
+            },
+          )),
         ),
       ),
     );

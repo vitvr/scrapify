@@ -1,23 +1,23 @@
 # Summary
 
-Date : 2023-03-16 12:07:05
+Date : 2023-03-20 15:52:49
 
 Directory c:\\Users\\victo\\Desktop\\secondHalf\\scrapify\\lib
 
-Total : 33 files,  4406 codes, 638 comments, 314 blanks, all 5358 lines
+Total : 35 files,  5706 codes, 522 comments, 368 blanks, all 6596 lines
 
 Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| Dart | 33 | 4,406 | 638 | 314 | 5,358 |
+| Dart | 35 | 5,706 | 522 | 368 | 6,596 |
 
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 33 | 4,406 | 638 | 314 | 5,358 |
-| . (Files) | 22 | 3,610 | 466 | 239 | 4,315 |
-| utils | 11 | 796 | 172 | 75 | 1,043 |
+| . | 35 | 5,706 | 522 | 368 | 6,596 |
+| . (Files) | 24 | 4,664 | 337 | 286 | 5,287 |
+| utils | 11 | 1,042 | 185 | 82 | 1,309 |
 
 Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

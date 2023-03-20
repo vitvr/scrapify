@@ -53,7 +53,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   Future<void> register() async {
     String email = FirebaseAuth.instance.currentUser!.email!;
-    String name = FirebaseAuth.instance.currentUser!.displayName!;
+    String name = FirebaseAuth.instance.currentUser!.displayName!.toLowerCase();
     print(name);
     try {
       // Add the user to firestore database

@@ -35,7 +35,7 @@ class RegisterPageState extends State<RegisterPage> {
       // Check if the username is already taken
       QuerySnapshot snapshot = await _firestore
           .collection('users')
-          .where('username', isEqualTo: usernameController.text)
+          .where('username', isEqualTo: usernameController.text.toLowerCase())
           .get();
 
       QuerySnapshot snapshot1 = await _firestore
@@ -97,7 +97,7 @@ class RegisterPageState extends State<RegisterPage> {
 
       // Add the user to firestore database
       await _firestore.collection('users').doc(cred.user!.uid).set({
-        'username': usernameController.text,
+        'username': usernameController.text.toLowerCase(),
         'uid': cred.user!.uid,
         'email': emailController.text,
         'profImage':
