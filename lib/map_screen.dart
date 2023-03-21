@@ -1,3 +1,5 @@
+import 'dart:ffi';
+import 'dart:ui' as ui;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -5,15 +7,15 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:async/async.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'dart:math';
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:scrapify/utils/colors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:scrapify/utils/post.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -48,6 +50,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         .doc(FirebaseAuth.instance.currentUser?.uid)
         .get();
     profImage = snapshot.get('profImage');
+
     setState(() {});
   }
 
@@ -59,9 +62,22 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     fetchData();
   }
 
-  void _setMarker(LatLng point) {
+  void _setMarker(LatLng point) async {
+    var postStream = await FirebaseFirestore.instance
+        .collection('posts')
+        .get()
+        .then((querySnapshot) {
+      for (var docSnapshot in querySnapshot.docs) {
+        String desc = docSnapshot.data()['description'];
+        String user = docSnapshot.data()['username'];
+        double lat = docSnapshot.data()['latitude'];
+        double long = docSnapshot.data()['longitude'];
+
+        addPostMarker(desc, LatLng(lat, long), desc, user);
+      }
+    });
     setState(() {
-      addMarker("main", point); //"Current ", "test1");
+      addMarker("main", point);
     });
   }
 
@@ -123,8 +139,22 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     _setMarker(LatLng(lat, lng));
   }
 
+  addPostMarker(
+      String id, LatLng location, String markerTitle, String desc) async {
+    var marker = Marker(
+        markerId: MarkerId(id),
+        position: location,
+        infoWindow: InfoWindow(title: markerTitle, snippet: desc),
+        icon: await BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), 'assets/customMarker1.png'));
+    _markers[id] = marker;
+  }
+
   addMarker(
-      String id, LatLng location /*, String markerTitle, String desc*/) async {
+    String id,
+    LatLng location,
+    /*, String markerTitle, String desc*/
+  ) async {
     var marker = Marker(
         markerId: MarkerId(id),
         position: location,
@@ -135,7 +165,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery.of(context).size;
+    ui.Size deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Image(
@@ -338,16 +368,17 @@ Widget buildDragHandle() => Center(
     );
 
 Stream<QuerySnapshot<Map<String, dynamic>>>? getNearbyResults() {
+  int km = 1;
   Stream<QuerySnapshot<Map<String, dynamic>>>? rawResults = FirebaseFirestore
       .instance
       .collection('posts')
       //.orderBy('datePublished', descending: true)
       .where("latitude",
           isLessThan:
-              _MapScreenState.currentLocation.latitude + 0.018087434659142)
+              _MapScreenState.currentLocation.latitude + 0.018087434659142 * km)
       .where("latitude",
-          isGreaterThanOrEqualTo:
-              (_MapScreenState.currentLocation.latitude - 0.018087434659142))
+          isGreaterThanOrEqualTo: (_MapScreenState.currentLocation.latitude -
+              0.018087434659142 * km))
       .snapshots();
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? rawResults2 = FirebaseFirestore
@@ -355,39 +386,17 @@ Stream<QuerySnapshot<Map<String, dynamic>>>? getNearbyResults() {
       .collection('posts')
       //.orderBy('datePublished', descending: true)
       .where("longitude",
-          isLessThan:
-              (_MapScreenState.currentLocation.longitude + 0.01796622349982))
+          isLessThan: (_MapScreenState.currentLocation.longitude +
+              0.01796622349982 * km))
       .where("longitude",
-          isGreaterThanOrEqualTo:
-              (_MapScreenState.currentLocation.longitude - 0.01796622349982))
+          isGreaterThanOrEqualTo: (_MapScreenState.currentLocation.longitude -
+              0.01796622349982 * km))
       .snapshots();
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? returnStream =
       StreamGroup.merge([rawResults, rawResults2]);
 
   return returnStream;
-  // return StreamGroup.merge([
-  //   FirebaseFirestore.instance
-  //       .collection('posts')
-  //       //.orderBy('datePublished', descending: true)
-  //       .where("latitude",
-  //           isLessThan:
-  //               _MapScreenState.currentLocation.latitude + 0.018087434659142)
-  //       .where("latitude",
-  //           isGreaterThanOrEqualTo:
-  //               (_MapScreenState.currentLocation.latitude - 0.018087434659142))
-  //       .snapshots(),
-  //   FirebaseFirestore.instance
-  //       .collection('posts')
-  //       //.orderBy('datePublished', descending: true)
-  //       .where("longitude",
-  //           isLessThan:
-  //               (_MapScreenState.currentLocation.longitude + 0.01796622349982))
-  //       .where("longitude",
-  //           isGreaterThanOrEqualTo:
-  //               (_MapScreenState.currentLocation.longitude - 0.01796622349982))
-  //       .snapshots()
-  // ]);
 }
 
 double longitudeDifference(double long) {
