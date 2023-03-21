@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:scrapify/utils/post.dart';
+import 'package:scrapify/screens/Posts/post.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -26,7 +26,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   // Default coordinates (HWUD)
-  static final LatLng defaultLocation =
+  static const LatLng defaultLocation =
       LatLng(25.102288819629432, 55.162327475793415);
   // Coordinates to update when interactions happen
   static LatLng currentLocation = defaultLocation;
