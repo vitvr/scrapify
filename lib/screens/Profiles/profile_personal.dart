@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, prefer_const_constructors, prefer_interpolation_to_compose_strings
 
 /* page to see current user's profile info */
 
@@ -6,50 +6,37 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:scrapify/editables/edit_page.dart';
 import 'package:scrapify/editables/edit_user.dart';
 import 'package:scrapify/screens/Posts/large_post.dart';
+import 'package:scrapify/screens/Posts/post.dart';
+import 'package:scrapify/screens/Posts/view_page.dart';
 import '../../utils/colors.dart';
 import 'package:scrapify/models/user_model.dart' as model;
 
-class ProfileGeneral extends StatefulWidget {
-  final uid;
-  const ProfileGeneral({
+class ProfilePersonal extends StatefulWidget {
+  const ProfilePersonal({
     Key? key,
-    required this.uid,
   }) : super(key: key);
 
   @override
-  State<ProfileGeneral> createState() => _ProfileGeneralState();
+  State<ProfilePersonal> createState() => _ProfilePersonalState();
 }
 
-class _ProfileGeneralState extends State<ProfileGeneral> {
+class _ProfilePersonalState extends State<ProfilePersonal> {
   final double coverHeight = 180;
 
   final double profileRadius = 65;
 
   final double profileSpacing = 20;
 
-  bool isFollowing = false;
-
-  Future<void> checkFollowing() async {
-    var userSnap = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.uid)
-        .get();
-    isFollowing = userSnap
-        .data()!['followers']
-        .contains(FirebaseAuth.instance.currentUser!.uid);
-    print(isFollowing);
-    setState(() {});
-  }
+  var uid = FirebaseAuth.instance.currentUser?.uid;
 
   String profImage = "";
 
   Future<void> fetchData() async {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
-        .get();
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
     profImage = snapshot.get('profImage');
     setState(() {});
   }
@@ -57,101 +44,19 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
   @override
   void initState() {
     super.initState();
-    checkFollowing();
     fetchData();
   }
 
-  Future<void> followUser(String cuid, String followId) async {
-    try {
-      DocumentSnapshot snap =
-          await FirebaseFirestore.instance.collection('users').doc(cuid).get();
-      List following = (snap.data()! as dynamic)['following'];
+  Future<model.User> getUserDetails() async {
+    DocumentSnapshot documentSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
-      if (following.contains(followId)) {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(followId)
-            .update({
-          'followers': FieldValue.arrayRemove([cuid])
-        });
-
-        await FirebaseFirestore.instance.collection('users').doc(cuid).update({
-          'following': FieldValue.arrayRemove([followId])
-        });
-      } else {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(followId)
-            .update({
-          'followers': FieldValue.arrayUnion([cuid])
-        });
-
-        await FirebaseFirestore.instance.collection('users').doc(cuid).update({
-          'following': FieldValue.arrayUnion([followId])
-        });
-      }
-    } catch (e) {
-      print(e.toString());
-    }
+    return model.User.fromSnap(documentSnapshot);
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget followButton = Container();
-    if (isFollowing) {
-      followButton = Padding(
-        padding: EdgeInsets.all(profileSpacing),
-        child: TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: CustomColors().lighter,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16.0)),
-            ),
-            minimumSize: const Size(1000000, 30),
-          ),
-          onPressed: () async {
-            await followUser(
-                FirebaseAuth.instance.currentUser!.uid, widget.uid);
-            isFollowing = !isFollowing;
-            setState(() {});
-          },
-          child: const Text(
-            'Unfollow',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-            ),
-          ),
-        ),
-      );
-    } else {
-      followButton = Padding(
-        padding: EdgeInsets.all(profileSpacing),
-        child: TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: CustomColors().light,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16.0)),
-            ),
-            minimumSize: const Size(1000000, 30),
-          ),
-          onPressed: () async {
-            await followUser(
-                FirebaseAuth.instance.currentUser!.uid, widget.uid);
-            isFollowing = !isFollowing;
-            setState(() {});
-          },
-          child: const Text(
-            'Follow',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-            ),
-          ),
-        ),
-      );
-    }
-    var a = FirebaseFirestore.instance.collection('users').doc(widget.uid);
+    var a = FirebaseFirestore.instance.collection('users').doc(uid);
     double postPadding = MediaQuery.of(context).size.width.toDouble() * 0.02;
     return Container(
       color: Colors.white,
@@ -164,10 +69,6 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
           actions: [
             (profImage != "")
                 ? Padding(
@@ -193,7 +94,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
               FutureBuilder(
                   future: FirebaseFirestore.instance
                       .collection('users')
-                      .doc(widget.uid)
+                      .doc(uid)
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -250,7 +151,6 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                                           height: profileSpacing / 4,
                                         ),
                                         Row(
-                                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                           children: [
                                             Text(
                                               snapshot.data!
@@ -270,19 +170,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                                                   ' following',
                                             ),
                                           ],
-                                        ),
-                                        SizedBox(
-                                          height: profileSpacing / 2,
-                                        ),
-                                        Text(
-                                          "\"" +
-                                              snapshot.data!.get('bio') +
-                                              "\"",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                          ),
-                                        ),
+                                        )
                                       ],
                                     ),
                                   ],
@@ -303,7 +191,44 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                             ),
                           ],
                         ),
-                        followButton
+                        SizedBox(
+                          height: profileSpacing / 2,
+                        ),
+                        Text(
+                          "\"" + snapshot.data!.get('bio') + "\"",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(profileSpacing),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: CustomColors().light,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16.0)),
+                              ),
+                              minimumSize: const Size(1000000, 30),
+                            ),
+                            onPressed: () async {
+                              await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => editProfile(),
+                                ),
+                              );
+                              setState(() {});
+                            },
+                            child: const Text(
+                              'Edit Profile',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     );
                   }),
@@ -313,7 +238,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                   child: FutureBuilder(
                     future: FirebaseFirestore.instance
                         .collection('posts')
-                        .where('uid', isEqualTo: widget.uid)
+                        .where('uid', isEqualTo: uid)
                         .get(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -351,8 +276,6 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                           );
                         },
                       );
-
-                      // placeholder
                     },
                   ),
                 ),

@@ -1,21 +1,23 @@
+// ignore_for_file: avoid_print, prefer_typing_uninitialized_variables, no_leading_underscores_for_local_identifiers, prefer_interpolation_to_compose_strings, unused_local_variable, use_build_context_synchronously
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:scrapify/comentscreen.dart';
-import 'package:scrapify/large_post.dart';
+import 'package:scrapify/screens/commentscreen.dart';
+import 'package:scrapify/screens/Posts/large_post.dart';
 import 'package:scrapify/utils/colors.dart';
+import 'package:scrapify/editables/large_post_editable.dart';
 import 'package:scrapify/utils/like_animation.dart';
-import 'package:scrapify/utils/post_image.dart';
-import 'package:scrapify/view_page.dart';
-import '../profile.dart';
-import '../profile_general.dart';
+import '../Profiles/profile_personal.dart';
+import '../Profiles/profile_general.dart';
+import 'package:scrapify/screens/Posts/view_page.dart';
 
-class PostEditable extends StatefulWidget {
+class PostCard extends StatefulWidget {
   final snap;
   final bool large;
   final ValueChanged<int> update;
-  const PostEditable({
+  const PostCard({
     Key? key,
     required this.snap,
     required this.update,
@@ -23,19 +25,12 @@ class PostEditable extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<PostEditable> createState() => _PostEditableState();
+  State<PostCard> createState() => _PostCardState();
 }
 
-class _PostEditableState extends State<PostEditable> {
+class _PostCardState extends State<PostCard> {
   String _username = "";
   String _profImage = "";
-  final captionController = TextEditingController();
-
-  @override
-  void dispose() {
-    captionController.dispose();
-    super.dispose();
-  }
 
   @override
   void initState() {
@@ -53,14 +48,15 @@ class _PostEditableState extends State<PostEditable> {
         .get();
     Map<String, dynamic> data = snapshot.data()!;
 
-    setState(() {
-      _username = data['username'];
-      _profImage = data['profImage'];
-    });
+    if (mounted) {
+      setState(() {
+        _username = data['username'];
+        _profImage = data['profImage'];
+      });
+    }
   }
 
   Future<void> likePost(String postId, String uid, List likes) async {
-    String res = 'ERROR';
     try {
       if (likes.contains(uid)) {
         await FirebaseFirestore.instance
@@ -120,103 +116,107 @@ class _PostEditableState extends State<PostEditable> {
     return showDialog(
       context: context,
       builder: (context) {
-        return AnimatedContainer(
-          margin: MediaQuery.of(context).viewInsets,
-          padding: MediaQuery.of(context).padding,
-          duration: const Duration(milliseconds: 300),
-          child: Dialog(
-            shape: RoundedRectangleBorder(
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-            child: Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Post Options",
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Post Options",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ListTile(
+                  leading: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                  title: const Text(
+                    "Delete Post",
                     style: TextStyle(
-                      fontSize: 20,
+                      color: Colors.red,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
-                  ListTile(
-                    leading: Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
-                    title: Text(
-                      "Delete Post",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onTap: () async {
-                      await deletePost(widget.snap['postId']);
-                      widget.update(100);
-                      Navigator.pop(context);
+                  onTap: () async {
+                    await deletePost(widget.snap['postId']);
+                    widget.update(100);
+                    Navigator.pop(context);
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Row(
-                            children: [
-                              Icon(
-                                Icons.check_circle_outline,
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Row(
+                          children: const [
+                            Icon(
+                              Icons.check_circle_outline,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'Post deleted',
+                              style: TextStyle(
                                 color: Colors.white,
-                                size: 32,
+                                fontSize: 16,
                               ),
-                              SizedBox(width: 10),
-                              Text(
-                                'Post deleted',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                          backgroundColor: Colors.red,
-                          duration: Duration(seconds: 3),
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
-                  Divider(),
-                  SizedBox(height: 10),
-                  ListTile(
-                    leading: Icon(Icons.edit),
-                    title: Text("Edit Post"),
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Add your edit post code here
-                    },
-                  ),
-                  Divider(),
-                  SizedBox(height: 20),
-                  TextButton(
-                    child: Text(
-                      "Cancel",
-                      style: TextStyle(
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.bold,
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 3),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                       ),
+                    );
+                  },
+                ),
+                const Divider(),
+                const SizedBox(height: 10),
+                ListTile(
+                  leading: const Icon(Icons.edit),
+                  title: const Text("Edit Post"),
+                  onTap: () {
+                    Navigator.pop(context);
+                    // Add your edit post code here
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return LargePostEditable(
+                          snap: widget.snap,
+                          update: widget.update,
+                        );
+                      },
+                    );
+                  },
+                ),
+                const Divider(),
+                const SizedBox(height: 20),
+                TextButton(
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontWeight: FontWeight.bold,
                     ),
-                    onPressed: () => Navigator.pop(context),
                   ),
-                ],
-              ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
             ),
           ),
         );
@@ -241,7 +241,7 @@ class _PostEditableState extends State<PostEditable> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colors.white,
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(spreadRadius: 1, blurRadius: 3, color: Colors.grey),
             ],
           ),
@@ -253,35 +253,18 @@ class _PostEditableState extends State<PostEditable> {
                   alignment: Alignment.center,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          // Navigator.of(context).push(
-                          //   MaterialPageRoute(
-                          //     builder: (context) => ViewPage(
-                          //       snap: widget.snap,
-                          //     ),
-                          //   ),
-                          // );
-                          // Navigator.of(context).push(
-                          //   MaterialPageRoute(
-                          //     builder: (context) => PostCard(
-                          //       snap: widget.snap,
-                          //       update: (int value) {},
-                          //     ),
-                          //   ),
-                          // );
-                          // Navigator.of(context).push(
-                          //   MaterialPageRoute(
-                          //     builder: (context) => LargePost(
-                          //       snap: widget.snap,
-                          //     ),
-                          //   ),
-                          // );
                           if (widget.large) {
+                            if (widget.snap['pageIndex'].isEmpty &&
+                                widget.snap['uid'] !=
+                                    FirebaseAuth.instance.currentUser?.uid) {
+                              return;
+                            }
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => ViewPage(
@@ -310,7 +293,6 @@ class _PostEditableState extends State<PostEditable> {
                 ),
               ),
               SizedBox(
-                // height: MediaQuery.of(context).size.height * 0.077,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     vertical: 4,
@@ -351,23 +333,13 @@ class _PostEditableState extends State<PostEditable> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    TextFormField(
-                                      controller: captionController,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                        ),
-                                        labelText: widget.snap["description"],
+                                    AutoSizeText(
+                                      widget.snap["description"],
+                                      style: const TextStyle(
+                                        fontSize: 16,
                                       ),
                                     ),
-                                    // AutoSizeText(
-                                    //   widget.snap["description"],
-                                    //   style: const TextStyle(
-                                    //     fontSize: 16,
-                                    //   ),
-                                    // ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 4,
                                     ),
                                     Text(
@@ -428,7 +400,7 @@ class _PostEditableState extends State<PostEditable> {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: CustomColors().extremelyLight,
+                            color: const CustomColors().extremelyLight,
                             // border: Border.all(color: Colors.black),
                             borderRadius: BorderRadius.circular(20.0),
                           ),
@@ -458,7 +430,7 @@ class _PostEditableState extends State<PostEditable> {
                                     isAnimating: liked,
                                     smallLike: true,
                                     child: IconButton(
-                                      padding: EdgeInsets.all(0),
+                                      padding: const EdgeInsets.all(0),
                                       onPressed: () async {
                                         await likePost(
                                           widget.snap['postId'],
@@ -487,7 +459,7 @@ class _PostEditableState extends State<PostEditable> {
                       ),
                     ),
                     IconButton(
-                      padding: EdgeInsets.all(0),
+                      padding: const EdgeInsets.all(0),
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -497,7 +469,7 @@ class _PostEditableState extends State<PostEditable> {
                           ),
                         );
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.comment,
                         color: Colors.red,
                       ),
@@ -510,8 +482,6 @@ class _PostEditableState extends State<PostEditable> {
                             .get(),
                         builder: (context, snapshot) {
                           bool bookmarked = false;
-                          print(_uid);
-                          print(snapshot.data);
                           List bookmarks = [];
                           if (snapshot.hasData) {
                             bookmarks = snapshot.data!.get('bookmarks');
@@ -523,7 +493,7 @@ class _PostEditableState extends State<PostEditable> {
                             isAnimating: bookmarked,
                             smallLike: true,
                             child: IconButton(
-                              padding: EdgeInsets.all(0),
+                              padding: const EdgeInsets.all(0),
                               onPressed: () async {
                                 await bookmarkPost(
                                   widget.snap['postId'],
@@ -533,11 +503,11 @@ class _PostEditableState extends State<PostEditable> {
                                 setState(() {});
                               },
                               icon: bookmarked
-                                  ? Icon(
+                                  ? const Icon(
                                       Icons.bookmark,
                                       color: Colors.black,
                                     )
-                                  : Icon(
+                                  : const Icon(
                                       Icons.bookmark_outline,
                                     ),
                               visualDensity: VisualDensity.comfortable,

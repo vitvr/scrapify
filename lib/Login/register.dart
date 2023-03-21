@@ -1,10 +1,12 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, use_build_context_synchronously, must_call_super
+
 /* page for registering with email and password */
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:scrapify/login.dart';
+import 'package:scrapify/Login/login.dart';
 import 'package:scrapify/mainpage.dart';
 import 'package:scrapify/utils/colors.dart';
 
@@ -48,16 +50,16 @@ class RegisterPageState extends State<RegisterPage> {
           SnackBar(
             content: Row(
               children: [
-                Icon(Icons.error_outline, color: Colors.white, size: 32),
-                SizedBox(width: 10),
-                Text(
+                const Icon(Icons.error_outline, color: Colors.white, size: 32),
+                const SizedBox(width: 10),
+                const Text(
                   'Username already taken',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ],
             ),
             backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -72,16 +74,16 @@ class RegisterPageState extends State<RegisterPage> {
           SnackBar(
             content: Row(
               children: [
-                Icon(Icons.error_outline, color: Colors.white, size: 32),
-                SizedBox(width: 10),
-                Text(
+                const Icon(Icons.error_outline, color: Colors.white, size: 32),
+                const SizedBox(width: 10),
+                const Text(
                   'Account with this email already exists',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ],
             ),
             backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -300,10 +302,10 @@ class RegisterPageState extends State<RegisterPage> {
                             SnackBar(
                               content: Row(
                                 children: [
-                                  Icon(Icons.error_outline,
+                                  const Icon(Icons.error_outline,
                                       color: Colors.white, size: 32),
-                                  SizedBox(width: 10),
-                                  Text(
+                                  const SizedBox(width: 10),
+                                  const Text(
                                     'Passwords do not match',
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 16),
@@ -311,7 +313,7 @@ class RegisterPageState extends State<RegisterPage> {
                                 ],
                               ),
                               backgroundColor: Colors.red,
-                              duration: Duration(seconds: 3),
+                              duration: const Duration(seconds: 3),
                               behavior: SnackBarBehavior.floating,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),

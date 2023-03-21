@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:scrapify/edit_page.dart';
+import 'package:scrapify/editables/edit_page.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:uuid/uuid.dart';
@@ -154,6 +154,7 @@ class _ViewPageState extends State<ViewPage> {
     bool belongsToUser =
         (widget.snap['uid'] == FirebaseAuth.instance.currentUser?.uid);
 
+    double thickness = 2;
     return SafeArea(
       child: Stack(
         children: [
@@ -215,10 +216,24 @@ class _ViewPageState extends State<ViewPage> {
                           Expanded(
                             child: showImage[0],
                           ),
+                          SizedBox(
+                            width: thickness,
+                            height: MediaQuery.of(context).size.height,
+                            child: Container(
+                              color: Colors.grey,
+                            ),
+                          ),
                           Expanded(
                             child: showImage[1],
                           ),
                         ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.height,
+                      height: thickness,
+                      child: Container(
+                        color: Colors.grey,
                       ),
                     ),
                     Expanded(
@@ -236,6 +251,13 @@ class _ViewPageState extends State<ViewPage> {
                               ],
                             ),
                           ),
+                          SizedBox(
+                            width: thickness,
+                            height: MediaQuery.of(context).size.height,
+                            child: Container(
+                              color: Colors.grey,
+                            ),
+                          ),
                           Expanded(
                             child: Stack(
                               fit: StackFit.passthrough,
@@ -248,6 +270,13 @@ class _ViewPageState extends State<ViewPage> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.height,
+                      height: thickness,
+                      child: Container(
+                        color: Colors.grey,
                       ),
                     ),
                     Expanded(
@@ -263,6 +292,13 @@ class _ViewPageState extends State<ViewPage> {
                                   child: showImage[4],
                                 ),
                               ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: thickness,
+                            height: MediaQuery.of(context).size.height,
+                            child: Container(
+                              color: Colors.grey,
                             ),
                           ),
                           Expanded(

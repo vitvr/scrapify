@@ -1,8 +1,7 @@
 /* page for reset pass confirmation*/
 
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:scrapify/login.dart';
+import 'package:scrapify/Login/login.dart';
 import 'package:scrapify/utils/colors.dart';
 
 class ResetPasswordPage extends StatefulWidget {

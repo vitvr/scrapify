@@ -1,12 +1,14 @@
+// ignore_for_file: unused_import, camel_case_types, prefer_final_fields, use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:scrapify/storage_methods.dart';
+import 'package:scrapify/utils/storage_methods.dart';
 import 'package:scrapify/utils/choose_image.dart';
 import 'package:scrapify/utils/colors.dart';
-import 'package:scrapify/utils/post_image.dart';
+import 'package:scrapify/models/post_image.dart';
 import 'package:textfields/textfields.dart';
 
 class editProfile extends StatefulWidget {
@@ -17,7 +19,7 @@ class editProfile extends StatefulWidget {
 }
 
 class _editPageState extends State<editProfile> {
-  var _uid = FirebaseAuth.instance.currentUser?.uid;
+  final _uid = FirebaseAuth.instance.currentUser?.uid;
   final usernameController = TextEditingController();
   final bioController = TextEditingController();
 
@@ -30,7 +32,6 @@ class _editPageState extends State<editProfile> {
       .doc(FirebaseAuth.instance.currentUser?.uid);
 
   Future<String> postImage(Uint8List file) async {
-    print(file);
     String photoURL =
         await Storage_Methods().uploadImageToStorage('user', file, true);
     return photoURL;
@@ -53,7 +54,7 @@ class _editPageState extends State<editProfile> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          title: Center(
+          title: const Center(
             child: Text(
               "Choose Header",
               style: TextStyle(
@@ -66,8 +67,8 @@ class _editPageState extends State<editProfile> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: Icon(Icons.camera_alt, color: Colors.blueGrey),
-                title: Text("Take a Photo",
+                leading: const Icon(Icons.camera_alt, color: Colors.blueGrey),
+                title: const Text("Take a Photo",
                     style: TextStyle(color: Colors.black54)),
                 onTap: () async {
                   Navigator.pop(context);
@@ -81,8 +82,8 @@ class _editPageState extends State<editProfile> {
               ),
               Divider(color: Colors.grey[400]),
               ListTile(
-                leading: Icon(Icons.photo, color: CustomColors().dark),
-                title: Text("Choose From Gallery",
+                leading: Icon(Icons.photo, color: const CustomColors().dark),
+                title: const Text("Choose From Gallery",
                     style: TextStyle(color: Colors.black54)),
                 onTap: () async {
                   Navigator.pop(context);
@@ -139,13 +140,13 @@ class _editPageState extends State<editProfile> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
+        title: const Text(
           'Edit Profile',
           style: TextStyle(
             color: Colors.black,
@@ -180,7 +181,7 @@ class _editPageState extends State<editProfile> {
 
               Navigator.pop(context);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.check,
               color: Colors.black,
             ),
@@ -191,7 +192,7 @@ class _editPageState extends State<editProfile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Stack(
@@ -202,7 +203,7 @@ class _editPageState extends State<editProfile> {
                   child: Container(
                     height: 150,
                     width: double.infinity,
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       image: DecorationImage(
@@ -215,9 +216,9 @@ class _editPageState extends State<editProfile> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(right: 15),
+                  padding: const EdgeInsets.only(right: 15),
                   child: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.camera_alt,
                       color: Colors.white,
                     ),
@@ -228,7 +229,7 @@ class _editPageState extends State<editProfile> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             GestureDetector(
@@ -249,7 +250,7 @@ class _editPageState extends State<editProfile> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(
@@ -264,7 +265,7 @@ class _editPageState extends State<editProfile> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(

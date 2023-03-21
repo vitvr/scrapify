@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_import, unused_import, implementation_imports, override_on_non_overriding_member
+
 import 'dart:ffi';
 
 import 'package:flutter/src/widgets/framework.dart';

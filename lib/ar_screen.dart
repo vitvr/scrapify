@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, unused_import, depend_on_referenced_packages, library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_constructors_in_immutables
+
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:arkit_plugin/arkit_plugin.dart';
@@ -16,6 +18,7 @@ class ARScreen extends StatefulWidget {
 class _ARScreenState extends State<ARScreen> {
   late ARKitController arKitController;
   Size? imageSize;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -34,12 +37,27 @@ class _ARScreenState extends State<ARScreen> {
       }),
     );
     imageSize = await completer.future;
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.arrow_back_outlined),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       body: ARKitSceneView(
         onARKitViewCreated: _onARKitViewCreated,
         enableTapRecognizer: true,
@@ -57,6 +75,7 @@ class _ARScreenState extends State<ARScreen> {
     final material = ARKitMaterial(
       lightingModelName: ARKitLightingModel.lambert,
       diffuse: ARKitMaterialProperty.image(widget.imageUrl),
+      doubleSided: true,
     );
 
     final plane = ARKitPlane(
@@ -67,7 +86,7 @@ class _ARScreenState extends State<ARScreen> {
 
     final node = ARKitNode(
       geometry: plane,
-      position: vector.Vector3(0, 0, -2.5),
+      position: vector.Vector3(0, 0, -3),
       eulerAngles: vector.Vector3.zero(),
     );
 

@@ -1,17 +1,20 @@
+// ignore_for_file: unused_import
+
 /* this page contains the bottom navigation bar and the app bar (TODO);
 other pages are built inside this one, this is so the navigation and app bar do
 not have to be rebuilt when moving to another page */
 
 import 'package:flutter/material.dart';
-import 'package:scrapify/homepage.dart';
-import 'package:scrapify/map_screen.dart';
-import 'package:scrapify/menuscreen.dart';
-import 'package:scrapify/profile.dart';
-import 'package:scrapify/profile_general.dart';
-import 'package:scrapify/scrapbook_page.dart';
-import 'package:scrapify/search_screen.dart';
+import 'package:scrapify/screens/homepage_screen.dart';
+import 'package:scrapify/screens/ar_screen.dart';
+import 'package:scrapify/screens/map_screen.dart';
+import 'package:scrapify/screens/menuscreen.dart';
+import 'package:scrapify/screens/Profiles/profile_personal.dart';
+import 'package:scrapify/screens/Profiles/profile_general.dart';
+import 'package:scrapify/utils/scrapbook_page.dart';
+import 'package:scrapify/screens/search_screen.dart';
 import 'package:scrapify/utils/colors.dart';
-import 'package:scrapify/utils/post.dart';
+import 'package:scrapify/screens/Posts/post.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,13 +31,12 @@ class _MainPageState extends State<MainPage> {
 
   // list of pages for the bottom navigation bar
   List<Widget> pages = [
-    HomePage(),
-    SearchPage(), // placeholder
-    MapScreen(), // placeholder
-    ProfilePersonal(),
-    Menu(),
+    const HomePage(),
+    const SearchPage(), // placeholder
+    const MapScreen(), // placeholder
+    const ProfilePersonal(),
+    const Menu(),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

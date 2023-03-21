@@ -1,8 +1,12 @@
+// ignore_for_file: unnecessary_import, unused_import, implementation_imports
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:scrapify/screens/Profiles/profile_general.dart';
+import 'package:scrapify/screens/Profiles/profile_personal.dart';
 
 class FollowersPage extends StatefulWidget {
   final bool following;
@@ -40,7 +44,9 @@ class _FollowersPageState extends State<FollowersPage> {
           FittedBox(
               child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: widget.following ? Text('Following') : Text('Followers'),
+            child: widget.following
+                ? const Text('Following')
+                : const Text('Followers'),
           )),
         ],
       ),
@@ -71,8 +77,19 @@ class _FollowersPageState extends State<FollowersPage> {
                     final currentUser = FirebaseAuth.instance.currentUser?.uid;
                     final targetUid =
                         (snapshot.data! as dynamic).docs[index]['uid'];
+
                     if (currentUser == targetUid) {
-                    } else {}
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const ProfilePersonal()),
+                      );
+                    } else {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ProfileGeneral(uid: targetUid),
+                        ),
+                      );
+                    }
                   },
                 );
               },

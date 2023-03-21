@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, prefer_typing_uninitialized_variables, avoid_print, prefer_interpolation_to_compose_strings
 
 /* page to see current user's profile info */
 
@@ -6,8 +6,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:scrapify/editables/edit_user.dart';
+import 'package:scrapify/editables/edit_page.dart';
 import 'package:scrapify/screens/Posts/large_post.dart';
+import 'package:scrapify/screens/Posts/post.dart';
+import 'package:scrapify/screens/Posts/view_page.dart';
 import '../../utils/colors.dart';
 import 'package:scrapify/models/user_model.dart' as model;
 
@@ -39,7 +41,6 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
     isFollowing = userSnap
         .data()!['followers']
         .contains(FirebaseAuth.instance.currentUser!.uid);
-    print(isFollowing);
     setState(() {});
   }
 
@@ -103,7 +104,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
         padding: EdgeInsets.all(profileSpacing),
         child: TextButton(
           style: TextButton.styleFrom(
-            backgroundColor: CustomColors().lighter,
+            backgroundColor: const CustomColors().lighter,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(16.0)),
             ),
@@ -129,7 +130,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
         padding: EdgeInsets.all(profileSpacing),
         child: TextButton(
           style: TextButton.styleFrom(
-            backgroundColor: CustomColors().light,
+            backgroundColor: const CustomColors().light,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(16.0)),
             ),
@@ -171,7 +172,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
           actions: [
             (profImage != "")
                 ? Padding(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       vertical: 5,
                       horizontal: 5,
                     ),
@@ -184,7 +185,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                       ),
                     ),
                   )
-                : CircularProgressIndicator(),
+                : const CircularProgressIndicator(),
           ],
         ),
         body: SafeArea(
@@ -232,7 +233,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                                         ),
                                         Text(
                                           snapshot.data!.get('username'),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 30,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -242,7 +243,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                                         ),
                                         Text(
                                           '@' + snapshot.data!.get('username'),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontStyle: FontStyle.italic,
                                           ),
                                         ),
@@ -279,7 +280,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                                               snapshot.data!.get('bio') +
                                               "\"",
                                           textAlign: TextAlign.left,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 15,
                                           ),
                                         ),
@@ -309,7 +310,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                   }),
               Expanded(
                 child: Container(
-                  color: CustomColors().lighter,
+                  color: const CustomColors().lighter,
                   child: FutureBuilder(
                     future: FirebaseFirestore.instance
                         .collection('posts')

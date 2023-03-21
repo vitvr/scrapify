@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:scrapify/new_scrapbook.dart';
-import 'package:scrapify/utils/post.dart';
+import 'package:scrapify/screens/Posts/new_scrapbook.dart';
+import 'package:scrapify/screens/Posts/post.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,7 +26,9 @@ class _HomePageState extends State<HomePage> {
     followingIds = List<String>.from(snapshot.get('following'));
     profImage = snapshot.get('profImage');
     followingIds.add(uid);
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
   }
 
   int _count = 0;
@@ -58,11 +60,13 @@ class _HomePageState extends State<HomePage> {
                   builder: (context) => NewScrapbookPage(),
                 ),
               );
-              setState(() {});
+              if (this.mounted) {
+                setState(() {});
+              }
             },
           ),
           appBar: AppBar(
-            title: Image(
+            title: const Image(
               image: AssetImage('assets/mainLogoNoLogo.png'),
               height: 35,
             ),
@@ -76,7 +80,7 @@ class _HomePageState extends State<HomePage> {
               // ),
               (profImage != "")
                   ? Padding(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         vertical: 5,
                         horizontal: 5,
                       ),
@@ -89,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     )
-                  : CircularProgressIndicator(),
+                  : const CircularProgressIndicator(),
             ],
           ),
           body: SafeArea(
@@ -109,7 +113,6 @@ class _HomePageState extends State<HomePage> {
                   child: CircularProgressIndicator(),
                 );
               }
-              print(followingIds);
               if (snapshot.data!.docs.isNotEmpty) {
                 return MasonryGridView.count(
                   padding: EdgeInsets.all(postPadding),
@@ -128,10 +131,9 @@ class _HomePageState extends State<HomePage> {
                   },
                 );
               } else {
-                print('HEREEERERE');
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     Center(
                       child: Text(
                         'Not following anyone\nCheck out the browse page!',
