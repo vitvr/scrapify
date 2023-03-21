@@ -1,10 +1,12 @@
+// ignore_for_file: use_build_context_synchronously, must_call_super
+
 /* page for logging in with email and password */
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:scrapify/forgotPass.dart';
+import 'package:scrapify/Login/forgotPass.dart';
 import 'package:scrapify/mainpage.dart';
-import 'package:scrapify/register.dart';
+import 'package:scrapify/Login/register.dart';
 import 'package:scrapify/utils/colors.dart';
 
 class LoginPage extends StatefulWidget {
@@ -29,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
-            children: [
+            children: const [
               Icon(Icons.waving_hand_sharp, color: Colors.white, size: 32),
               SizedBox(width: 10),
               Text(
@@ -39,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
           backgroundColor: Colors.green,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -50,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
-            children: [
+            children: const [
               Icon(Icons.error_outline, color: Colors.white, size: 32),
               SizedBox(width: 10),
               Text(
@@ -60,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
           backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -112,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                           border: InputBorder.none,
                           hintText: 'Email Address',
                         ),
-                        style: TextStyle(fontSize: 14),
+                        style: const TextStyle(fontSize: 14),
                       ),
                     ),
                   ),

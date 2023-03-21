@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, implementation_imports, unnecessary_import, prefer_typing_uninitialized_variables, must_be_immutable, use_build_context_synchronously
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -6,7 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:scrapify/storage_methods.dart';
+import 'package:scrapify/utils/storage_methods.dart';
 import 'package:scrapify/utils/choose_image.dart';
 import 'package:scrapify/utils/colors.dart';
 
@@ -48,7 +50,6 @@ class _EditPageState extends State<EditPage> {
 
   Future<String> postImage(int i) async {
     var file = files[i]!;
-    print(file);
     if (file.runtimeType == String) {
       contents[i] = file;
       return "";
@@ -99,10 +100,10 @@ class _EditPageState extends State<EditPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Text'),
+        title: const Text('Text'),
         content: TextField(
           autofocus: true,
-          decoration: InputDecoration(hintText: 'write here...'),
+          decoration: const InputDecoration(hintText: 'write here...'),
           controller: controller,
         ),
         actions: [
@@ -111,11 +112,9 @@ class _EditPageState extends State<EditPage> {
               text = controller.text;
               files[index] = text;
               Navigator.of(context).pop();
-              setState(() {
-                // files[index] = text;
-              });
+              setState(() {});
             },
-            child: Text('Submit'),
+            child: const Text('Submit'),
           ),
         ],
       ),
@@ -229,7 +228,6 @@ class _EditPageState extends State<EditPage> {
     received = true;
     loadContents();
     setState(() {});
-    print(contents);
   }
 
   List<Widget> showImage = [
@@ -275,8 +273,8 @@ class _EditPageState extends State<EditPage> {
           await postPage();
           Navigator.of(context).pop();
         },
-        backgroundColor: Color.fromARGB(70, 0, 0, 0),
-        child: Icon(
+        backgroundColor: const Color.fromARGB(70, 0, 0, 0),
+        child: const Icon(
           Icons.check,
         ),
       ),
@@ -298,7 +296,7 @@ class _EditPageState extends State<EditPage> {
                             child: showImage[0],
                           ),
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.add,
                               color: Color.fromARGB(75, 0, 0, 0),
                             ),
@@ -319,7 +317,7 @@ class _EditPageState extends State<EditPage> {
                             child: showImage[1],
                           ),
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.add,
                               color: Color.fromARGB(75, 0, 0, 0),
                             ),
@@ -347,7 +345,7 @@ class _EditPageState extends State<EditPage> {
                             child: showImage[2],
                           ),
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.add,
                               color: Color.fromARGB(75, 0, 0, 0),
                             ),
@@ -368,7 +366,7 @@ class _EditPageState extends State<EditPage> {
                             child: showImage[3],
                           ),
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.add,
                               color: Color.fromARGB(75, 0, 0, 0),
                             ),
@@ -396,7 +394,7 @@ class _EditPageState extends State<EditPage> {
                             child: showImage[4],
                           ),
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.add,
                               color: Color.fromARGB(75, 0, 0, 0),
                             ),
@@ -417,7 +415,7 @@ class _EditPageState extends State<EditPage> {
                             child: showImage[5],
                           ),
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.add,
                               color: Color.fromARGB(75, 0, 0, 0),
                             ),
@@ -432,52 +430,6 @@ class _EditPageState extends State<EditPage> {
                   ],
                 ),
               ),
-              // SizedBox(
-              //   height: MediaQuery.of(context).size.height * 0.1,
-              //   child: Container(
-              //     color: CustomColors().extremelyLight,
-              //     child: Row(
-              //       children: [
-              //         Padding(
-              //           padding: const EdgeInsets.only(left: 16.0),
-              //           child: TextButton.icon(
-              //             style: ButtonStyle(
-              //               shape:
-              //                   MaterialStateProperty.all<RoundedRectangleBorder>(
-              //                 RoundedRectangleBorder(
-              //                   borderRadius: BorderRadius.circular(18.0),
-              //                 ),
-              //               ),
-              //               backgroundColor: MaterialStatePropertyAll(Colors.white),
-              //             ),
-              //             onPressed: () async {
-              //               await FirebaseFirestore.instance
-              //                   .collection('posts')
-              //                   .doc(widget.snap['postId'])
-              //                   .collection('pages')
-              //                   .doc(widget.pageIndex[widget.page])
-              //                   .delete();
-              //               widget.pageIndex.removeAt(widget.page);
-              //               await FirebaseFirestore.instance
-              //                   .collection('posts')
-              //                   .doc(widget.snap['postId'])
-              //                   .update({'pageIndex': widget.pageIndex});
-              //               Navigator.of(context).pop();
-              //             },
-              //             icon: Icon(
-              //               Icons.delete,
-              //               color: Colors.red,
-              //             ),
-              //             label: Text(
-              //               'Delete Page',
-              //               style: TextStyle(color: Colors.black),
-              //             ),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
             ],
           ),
           Align(
@@ -491,8 +443,8 @@ class _EditPageState extends State<EditPage> {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
-                  backgroundColor:
-                      MaterialStatePropertyAll(Color.fromARGB(70, 0, 0, 0)),
+                  backgroundColor: const MaterialStatePropertyAll(
+                      Color.fromARGB(70, 0, 0, 0)),
                 ),
                 onPressed: () async {
                   await FirebaseFirestore.instance
@@ -508,11 +460,11 @@ class _EditPageState extends State<EditPage> {
                       .update({'pageIndex': widget.pageIndex});
                   Navigator.of(context).pop();
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.delete,
                   color: Colors.red,
                 ),
-                label: Text(
+                label: const Text(
                   'Delete Page',
                   style: TextStyle(color: Colors.black),
                 ),

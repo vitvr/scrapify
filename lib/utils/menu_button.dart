@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:scrapify/utils/colors.dart';
 
@@ -61,7 +63,7 @@ class MenuButton extends StatelessWidget {
                     ),
                     child: Text(
                       text,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20,
                       ),

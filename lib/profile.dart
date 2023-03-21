@@ -4,14 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:scrapify/edit_page.dart';
-import 'package:scrapify/edit_user.dart';
-import 'package:scrapify/large_post.dart';
-import 'package:scrapify/utils/pic.dart';
-import 'package:scrapify/utils/post.dart';
-import 'package:scrapify/view_page.dart';
+import 'package:scrapify/editables/edit_user.dart';
+import 'package:scrapify/screens/Posts/large_post.dart';
 import 'utils/colors.dart';
-import 'package:scrapify/utils/user_model.dart' as model;
+import 'package:scrapify/models/user_model.dart' as model;
 
 class ProfilePersonal extends StatefulWidget {
   const ProfilePersonal({

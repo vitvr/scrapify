@@ -1,9 +1,11 @@
+// ignore_for_file: unused_catch_clause, use_build_context_synchronously
+
 /* page for password reset */
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:scrapify/login.dart';
-import 'package:scrapify/resetPass.dart';
+import 'package:scrapify/Login/login.dart';
+import 'package:scrapify/Login/resetPass.dart';
 import 'package:scrapify/utils/colors.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -74,7 +76,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           border: InputBorder.none,
                           hintText: 'Email Address',
                         ),
-                        style: TextStyle(fontSize: 14),
+                        style: const TextStyle(fontSize: 14),
                       ),
                     ),
                   ),
@@ -163,6 +165,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
       );
     } on FirebaseAuthException catch (e) {
+      // ignore: todo
       // TODO
     }
   }

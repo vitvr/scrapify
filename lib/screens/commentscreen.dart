@@ -1,8 +1,10 @@
+// ignore_for_file: avoid_print, prefer_typing_uninitialized_variables, unnecessary_this, annotate_overrides
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:scrapify/utils/comment_card.dart';
+import 'package:scrapify/models/comment_card.dart';
 import 'package:uuid/uuid.dart';
 
 class CommentScreen extends StatefulWidget {
@@ -57,13 +59,17 @@ class CommentScreenState extends State<CommentScreen> {
 
   //Getting username
   String username = 'EROORRR';
+  String profImage = "EROOR";
 
   getUsername() async {
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     var snapshot = snap.data() as Map<String, dynamic>;
     username = await snapshot["username"];
-    print(username);
+    profImage = await snapshot["profImage"];
+    if (this.mounted) {
+      setState(() {});
+    }
   }
 
   final _firestoreRef = FirebaseFirestore.instance
@@ -100,7 +106,7 @@ class CommentScreenState extends State<CommentScreen> {
           child: CommentBox(
             userImage: CommentBox.commentImageParser(
               imageURLorPath: NetworkImage(
-                widget.snap["profImage"],
+                profImage,
               ),
             ),
             labelText: 'Write a comment...',
@@ -112,7 +118,7 @@ class CommentScreenState extends State<CommentScreen> {
                 commentController.text,
                 _uid!,
                 username,
-                widget.snap['profImage'],
+                profImage,
               );
               setState(() {
                 commentController.text = "";

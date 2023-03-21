@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, unnecessary_import, implementation_imports
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -27,7 +29,7 @@ class _ScrapbookPageState extends State<ScrapbookPage> {
           height: MediaQuery.of(context).size.height * 0.8,
           width: MediaQuery.of(context).size.width * 0.8,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.4),
@@ -53,7 +55,7 @@ class _ScrapbookPageState extends State<ScrapbookPage> {
               });
             },
             child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
               child: CustomPaint(
                 painter: ScrapbookPainter(points: points),
               ),

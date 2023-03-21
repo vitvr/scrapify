@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:scrapify/large_post.dart';
-import 'package:scrapify/profile.dart';
-import 'package:scrapify/profile_general.dart';
+import 'package:scrapify/screens/Posts/large_post.dart';
+import 'package:scrapify/screens/Profiles/profile_personal.dart';
+import 'package:scrapify/screens/Profiles/profile_general.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:scrapify/utils/post_image.dart';
-import 'package:scrapify/view_page.dart';
-import 'package:scrapify/view_page.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -59,11 +56,10 @@ class _SearchPageState extends State<SearchPage> {
                   borderRadius: BorderRadius.circular(16.0),
                   child: AlertDialog(
                     title: Row(
-                      children: [
-                        const Icon(Icons.error_outline, color: Colors.red),
-                        const SizedBox(width: 8),
-                        const Text('Error',
-                            style: TextStyle(color: Colors.red)),
+                      children: const [
+                        Icon(Icons.error_outline, color: Colors.red),
+                        SizedBox(width: 8),
+                        Text('Error', style: TextStyle(color: Colors.red)),
                       ],
                     ),
                     content: const Text('Please enter a search term.'),

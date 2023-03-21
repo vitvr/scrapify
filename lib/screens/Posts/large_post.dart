@@ -1,8 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:scrapify/screens/ar_screen.dart';
 import 'package:scrapify/utils/colors.dart';
-import 'package:scrapify/utils/post.dart';
+import 'package:scrapify/screens/Posts/post.dart';
 
 class LargePost extends StatefulWidget {
   final snap;
@@ -71,7 +72,13 @@ class _LargePostState extends State<LargePost> {
           ),
           GestureDetector(
             onTap: () {
-              print('ep');
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ARScreen(
+                    imageUrl: widget.snap['postUrl'],
+                  ),
+                ),
+              );
             },
             child: Padding(
               padding: EdgeInsets.only(

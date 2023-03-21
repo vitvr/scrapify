@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:scrapify/utils/post.dart';
+import 'package:scrapify/screens/Posts/post.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class MapScreen extends StatefulWidget {

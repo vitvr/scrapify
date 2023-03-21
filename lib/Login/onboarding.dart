@@ -1,11 +1,13 @@
+// ignore_for_file: avoid_print, await_only_futures, must_be_immutable, unnecessary_nullable_for_final_variable_declarations
+
 /* welcoming page shown to new users before they log-in to an account, includes
 google authentication */
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:scrapify/mainpage.dart';
-import 'package:scrapify/register.dart';
-import 'package:scrapify/login.dart';
+import 'package:scrapify/Login/register.dart';
+import 'package:scrapify/Login/login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -54,7 +56,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Future<void> register() async {
     String email = FirebaseAuth.instance.currentUser!.email!;
     String name = FirebaseAuth.instance.currentUser!.displayName!.toLowerCase();
-    print(name);
     try {
       // Add the user to firestore database
       await _firestore.collection('users').doc(_auth.currentUser!.uid).set({

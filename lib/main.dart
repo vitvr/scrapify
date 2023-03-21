@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:scrapify/intial_auth.dart';
+import 'package:scrapify/Login/intial_auth.dart';
 import 'package:scrapify/utils/colors.dart';
-import 'firebase_options.dart';
+import 'utils/firebase_options.dart';
 import 'package:material_color_generator/material_color_generator.dart';
 
 Future<void> main() async {
