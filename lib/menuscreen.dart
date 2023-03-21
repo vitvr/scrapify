@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scrapify/bookmarks.dart';
 import 'package:scrapify/followers.dart';
 import 'package:scrapify/homepage.dart';
 import 'package:scrapify/onboarding.dart';
@@ -38,20 +39,6 @@ class _MenuState extends State<Menu> {
       color: Colors.white,
       child: Scaffold(
         backgroundColor: const Color.fromARGB(14, 255, 99, 61),
-        // currently, the 'create scrapbook' button is being used as a
-        // placeholder sign out button
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(255, 255, 99, 61),
-          child: const Icon(Icons.create),
-          onPressed: () {
-            FirebaseAuth.instance.signOut();
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const OnboardingPage(),
-              ),
-            );
-          },
-        ),
         appBar: AppBar(
           title: const Image(
             image: AssetImage('assets/mainLogoNoLogo.png'),
@@ -107,7 +94,7 @@ class _MenuState extends State<Menu> {
                   MenuButton(
                     icon: Icons.bookmark,
                     text: 'Bookmarks',
-                    page: HomePage(),
+                    page: BookmarkPage(),
                   ),
                   MenuButton(
                     icon: Icons.help,

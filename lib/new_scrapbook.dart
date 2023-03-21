@@ -64,7 +64,9 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
     var snapshot = snap.data() as Map<String, dynamic>;
     username = await snapshot["username"];
     profImage = await snapshot["profImage"];
-    print(username);
+    if (this.mounted) {
+      setState(() {});
+    }
   }
 
   final _firestoreRef = FirebaseFirestore.instance
@@ -226,12 +228,6 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notification_add_outlined),
-            ),
-          ],
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -256,6 +252,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CircleAvatar(
                           backgroundColor: Colors.white,
@@ -273,21 +270,6 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                                 DropdownButton(
                                   dropdownColor: CustomColors().light,
                                   borderRadius: BorderRadius.circular(20.0),
-                                  value: visibilityValue,
-                                  icon: Icon(Icons.arrow_downward),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      visibilityValue = value.toString();
-                                    });
-                                  },
-                                  items: visibilityList.map((value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                ),
-                                DropdownButton(
                                   value: infoTypeValue,
                                   icon: Icon(Icons.arrow_downward),
                                   onChanged: (value) {
