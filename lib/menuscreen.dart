@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scrapify/bookmarks.dart';
+import 'package:scrapify/followers.dart';
 import 'package:scrapify/homepage.dart';
 import 'package:scrapify/onboarding.dart';
 import 'package:scrapify/utils/colors.dart';
@@ -37,20 +39,6 @@ class _MenuState extends State<Menu> {
       color: Colors.white,
       child: Scaffold(
         backgroundColor: const Color.fromARGB(14, 255, 99, 61),
-        // currently, the 'create scrapbook' button is being used as a
-        // placeholder sign out button
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(255, 255, 99, 61),
-          child: const Icon(Icons.create),
-          onPressed: () {
-            FirebaseAuth.instance.signOut();
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const OnboardingPage(),
-              ),
-            );
-          },
-        ),
         appBar: AppBar(
           title: const Image(
             image: AssetImage('assets/mainLogoNoLogo.png'),
@@ -91,12 +79,12 @@ class _MenuState extends State<Menu> {
                   MenuButton(
                     icon: Icons.person_outline,
                     text: 'Followers',
-                    page: HomePage(),
+                    page: FollowersPage(following: false),
                   ),
                   MenuButton(
                     icon: Icons.person,
                     text: 'Following',
-                    page: HomePage(),
+                    page: FollowersPage(following: true),
                   )
                 ],
               ),
@@ -106,23 +94,18 @@ class _MenuState extends State<Menu> {
                   MenuButton(
                     icon: Icons.bookmark,
                     text: 'Bookmarks',
-                    page: HomePage(),
+                    page: BookmarkPage(),
                   ),
-                  MenuButton(
-                    icon: Icons.settings,
-                    text: 'Settings',
-                    page: HomePage(),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
                   MenuButton(
                     icon: Icons.help,
                     text: 'Help & Support',
                     page: HomePage(),
                   ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
                   MenuButton(
                     icon: Icons.insert_page_break_rounded,
                     text: 'Terms & Policies',

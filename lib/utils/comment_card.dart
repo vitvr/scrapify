@@ -157,7 +157,9 @@ class _CommentCardState extends State<CommentCard> {
     profImg = await snapshot["profImage"];
     commentId = widget.snap["commentId"];
     postId = widget.snap['postId'];
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
 
     print(username);
     print(commentId);

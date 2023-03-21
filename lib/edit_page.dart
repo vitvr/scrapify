@@ -270,191 +270,252 @@ class _EditPageState extends State<EditPage> {
     }
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        await postPage();
-        Navigator.of(context).pop();
-      }),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      Expanded(
-                        child: showImage[0],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await postPage();
+          Navigator.of(context).pop();
+        },
+        backgroundColor: Color.fromARGB(70, 0, 0, 0),
+        child: Icon(
+          Icons.check,
+        ),
+      ),
+      body: Stack(
+        fit: StackFit.passthrough,
+        children: [
+          Column(
+            children: <Widget>[
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Expanded(
+                            child: showImage[0],
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: Color.fromARGB(75, 0, 0, 0),
+                            ),
+                            onPressed: () {
+                              _selectImage(context, 0);
+                            },
+                            iconSize: MediaQuery.of(context).size.width * 0.2,
+                          ),
+                        ],
                       ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.add,
-                          color: Color.fromARGB(75, 0, 0, 0),
-                        ),
-                        onPressed: () {
-                          _selectImage(context, 0);
-                        },
-                        iconSize: MediaQuery.of(context).size.width * 0.2,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      Expanded(
-                        child: showImage[1],
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.add,
-                          color: Color.fromARGB(75, 0, 0, 0),
-                        ),
-                        onPressed: () {
-                          _selectImage(context, 1);
-                        },
-                        iconSize: MediaQuery.of(context).size.width * 0.2,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      Expanded(
-                        child: showImage[2],
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.add,
-                          color: Color.fromARGB(75, 0, 0, 0),
-                        ),
-                        onPressed: () {
-                          _selectImage(context, 2);
-                        },
-                        iconSize: MediaQuery.of(context).size.width * 0.2,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      Expanded(
-                        child: showImage[3],
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.add,
-                          color: Color.fromARGB(75, 0, 0, 0),
-                        ),
-                        onPressed: () {
-                          _selectImage(context, 3);
-                        },
-                        iconSize: MediaQuery.of(context).size.width * 0.2,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      Expanded(
-                        child: showImage[4],
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.add,
-                          color: Color.fromARGB(75, 0, 0, 0),
-                        ),
-                        onPressed: () {
-                          _selectImage(context, 4);
-                        },
-                        iconSize: MediaQuery.of(context).size.width * 0.2,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    alignment: Alignment.center,
-                    children: [
-                      Expanded(
-                        child: showImage[5],
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.add,
-                          color: Color.fromARGB(75, 0, 0, 0),
-                        ),
-                        onPressed: () {
-                          _selectImage(context, 5);
-                        },
-                        iconSize: MediaQuery.of(context).size.width * 0.2,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: Container(
-              color: CustomColors().extremelyLight,
-              child: Row(
-                children: [
-                  TextButton.icon(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
-                          CustomColors().extremelyLight),
                     ),
-                    onPressed: () async {
-                      await FirebaseFirestore.instance
-                          .collection('posts')
-                          .doc(widget.snap['postId'])
-                          .collection('pages')
-                          .doc(widget.pageIndex[widget.page])
-                          .delete();
-                      widget.pageIndex.removeAt(widget.page);
-                      await FirebaseFirestore.instance
-                          .collection('posts')
-                          .doc(widget.snap['postId'])
-                          .update({'pageIndex': widget.pageIndex});
-                      Navigator.of(context).pop();
-                    },
-                    icon: Icon(Icons.delete),
-                    label: Text(
-                      'Delete Page',
-                      style: TextStyle(color: Colors.black),
+                    Expanded(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Expanded(
+                            child: showImage[1],
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: Color.fromARGB(75, 0, 0, 0),
+                            ),
+                            onPressed: () {
+                              _selectImage(context, 1);
+                            },
+                            iconSize: MediaQuery.of(context).size.width * 0.2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Expanded(
+                            child: showImage[2],
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: Color.fromARGB(75, 0, 0, 0),
+                            ),
+                            onPressed: () {
+                              _selectImage(context, 2);
+                            },
+                            iconSize: MediaQuery.of(context).size.width * 0.2,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Expanded(
+                            child: showImage[3],
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: Color.fromARGB(75, 0, 0, 0),
+                            ),
+                            onPressed: () {
+                              _selectImage(context, 3);
+                            },
+                            iconSize: MediaQuery.of(context).size.width * 0.2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Expanded(
+                            child: showImage[4],
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: Color.fromARGB(75, 0, 0, 0),
+                            ),
+                            onPressed: () {
+                              _selectImage(context, 4);
+                            },
+                            iconSize: MediaQuery.of(context).size.width * 0.2,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Expanded(
+                            child: showImage[5],
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: Color.fromARGB(75, 0, 0, 0),
+                            ),
+                            onPressed: () {
+                              _selectImage(context, 5);
+                            },
+                            iconSize: MediaQuery.of(context).size.width * 0.2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // SizedBox(
+              //   height: MediaQuery.of(context).size.height * 0.1,
+              //   child: Container(
+              //     color: CustomColors().extremelyLight,
+              //     child: Row(
+              //       children: [
+              //         Padding(
+              //           padding: const EdgeInsets.only(left: 16.0),
+              //           child: TextButton.icon(
+              //             style: ButtonStyle(
+              //               shape:
+              //                   MaterialStateProperty.all<RoundedRectangleBorder>(
+              //                 RoundedRectangleBorder(
+              //                   borderRadius: BorderRadius.circular(18.0),
+              //                 ),
+              //               ),
+              //               backgroundColor: MaterialStatePropertyAll(Colors.white),
+              //             ),
+              //             onPressed: () async {
+              //               await FirebaseFirestore.instance
+              //                   .collection('posts')
+              //                   .doc(widget.snap['postId'])
+              //                   .collection('pages')
+              //                   .doc(widget.pageIndex[widget.page])
+              //                   .delete();
+              //               widget.pageIndex.removeAt(widget.page);
+              //               await FirebaseFirestore.instance
+              //                   .collection('posts')
+              //                   .doc(widget.snap['postId'])
+              //                   .update({'pageIndex': widget.pageIndex});
+              //               Navigator.of(context).pop();
+              //             },
+              //             icon: Icon(
+              //               Icons.delete,
+              //               color: Colors.red,
+              //             ),
+              //             label: Text(
+              //               'Delete Page',
+              //               style: TextStyle(color: Colors.black),
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextButton.icon(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
-                ],
+                  backgroundColor:
+                      MaterialStatePropertyAll(Color.fromARGB(70, 0, 0, 0)),
+                ),
+                onPressed: () async {
+                  await FirebaseFirestore.instance
+                      .collection('posts')
+                      .doc(widget.snap['postId'])
+                      .collection('pages')
+                      .doc(widget.pageIndex[widget.page])
+                      .delete();
+                  widget.pageIndex.removeAt(widget.page);
+                  await FirebaseFirestore.instance
+                      .collection('posts')
+                      .doc(widget.snap['postId'])
+                      .update({'pageIndex': widget.pageIndex});
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
+                label: Text(
+                  'Delete Page',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             ),
           ),

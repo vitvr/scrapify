@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:scrapify/intial_auth.dart';
+import 'package:scrapify/utils/colors.dart';
 import 'firebase_options.dart';
 import 'package:material_color_generator/material_color_generator.dart';
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Inter',
-        primarySwatch: generateMaterialColor(color: const Color(0xFFFF633D)),
+        primarySwatch: generateMaterialColor(color: const CustomColors().light),
       ),
       home: const InitialAuth(),
       builder: EasyLoading.init(),

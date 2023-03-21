@@ -36,6 +36,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
   String visibilityValue = 'Public';
 
   String infoTypeValue = 'Opinion';
+  bool infoTypeBool = false;
 
   Image image = Image.asset(
     'assets/parrot.png',
@@ -63,7 +64,9 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
     var snapshot = snap.data() as Map<String, dynamic>;
     username = await snapshot["username"];
     profImage = await snapshot["profImage"];
-    print(username);
+    if (this.mounted) {
+      setState(() {});
+    }
   }
 
   final _firestoreRef = FirebaseFirestore.instance
@@ -71,7 +74,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
       .doc(FirebaseAuth.instance.currentUser?.uid);
 
   Future<String> postImage(String caption, Uint8List file, String uid,
-      String username, String profImage) async {
+      String username, String profImage, bool fact) async {
     String res = "error";
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     try {
@@ -89,7 +92,8 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
           postUrl: photoURL,
           profImage: profImage,
           location: const GeoPoint(0.0, 0.0),
-          pageIndex: []);
+          pageIndex: [],
+          fact: fact);
 
       _firestore.collection('posts').doc(postID).set(post.toJson());
 
@@ -224,12 +228,6 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notification_add_outlined),
-            ),
-          ],
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -254,6 +252,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CircleAvatar(
                           backgroundColor: Colors.white,
@@ -271,26 +270,16 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                                 DropdownButton(
                                   dropdownColor: CustomColors().light,
                                   borderRadius: BorderRadius.circular(20.0),
-                                  value: visibilityValue,
-                                  icon: Icon(Icons.arrow_downward),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      visibilityValue = value.toString();
-                                    });
-                                  },
-                                  items: visibilityList.map((value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                ),
-                                DropdownButton(
                                   value: infoTypeValue,
                                   icon: Icon(Icons.arrow_downward),
                                   onChanged: (value) {
                                     setState(() {
                                       infoTypeValue = value.toString();
+                                      if (infoTypeValue == 'Fact') {
+                                        infoTypeBool = true;
+                                      } else {
+                                        infoTypeBool = false;
+                                      }
                                     });
                                   },
                                   items: infoTypeList.map((value) {
@@ -379,6 +368,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                                   _uid!,
                                   username,
                                   profImage,
+                                  infoTypeBool,
                                 );
 
                                 ScaffoldMessenger.of(context).showSnackBar(
