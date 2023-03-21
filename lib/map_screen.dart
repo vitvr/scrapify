@@ -318,27 +318,39 @@ class PanelWidget extends StatelessWidget {
                   );
                 }
 
-                return ListView.separated(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  padding: EdgeInsets.all(
-                      MediaQuery.of(context).size.width.toDouble() * 0.019),
-                  itemCount: snapshot.data!.docs.length,
-                  separatorBuilder: (context, index) {
-                    return SizedBox(
-                      height: 13,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    return Flexible(
-                      child: PostCard(
-                        snap: snapshot.data!.docs[index].data(),
-                        update: _update,
-                        large: false,
-                      ),
-                    );
-                  },
-                );
+                if (snapshot.data!.docs.isEmpty) {
+                  return Column(
+                    children: [
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.1),
+                      const Center(
+                          child: Text("There are no scrapbooks nearby.",
+                              textAlign: TextAlign.center))
+                    ],
+                  );
+                } else {
+                  return ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.all(
+                        MediaQuery.of(context).size.width.toDouble() * 0.019),
+                    itemCount: snapshot.data!.docs.length,
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 13,
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      return Flexible(
+                        child: PostCard(
+                          snap: snapshot.data!.docs[index].data(),
+                          update: _update,
+                          large: false,
+                        ),
+                      );
+                    },
+                  );
+                }
               },
             ),
           ),
