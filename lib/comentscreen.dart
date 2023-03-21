@@ -1,14 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:http/http.dart';
-import 'package:scrapify/homepage.dart';
-import 'package:scrapify/onboarding.dart';
-import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/comment_card.dart';
-import 'package:scrapify/utils/menu_button.dart';
 import 'package:uuid/uuid.dart';
 
 class CommentScreen extends StatefulWidget {

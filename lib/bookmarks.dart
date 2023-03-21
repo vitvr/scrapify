@@ -1,13 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:scrapify/new_scrapbook.dart';
 import 'package:scrapify/utils/post.dart';
 
 class BookmarkPage extends StatefulWidget {
-  BookmarkPage({Key? key}) : super(key: key);
+  const BookmarkPage({Key? key}) : super(key: key);
 
   @override
   _BookmarkPageState createState() => _BookmarkPageState();
@@ -84,7 +81,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                         padding: EdgeInsets.all(postPadding),
                         itemCount: snapshot.data!.docs.length,
                         separatorBuilder: (context, index) {
-                          return SizedBox(
+                          return const SizedBox(
                             height: 13,
                           );
                         },

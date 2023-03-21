@@ -184,9 +184,9 @@ class _ViewPageState extends State<ViewPage> {
                 // print(details.velocity.pixelsPerSecond.dx > 0);
                 // Swipe left
                 if (details.velocity.pixelsPerSecond.dx < 0) {
-                  if (!belongsToUser) {
-                    return;
-                  }
+                  // if (!belongsToUser) {
+                  //   return;
+                  // }
                   if (page == 7) {
                     return;
                   }
