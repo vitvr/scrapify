@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scrapify/homepage.dart';
@@ -5,8 +6,30 @@ import 'package:scrapify/onboarding.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/menu_button.dart';
 
-class Menu extends StatelessWidget {
+class Menu extends StatefulWidget {
   const Menu({super.key});
+
+  @override
+  State<Menu> createState() => _MenuState();
+}
+
+class _MenuState extends State<Menu> {
+  String profImage = "";
+
+  Future<void> fetchData() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get();
+    profImage = snapshot.get('profImage');
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +60,26 @@ class Menu extends StatelessWidget {
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notification_add_outlined),
-            ),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: const Icon(Icons.notification_add_outlined),
+            // ),
+            (profImage != "")
+                ? Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 5,
+                    ),
+                    child: FittedBox(
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(
+                          profImage,
+                        ),
+                      ),
+                    ),
+                  )
+                : CircularProgressIndicator(),
           ],
         ),
         body: SafeArea(
@@ -57,21 +96,6 @@ class Menu extends StatelessWidget {
                   MenuButton(
                     icon: Icons.person,
                     text: 'Following',
-                    page: HomePage(),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MenuButton(
-                    icon: Icons.people_outline,
-                    text: 'Groups',
-                    page: HomePage(),
-                  ),
-                  MenuButton(
-                    icon: Icons.map,
-                    text: 'Geocaching',
                     page: HomePage(),
                   )
                 ],
