@@ -60,6 +60,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   textfields: ^0.0.3
   print_remover: ^1.0.1
+  arkit_plugin: ^1.0.5
 
 flutter_icons:
   image_path: "assets/appLogo.png"
