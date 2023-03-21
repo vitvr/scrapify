@@ -1,0 +1,65 @@
+Date : 2023-03-21 16:58:04
+Directory : c:\Users\victo\Desktop\secondHalf\scrapify\lib
+Total : 39 files,  6666 codes, 591 comments, 424 blanks, all 7681 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         39 |      6,666 |        591 |        424 |      7,681 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                          | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                             |         39 |      6,666 |        591 |        424 |      7,681 |
+| . (Files)                                                                     |         26 |      4,932 |        399 |        316 |      5,647 |
+| utils                                                                         |         13 |      1,734 |        192 |        108 |      2,034 |
++-------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                      | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\ar.dart                        | Dart     |         68 |          0 |         15 |         83 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\bookmarks.dart                 | Dart     |        100 |          0 |         10 |        110 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\comentscreen.dart              | Dart     |        137 |          2 |         12 |        151 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\edit_page.dart                 | Dart     |        439 |          6 |         21 |        466 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\edit_user.dart                 | Dart     |        275 |          0 |         14 |        289 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\firebase_options.dart          | Dart     |         72 |         12 |          6 |         90 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\followers.dart                 | Dart     |         80 |          0 |          6 |         86 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\forgotPass.dart                | Dart     |        161 |          2 |          7 |        170 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\homepage.dart                  | Dart     |        166 |          7 |         11 |        184 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\intial_auth.dart               | Dart     |         23 |          5 |          4 |         32 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\large_post.dart                | Dart     |         99 |          0 |          4 |        103 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\login.dart                     | Dart     |        247 |          2 |          9 |        258 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\main.dart                      | Dart     |         30 |          1 |          5 |         36 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\mainpage.dart                  | Dart     |         66 |          5 |          8 |         79 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\map_screen.dart                | Dart     |        352 |         53 |         37 |        442 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\menuscreen.dart                | Dart     |        152 |        225 |          9 |        386 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\new_scrapbook.dart             | Dart     |        531 |          2 |         28 |        561 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\onboarding.dart                | Dart     |        308 |         16 |         21 |        345 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\profile.dart                   | Dart     |        273 |          1 |         15 |        289 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\profile_general.dart           | Dart     |        346 |          3 |         19 |        368 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\register.dart                  | Dart     |        373 |          6 |         15 |        394 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\resetPass.dart                 | Dart     |         87 |          1 |          5 |         93 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\scrapbook_page.dart            | Dart     |         62 |          0 |          5 |         67 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\search_screen.dart             | Dart     |        178 |          0 |         10 |        188 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\storage_methods.dart           | Dart     |         26 |          0 |          5 |         31 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\choose_image.dart        | Dart     |         17 |          0 |          5 |         22 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\colors.dart              | Dart     |          9 |          1 |          3 |         13 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\comment_card.dart        | Dart     |        230 |          2 |         12 |        244 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\large_post_editable.dart | Dart     |         38 |          0 |          4 |         42 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\like_animation.dart      | Dart     |         71 |          0 |         12 |         83 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\menu_button.dart         | Dart     |         75 |          1 |          3 |         79 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\pic.dart                 | Dart     |         92 |        130 |          9 |        231 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\post.dart                | Dart     |        503 |         25 |         18 |        546 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\post_editable.dart       | Dart     |        507 |         31 |         19 |        557 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\post_image.dart          | Dart     |         54 |          0 |          6 |         60 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\scrapbook_painter.dart   | Dart     |         28 |          1 |          7 |         36 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\template.dart            | Dart     |         59 |          1 |          4 |         64 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\utils\user_model.dart          | Dart     |         51 |          0 |          6 |         57 |
+| c:\Users\victo\Desktop\secondHalf\scrapify\lib\view_page.dart                 | Dart     |        281 |         50 |         15 |        346 |
+| Total                                                                         |          |      6,666 |        591 |        424 |      7,681 |
++-------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

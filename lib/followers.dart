@@ -37,7 +37,11 @@ class _FollowersPageState extends State<FollowersPage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          Text('FOLLOWWNG'),
+          FittedBox(
+              child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: widget.following ? Text('Following') : Text('Followers'),
+          )),
         ],
       ),
       body: SafeArea(

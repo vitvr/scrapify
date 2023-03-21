@@ -19,6 +19,66 @@ class _LargePostState extends State<LargePost> {
     return FittedBox(
       child: Column(
         children: [
+          // Padding(
+          //   padding: EdgeInsets.only(
+          //     top: size.height * 0.03,
+          //     bottom: size.height * 0.03,
+          //     left: size.width * 0.3,
+          //   ),
+          //   child: (widget.snap['fact'] == null || !widget.snap['fact'])
+          //       ? FittedBox(
+          //           child: Container(
+          //             decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(20.0),
+          //               color: Color.fromARGB(160, 0, 0, 0),
+          //             ),
+          //             child: Padding(
+          //               padding: const EdgeInsets.symmetric(
+          //                   vertical: 5.0, horizontal: 7.0),
+          //               child: Row(
+          //                 children: [
+          //                   Icon(
+          //                     Icons.question_mark_outlined,
+          //                     color: CustomColors().lighter,
+          //                   ),
+          //                   Text(
+          //                     '\t\tOpinion',
+          //                     style: TextStyle(
+          //                       color: CustomColors().lighter,
+          //                     ),
+          //                   ),
+          //                 ],
+          //               ),
+          //             ),
+          //           ),
+          //         )
+          //       : FittedBox(
+          //           child: Container(
+          //             decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(20.0),
+          //               color: Color.fromARGB(160, 0, 0, 0),
+          //             ),
+          //             child: Padding(
+          //               padding: const EdgeInsets.symmetric(
+          //                   vertical: 5.0, horizontal: 7.0),
+          //               child: Row(
+          //                 children: [
+          //                   Icon(
+          //                     Icons.check_circle_outline,
+          //                     color: Colors.green,
+          //                   ),
+          //                   Text(
+          //                     '\t\tFact',
+          //                     style: TextStyle(
+          //                       color: Colors.green,
+          //                     ),
+          //                   ),
+          //                 ],
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          // ),
           SizedBox(
             height: size.height * 0.4,
             child: Container(
@@ -26,74 +86,42 @@ class _LargePostState extends State<LargePost> {
                 fit: BoxFit.contain,
                 child: Padding(
                   padding: EdgeInsets.only(
+                    bottom: size.height * 0.1,
                     top: size.height * 0.1,
                     left: size.width * 0.005,
                     right: size.width * 0.005,
                   ),
-                  child: PostCard(
-                    snap: widget.snap,
-                    update: (int value) {},
-                    large: true,
+                  child: Stack(
+                    fit: StackFit.passthrough,
+                    children: [
+                      PostCard(
+                        snap: widget.snap,
+                        update: (int value) {},
+                        large: true,
+                      ),
+                      Positioned(
+                        right: 0,
+                        child: FittedBox(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(70, 255, 255, 255),
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: size.height * 0.03),
-            child: (widget.snap['fact'] == null || !widget.snap['fact'])
-                ? FittedBox(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: Color.fromARGB(160, 0, 0, 0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 7.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.question_mark_outlined,
-                              color: CustomColors().light,
-                            ),
-                            Text(
-                              '\t\tOpinion',
-                              style: TextStyle(
-                                color: CustomColors().light,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                : FittedBox(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: Color.fromARGB(160, 0, 0, 0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 7.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle_outline,
-                              color: Colors.green,
-                            ),
-                            Text(
-                              '\t\tFact',
-                              style: TextStyle(
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
           ),
         ],
       ),
