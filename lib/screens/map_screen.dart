@@ -380,7 +380,8 @@ Widget buildDragHandle() => Center(
     );
 
 Stream<QuerySnapshot<Map<String, dynamic>>>? getNearbyResults() {
-  int km = 1;
+  /* Edit the first value to change distance by KM*/
+  double km = 2 / 2;
   Stream<QuerySnapshot<Map<String, dynamic>>>? rawResults = FirebaseFirestore
       .instance
       .collection('posts')
@@ -414,26 +415,6 @@ Stream<QuerySnapshot<Map<String, dynamic>>>? getNearbyResults() {
 double longitudeDifference(double long) {
   return 0.01796622349982 * cos(_toRadians(long));
 }
-
-// USE IF LOGIC IS WORKING, ELSE COMMENT OUT
-
-// double haversineDistance(
-//     {required double lat1,
-//     required double lat2,
-//     required double long1,
-//     required double long2}) {
-//   const radius = (6378137 + 6357852.3) / 2;
-//   double latDelta = _toRadians(lat1 - lat2);
-//   double longDelta = _toRadians(long1 - long2);
-
-//   double a = (sin(latDelta / 2) * sin(latDelta / 2)) +
-//       (cos(_toRadians(lat1)) *
-//           cos(_toRadians(lat2)) *
-//           sin(longDelta / 2) *
-//           sin(longDelta / 2));
-//   double distance = radius * 2 * atan2(sqrt(a), sqrt(1 - a)) / 1000;
-//   return double.parse(distance.toStringAsFixed(3));
-// }
 
 double _toRadians(double num) {
   return num * (pi / 180.0);

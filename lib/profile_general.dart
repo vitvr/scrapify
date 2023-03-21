@@ -309,7 +309,7 @@ class _ProfileGeneralState extends State<ProfileGeneral> {
                   }),
               Expanded(
                 child: Container(
-                  color: CustomColors().lighter,
+                  color: CustomColors().extremelyLight,
                   child: FutureBuilder(
                     future: FirebaseFirestore.instance
                         .collection('posts')

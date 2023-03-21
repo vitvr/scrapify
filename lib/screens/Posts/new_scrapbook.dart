@@ -4,12 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scrapify/utils/storage_methods.dart';
 import 'package:scrapify/utils/choose_image.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/models/post_image.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:geolocator/geolocator.dart';
+import 'dart:async';
 
 class NewScrapbookPage extends StatefulWidget {
   NewScrapbookPage({super.key});
@@ -51,6 +55,8 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
   void initState() {
     super.initState();
     getUsername();
+    _getCurrentPosition();
+    currentCamera = CameraPosition(target: currentLocation, zoom: 14);
   }
 
   //getting UID
@@ -93,7 +99,8 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
           datePublished: DateTime.now(),
           postUrl: photoURL,
           profImage: profImage,
-          location: const GeoPoint(0.0, 0.0),
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude,
           pageIndex: [],
           fact: fact);
 
@@ -191,6 +198,107 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
   }
 
   bool display = false;
+
+  // Default is HWUD campus
+  LatLng currentLocation = LatLng(25.102288819629432, 55.162327475793415);
+  bool mapOpened = false;
+  Position? currentPosition;
+  static late CameraPosition currentCamera;
+  Completer<GoogleMapController> _controller = Completer();
+  Map<String, Marker> _markers = {};
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  void _setMarker(LatLng point) async {
+    setState(() {
+      addMarker("main", point);
+    });
+  }
+
+  addMarker(
+    String id,
+    LatLng location,
+  ) async {
+    var marker = Marker(
+        markerId: MarkerId(id),
+        position: location,
+        icon: BitmapDescriptor.defaultMarkerWithHue(12));
+    _markers[id] = marker;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    EasyLoading.show(status: "Loading...");
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position1) {
+      currentLocation = LatLng(position1.latitude, position1.longitude);
+      _setMarker(currentLocation);
+      currentCamera = CameraPosition(target: currentLocation, zoom: 14);
+      currentPosition = position1;
+    }).catchError((e) {
+      debugPrint(e);
+    });
+
+    EasyLoading.dismiss();
+  }
+
+  Future openMaps() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text('Drag to choose a location:'),
+            content: GoogleMap(
+              initialCameraPosition: currentCamera,
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
+              onCameraMove: (CameraPosition position) {
+                currentLocation =
+                    LatLng(position.target.latitude, position.target.longitude);
+                _setMarker(currentLocation);
+              },
+              mapType: MapType.normal,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+              markers: _markers.values.toSet(),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    mapOpened = true;
+                    Navigator.of(context).pop();
+                    setState(() {});
+                  },
+                  child: Text('SUBMIT'))
+            ],
+          ));
 
   @override
   Widget build(BuildContext context) {
@@ -369,6 +477,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                                 ),
                               );
                             } else {
+                              EasyLoading.show(status: "Uploading post...");
                               await postImage(
                                 captionController.text,
                                 _file!,
@@ -377,6 +486,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                                 profImage,
                                 infoTypeBool,
                               );
+                              EasyLoading.dismiss();
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -511,17 +621,19 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                             ),
                           ),
                           onPressed: () {
-                            _selectImage(context);
+                            openMaps();
                             display = true;
                           },
                           child: Column(
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.location_pin,
                                 color: Colors.black,
                               ),
                               Text(
-                                'Location Placeholder',
+                                (mapOpened
+                                    ? 'Change your chosen location'
+                                    : "Add a location"),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,

@@ -11,7 +11,8 @@ class Post {
   final DateTime datePublished;
   final String postUrl;
   final String profImage;
-  final GeoPoint location;
+  final double latitude;
+  final double longitude;
   final List pageIndex;
   final bool fact;
 
@@ -24,7 +25,8 @@ class Post {
       required this.datePublished,
       required this.postUrl,
       required this.profImage,
-      required this.location,
+      required this.latitude,
+      required this.longitude,
       required this.pageIndex,
       required this.fact});
 
@@ -40,7 +42,8 @@ class Post {
         username: snapshot["username"],
         postUrl: snapshot['postUrl'],
         profImage: snapshot['profImage'],
-        location: snapshot['location'],
+        latitude: snapshot['latitude'],
+        longitude: snapshot['longitude'],
         pageIndex: snapshot['pageIndex'],
         fact: snapshot['fact']);
   }
@@ -54,7 +57,8 @@ class Post {
         "datePublished": datePublished,
         'postUrl': postUrl,
         'profImage': profImage,
-        'location': location,
+        'latitude': latitude,
+        'longitude': longitude,
         'pageIndex': pageIndex,
         'fact': fact
       };
