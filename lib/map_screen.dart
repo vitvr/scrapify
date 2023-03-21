@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
+import 'package:async/async.dart';
 import 'dart:math';
 import 'dart:io';
 import 'package:scrapify/utils/colors.dart';
@@ -341,35 +342,77 @@ Stream<QuerySnapshot<Map<String, dynamic>>>? getNearbyResults() {
       .instance
       .collection('posts')
       //.orderBy('datePublished', descending: true)
-      .where("latitude", isLessThan: _MapScreenState.currentLocation.latitude)
+      .where("latitude",
+          isLessThan:
+              _MapScreenState.currentLocation.latitude + 0.018087434659142)
       .where("latitude",
           isGreaterThanOrEqualTo:
-              (_MapScreenState.currentLocation.latitude - 0.030120))
+              (_MapScreenState.currentLocation.latitude - 0.018087434659142))
       .snapshots();
-  //.snapshots();
 
-  // TODO: ADD LOGIC TO FILTER NEAREST LOCATIONS
+  Stream<QuerySnapshot<Map<String, dynamic>>>? rawResults2 = FirebaseFirestore
+      .instance
+      .collection('posts')
+      //.orderBy('datePublished', descending: true)
+      .where("longitude",
+          isLessThan:
+              (_MapScreenState.currentLocation.longitude + 0.01796622349982))
+      .where("longitude",
+          isGreaterThanOrEqualTo:
+              (_MapScreenState.currentLocation.longitude - 0.01796622349982))
+      .snapshots();
 
-  return rawResults;
+  Stream<QuerySnapshot<Map<String, dynamic>>>? returnStream =
+      StreamGroup.merge([rawResults, rawResults2]);
+
+  return returnStream;
+  // return StreamGroup.merge([
+  //   FirebaseFirestore.instance
+  //       .collection('posts')
+  //       //.orderBy('datePublished', descending: true)
+  //       .where("latitude",
+  //           isLessThan:
+  //               _MapScreenState.currentLocation.latitude + 0.018087434659142)
+  //       .where("latitude",
+  //           isGreaterThanOrEqualTo:
+  //               (_MapScreenState.currentLocation.latitude - 0.018087434659142))
+  //       .snapshots(),
+  //   FirebaseFirestore.instance
+  //       .collection('posts')
+  //       //.orderBy('datePublished', descending: true)
+  //       .where("longitude",
+  //           isLessThan:
+  //               (_MapScreenState.currentLocation.longitude + 0.01796622349982))
+  //       .where("longitude",
+  //           isGreaterThanOrEqualTo:
+  //               (_MapScreenState.currentLocation.longitude - 0.01796622349982))
+  //       .snapshots()
+  // ]);
 }
 
-double haversineDistance(
-    {required double lat1,
-    required double lat2,
-    required double long1,
-    required double long2}) {
-  const radius = (6378137 + 6357852.3) / 2;
-  double latDelta = _toRadians(lat1 - lat2);
-  double longDelta = _toRadians(long1 - long2);
-
-  double a = (sin(latDelta / 2) * sin(latDelta / 2)) +
-      (cos(_toRadians(lat1)) *
-          cos(_toRadians(lat2)) *
-          sin(longDelta / 2) *
-          sin(longDelta / 2));
-  double distance = radius * 2 * atan2(sqrt(a), sqrt(1 - a)) / 1000;
-  return double.parse(distance.toStringAsFixed(3));
+double longitudeDifference(double long) {
+  return 0.01796622349982 * cos(_toRadians(long));
 }
+
+// USE IF LOGIC IS WORKING, ELSE COMMENT OUT
+
+// double haversineDistance(
+//     {required double lat1,
+//     required double lat2,
+//     required double long1,
+//     required double long2}) {
+//   const radius = (6378137 + 6357852.3) / 2;
+//   double latDelta = _toRadians(lat1 - lat2);
+//   double longDelta = _toRadians(long1 - long2);
+
+//   double a = (sin(latDelta / 2) * sin(latDelta / 2)) +
+//       (cos(_toRadians(lat1)) *
+//           cos(_toRadians(lat2)) *
+//           sin(longDelta / 2) *
+//           sin(longDelta / 2));
+//   double distance = radius * 2 * atan2(sqrt(a), sqrt(1 - a)) / 1000;
+//   return double.parse(distance.toStringAsFixed(3));
+// }
 
 double _toRadians(double num) {
   return num * (pi / 180.0);
