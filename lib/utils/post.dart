@@ -47,10 +47,12 @@ class _PostCardState extends State<PostCard> {
         .get();
     Map<String, dynamic> data = snapshot.data()!;
 
-    setState(() {
-      _username = data['username'];
-      _profImage = data['profImage'];
-    });
+    if (this.mounted) {
+      setState(() {
+        _username = data['username'];
+        _profImage = data['profImage'];
+      });
+    }
   }
 
   Future<void> likePost(String postId, String uid, List likes) async {

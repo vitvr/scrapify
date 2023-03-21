@@ -36,6 +36,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
   String visibilityValue = 'Public';
 
   String infoTypeValue = 'Opinion';
+  bool infoTypeBool = false;
 
   Image image = Image.asset(
     'assets/parrot.png',
@@ -71,7 +72,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
       .doc(FirebaseAuth.instance.currentUser?.uid);
 
   Future<String> postImage(String caption, Uint8List file, String uid,
-      String username, String profImage) async {
+      String username, String profImage, bool fact) async {
     String res = "error";
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     try {
@@ -89,7 +90,8 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
           postUrl: photoURL,
           profImage: profImage,
           location: const GeoPoint(0.0, 0.0),
-          pageIndex: []);
+          pageIndex: [],
+          fact: fact);
 
       _firestore.collection('posts').doc(postID).set(post.toJson());
 
@@ -291,6 +293,11 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                                   onChanged: (value) {
                                     setState(() {
                                       infoTypeValue = value.toString();
+                                      if (infoTypeValue == 'Fact') {
+                                        infoTypeBool = true;
+                                      } else {
+                                        infoTypeBool = false;
+                                      }
                                     });
                                   },
                                   items: infoTypeList.map((value) {
@@ -379,6 +386,7 @@ class _NewScrapbookPageState extends State<NewScrapbookPage> {
                                   _uid!,
                                   username,
                                   profImage,
+                                  infoTypeBool,
                                 );
 
                                 ScaffoldMessenger.of(context).showSnackBar(

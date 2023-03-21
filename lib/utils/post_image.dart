@@ -11,6 +11,7 @@ class Post {
   final String profImage;
   final GeoPoint location;
   final List pageIndex;
+  final bool fact;
 
   const Post(
       {required this.caption,
@@ -22,7 +23,8 @@ class Post {
       required this.postUrl,
       required this.profImage,
       required this.location,
-      required this.pageIndex});
+      required this.pageIndex,
+      required this.fact});
 
   static Post fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
@@ -37,7 +39,8 @@ class Post {
         postUrl: snapshot['postUrl'],
         profImage: snapshot['profImage'],
         location: snapshot['location'],
-        pageIndex: snapshot['pageIndex']);
+        pageIndex: snapshot['pageIndex'],
+        fact: snapshot['fact']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -50,6 +53,7 @@ class Post {
         'postUrl': postUrl,
         'profImage': profImage,
         'location': location,
-        'pageIndex': pageIndex
+        'pageIndex': pageIndex,
+        'fact': fact
       };
 }

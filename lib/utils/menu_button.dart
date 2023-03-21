@@ -33,7 +33,13 @@ class MenuButton extends StatelessWidget {
                 ),
               ),
               // use 'page' here
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => page,
+                  ),
+                );
+              },
               child: Container(),
             ),
             Padding(

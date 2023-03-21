@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:scrapify/followers.dart';
 import 'package:scrapify/homepage.dart';
 import 'package:scrapify/onboarding.dart';
 import 'package:scrapify/utils/colors.dart';
@@ -91,12 +92,12 @@ class _MenuState extends State<Menu> {
                   MenuButton(
                     icon: Icons.person_outline,
                     text: 'Followers',
-                    page: HomePage(),
+                    page: FollowersPage(following: false),
                   ),
                   MenuButton(
                     icon: Icons.person,
                     text: 'Following',
-                    page: HomePage(),
+                    page: FollowersPage(following: true),
                   )
                 ],
               ),
@@ -109,20 +110,15 @@ class _MenuState extends State<Menu> {
                     page: HomePage(),
                   ),
                   MenuButton(
-                    icon: Icons.settings,
-                    text: 'Settings',
-                    page: HomePage(),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MenuButton(
                     icon: Icons.help,
                     text: 'Help & Support',
                     page: HomePage(),
                   ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
                   MenuButton(
                     icon: Icons.insert_page_break_rounded,
                     text: 'Terms & Policies',
