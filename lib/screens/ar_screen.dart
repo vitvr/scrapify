@@ -155,7 +155,7 @@ class _ARScreenState extends State<ARScreen> {
 
       final imageNode = ARKitNode(
         geometry: imagePlane,
-        position: vector.Vector3(imageOffset + i * width, -1, -distance),
+        position: vector.Vector3(imageOffset + i * width, -1.5, -distance),
         eulerAngles: vector.Vector3.zero(),
       );
 
