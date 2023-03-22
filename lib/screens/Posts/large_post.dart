@@ -75,7 +75,7 @@ class _LargePostState extends State<LargePost> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ARScreen(
-                    imageUrl: widget.snap['postUrl'],
+                    snap: widget.snap,
                   ),
                 ),
               );
