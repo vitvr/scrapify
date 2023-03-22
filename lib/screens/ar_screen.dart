@@ -3,13 +3,14 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:arkit_plugin/arkit_plugin.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
 class ARScreen extends StatefulWidget {
-  final String imageUrl;
+  final snap;
 
-  ARScreen({required this.imageUrl});
+  ARScreen({required this.snap});
 
   @override
   _ARScreenState createState() => _ARScreenState();
@@ -19,6 +20,32 @@ class _ARScreenState extends State<ARScreen> {
   late ARKitController arKitController;
   Size? imageSize;
   bool isLoading = true;
+  List contents = [];
+  List images = [];
+  String imageUrl = "";
+
+  Future<void> getContents() async {
+    imageUrl = widget.snap['postUrl'];
+    var postStream = await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(widget.snap['postId'])
+        .collection('pages')
+        .get()
+        .then((querySnapshot) {
+      for (var docSnapshot in querySnapshot.docs) {
+        contents.addAll(docSnapshot.data()['contents']);
+      }
+    });
+    for (int i = 0; i < contents.length; i++) {
+      if (contents[i] != null) {
+        if (List.from(contents[i].split("")).take(5).toString() ==
+            "(h, t, t, p, s)") {
+          images.add(contents[i]);
+        }
+      }
+    }
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -27,7 +54,8 @@ class _ARScreenState extends State<ARScreen> {
   }
 
   Future<void> _getImageDimensions() async {
-    final image = NetworkImage(widget.imageUrl);
+    await getContents();
+    final image = NetworkImage(imageUrl);
     final completer = Completer<Size>();
     image.resolve(ImageConfiguration()).addListener(
       ImageStreamListener((ImageInfo info, bool _) {
@@ -74,23 +102,21 @@ class _ARScreenState extends State<ARScreen> {
 
     final material = ARKitMaterial(
       lightingModelName: ARKitLightingModel.lambert,
-      diffuse: ARKitMaterialProperty.image(widget.imageUrl),
+      diffuse: ARKitMaterialProperty.image(imageUrl),
       doubleSided: true,
     );
-    print(imageSize!.width);
-    print(imageSize!.height);
 
     var width = imageSize!.width;
     var height = imageSize!.height;
-    var distance = 2.5;
+    var distance = 3.0;
     if (width > 3000 || height > 2500) {
       width = width / 1000;
       height = height / 1000;
-      distance = 8;
+      distance = 10.0;
     } else {
       width = width / 1000;
       height = height / 1000;
-      distance = 2.8;
+      distance = 6.0;
     }
 
     final plane = ARKitPlane(
@@ -99,18 +125,41 @@ class _ARScreenState extends State<ARScreen> {
       materials: [material],
     );
 
-    final node = ARKitNode(
+    // Calculate total width of image planes
+    final totalImageWidth = images.length * width;
+
+    // Calculate horizontal offset to center imageUrl plane
+    final imageOffset = (totalImageWidth - width) / -2;
+
+    // Add imageUrl plane node
+    final imageUrlNode = ARKitNode(
       geometry: plane,
-      position: vector.Vector3(0, 0, -distance),
+      position: vector.Vector3(0, 1, -distance),
       eulerAngles: vector.Vector3.zero(),
     );
+    arKitController.add(imageUrlNode);
 
-    arKitController.add(node);
-  }
+    // Add image planes nodes
+    for (int i = 0; i < images.length; i++) {
+      final imageMaterial = ARKitMaterial(
+        lightingModelName: ARKitLightingModel.lambert,
+        diffuse: ARKitMaterialProperty.image(images[i]),
+        doubleSided: true,
+      );
 
-  @override
-  void dispose() {
-    arKitController.dispose();
-    super.dispose();
+      final imagePlane = ARKitPlane(
+        width: width,
+        height: height,
+        materials: [imageMaterial],
+      );
+
+      final imageNode = ARKitNode(
+        geometry: imagePlane,
+        position: vector.Vector3(imageOffset + i * width, -1.5, -distance),
+        eulerAngles: vector.Vector3.zero(),
+      );
+
+      arKitController.add(imageNode);
+    }
   }
 }
