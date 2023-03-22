@@ -10,6 +10,7 @@ import 'package:scrapify/storage_methods.dart';
 import 'package:scrapify/utils/choose_image.dart';
 import 'package:scrapify/utils/colors.dart';
 
+// This class is responsible for editing and creating pages
 class EditPage extends StatefulWidget {
   final snap;
   int page;
@@ -25,7 +26,10 @@ class EditPage extends StatefulWidget {
   State<EditPage> createState() => _EditPageState();
 }
 
+// This class allows the user to upload an image or enter text to create content
 class _EditPageState extends State<EditPage> {
+  // The content are stored in the two following lists
+  // The contents list stores the uploaded images and/or text
   List contents = [
     null,
     null,
@@ -34,7 +38,7 @@ class _EditPageState extends State<EditPage> {
     null,
     null,
   ];
-
+  // The files list stores the actual image files and text strings
   List files = [
     null,
     null,
@@ -46,6 +50,7 @@ class _EditPageState extends State<EditPage> {
 
   String text = "THE ERROR";
 
+  // This function uploads the image to the Firebase storage
   Future<String> postImage(int i) async {
     var file = files[i]!;
     print(file);
@@ -59,6 +64,7 @@ class _EditPageState extends State<EditPage> {
     return "";
   }
 
+  // This function updates the Forestore documents
   Future<void> postList() async {
     await FirebaseFirestore.instance
         .collection('posts')
@@ -70,6 +76,8 @@ class _EditPageState extends State<EditPage> {
     });
   }
 
+  // This function is called when the user is done editing the page and saves it
+  // It uploads the added content to the Firebase storafe
   Future<void> postPage() async {
     for (int i = 0; i < 6; i++) {
       if (files[i] != null) {
@@ -181,7 +189,7 @@ class _EditPageState extends State<EditPage> {
   }
 
   bool received = false;
-
+  // This method displays the contents on the page
   void loadContents() {
     for (int i = 0; i < 6; i++) {
       if (contents[i] == null) {
@@ -209,7 +217,8 @@ class _EditPageState extends State<EditPage> {
       }
     }
   }
-
+  
+  // This method gets the contents and displays them on the editing page when it is loaded
   Future<void> getContents() async {
     if (received) {
       return;
