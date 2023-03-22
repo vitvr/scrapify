@@ -45,6 +45,8 @@ class _editPageState extends State<editProfile> {
 
   List<Uint8List?> _files = [null, null]; // header, profile
 
+  // This function allows the user to choose whether they want to select
+  // an image from gallery or take a photo
   Future<dynamic> _selectImage(BuildContext context, int index) async {
     return showDialog(
       context: context,
@@ -132,6 +134,7 @@ class _editPageState extends State<editProfile> {
 
   Future<void> postChanges() async {}
 
+  // The user interface
   @override
   Widget build(BuildContext context) {
     return Scaffold(
