@@ -26,24 +26,35 @@ class _ARScreenState extends State<ARScreen> {
 
   Future<void> getContents() async {
     imageUrl = widget.snap['postUrl'];
-    var postStream = await FirebaseFirestore.instance
-        .collection('posts')
-        .doc(widget.snap['postId'])
-        .collection('pages')
-        .get()
-        .then((querySnapshot) {
-      for (var docSnapshot in querySnapshot.docs) {
-        contents.addAll(docSnapshot.data()['contents']);
-      }
-    });
-    for (int i = 0; i < contents.length; i++) {
-      if (contents[i] != null) {
-        if (List.from(contents[i].split("")).take(5).toString() ==
-            "(h, t, t, p, s)") {
-          images.add(contents[i]);
+    var postStream;
+    try {
+      postStream = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(widget.snap['postId'])
+          .collection('pages')
+          .get()
+          .then((querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          contents.addAll(docSnapshot.data()['contents']);
+        }
+      });
+    } catch (e) {
+      // return;
+    }
+
+    if (postStream != null) {
+      return;
+    } else {
+      for (int i = 0; i < contents.length; i++) {
+        if (contents[i] != null) {
+          if (List.from(contents[i].split("")).take(5).toString() ==
+              "(h, t, t, p, s)") {
+            images.add(contents[i]);
+          }
         }
       }
     }
+
     setState(() {});
   }
 
