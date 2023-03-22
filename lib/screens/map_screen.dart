@@ -3,6 +3,8 @@ import 'dart:ui' as ui;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:scrapify/editables/large_post_editable.dart';
+import 'package:scrapify/screens/Posts/large_post.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
@@ -43,6 +45,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   Position? _currentPosition;
 
   String profImage = "";
+  var snap;
 
   Future<void> fetchData() async {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -73,7 +76,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         double lat = docSnapshot.data()['latitude'];
         double long = docSnapshot.data()['longitude'];
 
-        addPostMarker(desc, LatLng(lat, long), desc, user);
+        addPostMarker(desc, LatLng(lat, long), desc, user, docSnapshot);
       }
     });
     setState(() {
@@ -139,12 +142,22 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     _setMarker(LatLng(lat, lng));
   }
 
-  addPostMarker(
-      String id, LatLng location, String markerTitle, String desc) async {
+  addPostMarker(String id, LatLng location, String markerTitle, String desc,
+      var snap) async {
     var marker = Marker(
         markerId: MarkerId(id),
         position: location,
-        infoWindow: InfoWindow(title: markerTitle, snippet: desc),
+        // infoWindow: InfoWindow(title: markerTitle, snippet: desc),
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return LargePost(
+                snap: snap.data(),
+              );
+            },
+          );
+        },
         icon: await BitmapDescriptor.fromAssetImage(
             const ImageConfiguration(), 'assets/customMarker1.png'));
     _markers[id] = marker;
