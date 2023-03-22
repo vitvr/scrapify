@@ -61,6 +61,8 @@ dependencies:
   textfields: ^0.0.3
   print_remover: ^1.0.1
   arkit_plugin: ^1.0.5
+  url_launcher: ^6.1.10
+  flutter_inappwebview: ^5.7.2+3
 
 flutter_icons:
   image_path: "assets/appLogo.png"

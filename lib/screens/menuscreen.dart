@@ -7,6 +7,7 @@ import 'package:scrapify/screens/bookmarks_screen.dart';
 import 'package:scrapify/Login/onboarding.dart';
 import 'package:scrapify/utils/colors.dart';
 import 'package:scrapify/utils/menu_button.dart';
+import 'package:scrapify/utils/menu_button_2.dart';
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -76,11 +77,13 @@ class _MenuState extends State<Menu> {
                     icon: Icons.person_outline,
                     text: 'Followers',
                     page: const FollowersPage(following: false),
+                    link: false,
                   ),
                   MenuButton(
                     icon: Icons.person,
                     text: 'Following',
                     page: const FollowersPage(following: true),
+                    link: false,
                   )
                 ],
               ),
@@ -91,21 +94,24 @@ class _MenuState extends State<Menu> {
                     icon: Icons.bookmark,
                     text: 'Bookmarks',
                     page: const BookmarkPage(),
+                    link: false,
                   ),
                   MenuButton(
                     icon: Icons.help,
                     text: 'Help & Support',
                     page: const HomePage(),
+                    link: true,
                   ),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  MenuButton(
+                  MenuButton2(
                     icon: Icons.insert_page_break_rounded,
                     text: 'Terms & Policies',
                     page: const HomePage(),
+                    link: true,
                   )
                 ],
               ),
