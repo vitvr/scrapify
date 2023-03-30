@@ -1,9 +1,13 @@
 # Scrapify
 
 <p align="center">
-    <img src="https://uploads-ssl.webflow.com/63c8db5f599f96a9ba2ef848/63c8e628b3a4cb2468273c70_arLogo3_2-removebg-preview.png" width="400" alt="Godot Engine logo">
+    <img src="ourLogo.jpeg" width="400" alt="Logo">
 </p>
 
 ## AR Social Media and Scrapbooking platform
 
-Scrapify is a 
+Scrapify lets you **document, organise and share your memories** in the form of **digital scrapbooks** tied to **real world locations**
+
+## Flutter app
+
+The mobile app was built with the cross-platform app development framework **[Flutter](https://flutter.dev/)**, using **[Firebase](https://firebase.google.com/)** for its backend
